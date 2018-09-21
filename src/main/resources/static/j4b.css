@@ -1,0 +1,82 @@
+html{
+    text-align: center;
+    font-family: sans-serif;
+}
+h2,p{
+    margin: 0
+}
+header{
+    padding-bottom:1rem;
+}
+.u-logo{
+    display: inline-flex;
+    width: 5rem;
+    height: 5rem;
+}
+.u-logo img{
+    width: 100%;
+    margin: auto
+}
+.u-link{
+    border-bottom: 1px solid;
+}
+
+.u-link a{
+    display: inline-block;
+    padding: 0 1rem;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.container{
+    max-width: 60rem;
+    margin: auto;
+    padding: 2rem 0;
+}
+.container .u-card{
+    display: inline-block;
+    width: 10rem;
+    height: 10rem;
+    padding: 1rem;
+    border:1px solid black;
+    margin-bottom:1rem;
+    vertical-align: top;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+.container .u-card:hover{
+    border:1px solid cornflowerblue;
+}
+.container .u-card img{
+    display: block;
+    width: 100%;
+    height: 5rem;
+}
+.container .u-card .u-card-plane{
+    position: absolute;
+    bottom: 0;
+    left: 0 ;
+    right:0;
+    height: 3rem;
+    background: white;
+    line-height: 3rem;
+}
+footer{
+    border-top:1px solid;
+    font: 0.8rem serif;
+}
+footer > div{
+    display: inline-block;
+    width: 25rem;
+    padding: 1rem 0;
+    text-align: left
+}
+
+.u-page{
+    text-align: left;
+    border-left: 1px solid ;
+    border-right: 1px solid ;
+    padding: 1rem;
+    min-height: 40rem;
+}

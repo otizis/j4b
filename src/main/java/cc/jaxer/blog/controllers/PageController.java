@@ -4,11 +4,9 @@ import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import cc.jaxer.blog.entities.PageEntity;
 import cc.jaxer.blog.mapper.PageMapper;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +22,6 @@ public class PageController
     @Autowired
     private PageMapper pageMapper;
 
-
     @RequestMapping("/page/save")
     @NeedLogin
     public R add(@RequestBody PageEntity page)
@@ -32,20 +29,30 @@ public class PageController
         Date now = new Date();
         page.setCreateAt(now);
         page.setUpdateAt(now);
-        page.setId(UUID.randomUUID().toString().replace("-",""));
+        page.setId(UUID.randomUUID().toString().replace("-", ""));
+        String content = page.getContent();
+        int len = 30;
+        if(content.length() < len){
+            page.setDesc(content);
+        }else{
+            page.setDesc(content.substring(0, len));
+        }
         pageMapper.insert(page);
 
         return R.ok();
     }
 
+
     @RequestMapping("/page/list")
-    public R list(@RequestParam(name = "page",defaultValue = "1",required = false) Integer page,
-                  @RequestParam(name = "limit",defaultValue = "5",required = false) Integer limit)
+    public R list(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page, @RequestParam(name
+            = "limit", defaultValue = "5", required = false) Integer limit)
     {
         IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(page, limit), new
-                QueryWrapper<PageEntity>().orderByDesc("create_at"));
+                QueryWrapper<PageEntity>()
+                .excludeColumns(PageEntity.class, "content")
+                .orderByDesc("create_at"));
 
-        return R.ok("page",pageEntityIPage);
+        return R.ok("page", pageEntityIPage);
     }
 
     @RequestMapping("/page/edit")
