@@ -32,7 +32,7 @@ public class SysController
         ConfigEntity conf = configMapper.selectById("access");
         if (!StringUtils.equals(access, conf==null?"j4bj4b":conf.getV()))
         {
-            R.error();
+            return R.error(500,"密码错误");
         }
         UUID uuid = UUID.randomUUID();
         String token = uuid.toString();

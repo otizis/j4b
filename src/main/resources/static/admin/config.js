@@ -38,31 +38,5 @@ Zepto(function($){
         )
     })
 
-    // 文章部分
-    $("#addPageBtn").one("click",function(){
-        var data = $("#addPageForm").serializeArray();
-        console.log(data)
-        var jsonData={}
-        $.each(data,function(index,item){
-            jsonData[item.name] = item.value;
-        });
-        jsonData.content = editor.txt.html();
-        $.ajax(
-            {
-                type: 'POST',
-                url: "/page/save",
-                contentType: 'application/json',
-                data: JSON.stringify(jsonData),
-                success: function (resp) {
-                    console.log(resp);
-                    if(resp.code === 0){
-                        window.alert('新增成功');
-                    }
-                    else{
-                        window.alert(resp.msg||'error')
-                    }
-                }
-            }
-        )
-    })
+
 })

@@ -146,5 +146,21 @@ public class HtmlController
         return "login";
     }
 
+    @RequestMapping(path = {"/editPage.html"})
+    @NeedLogin(isPage = true)
+    public String editPage(ModelMap modelMap,String pageNum)
+    {
+        int pageN = 1;
+        if (NumberUtils.isDigits(pageNum))
+        {
+            pageN = Integer.parseInt(pageNum);
+        }
+        IPage<PageEntity> page = pageMapper.selectPage(new Page<>(pageN,5),
+                new QueryWrapper<PageEntity>().orderByDesc("create_at"));
+                
+        modelMap.put("page", page);
+        modelMap.put("total",page.getPages());
+        return "editPage";
+    }
 
 }

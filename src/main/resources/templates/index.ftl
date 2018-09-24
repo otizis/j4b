@@ -32,11 +32,11 @@
     </#list>
     <div>
         <#if pNum gt  1>
-            <a href="location.href='/index.html?pageNum=${pNum - 1}'">上一页</a>
+            <a href="?pageNum=${pNum - 1}">上一页</a>
         </#if>
         <span>第${pNum}页 共${total}页</span>
         <#if pNum lt total>
-            <a href="location.href='/index.html?pageNum=${pNum + 1}'">下一页</a>
+            <a href="?pageNum=${pNum + 1}">下一页</a>
         </#if>
     </div>
 </div>

@@ -63,4 +63,12 @@ public class PageController
         pageMapper.updateById(page);
         return R.ok();
     }
+
+    @RequestMapping("/page/info")
+    @NeedLogin
+    public R info(@RequestBody PageEntity page)
+    {
+        PageEntity result = pageMapper.selectById(page.getId());
+        return R.ok("page",result);
+    }
 }
