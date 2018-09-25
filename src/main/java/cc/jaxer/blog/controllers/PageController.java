@@ -23,8 +23,8 @@ public class PageController
     private PageMapper pageMapper;
 
     @RequestMapping("/page/list")
-    public R list(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page, @RequestParam(name
-            = "limit", defaultValue = "5", required = false) Integer limit)
+    public R list(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
+                  @RequestParam(name= "limit", defaultValue = "5", required = false) Integer limit)
     {
         IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(page, limit), new
                 QueryWrapper<PageEntity>()
