@@ -1,5 +1,5 @@
 <footer>
-    <#list footerList! as foot>
+    <#list blogInfo.footerList! as foot>
         <div>${foot!}</div>
     </#list>
 </footer>

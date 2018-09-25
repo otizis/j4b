@@ -4,9 +4,7 @@
 <#include "./comps/head.ftl"/>
 
 <body>
-<a href="/index.html">首页</a>
-<a href="/editPage.html">文章编辑</a>
-
+<#include "./comps/adminLink.ftl"/>
 <hr>
 
 <table style="margin: auto">

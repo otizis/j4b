@@ -22,6 +22,20 @@ public class PageController
     @Autowired
     private PageMapper pageMapper;
 
+    @RequestMapping("/page/list")
+    public R list(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page, @RequestParam(name
+            = "limit", defaultValue = "5", required = false) Integer limit)
+    {
+        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(page, limit), new
+                QueryWrapper<PageEntity>()
+                .eq("status",1)
+                .excludeColumns(PageEntity.class, "content")
+                .orderByDesc("create_at"));
+
+        return R.ok("page", pageEntityIPage);
+    }
+
+
     @RequestMapping("/page/save")
     @NeedLogin
     public R add(@RequestBody PageEntity page)
@@ -43,18 +57,6 @@ public class PageController
     }
 
 
-    @RequestMapping("/page/list")
-    public R list(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page, @RequestParam(name
-            = "limit", defaultValue = "5", required = false) Integer limit)
-    {
-        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(page, limit), new
-                QueryWrapper<PageEntity>()
-                .excludeColumns(PageEntity.class, "content")
-                .orderByDesc("create_at"));
-
-        return R.ok("page", pageEntityIPage);
-    }
-
     @RequestMapping("/page/edit")
     @NeedLogin
     public R list(@RequestBody PageEntity page)
@@ -70,5 +72,15 @@ public class PageController
     {
         PageEntity result = pageMapper.selectById(page.getId());
         return R.ok("page",result);
+    }
+
+    @RequestMapping("/page/del")
+    @NeedLogin
+    public R del(@RequestBody PageEntity page)
+    {
+        page.setStatus(0);
+        page.setUpdateAt(new Date());
+        pageMapper.updateById(page);
+        return R.ok();
     }
 }

@@ -1,24 +1,33 @@
 <!DOCTYPE HTML>
 <html lang="en">
-
 <#include "./comps/head.ftl"/>
-
 <body>
-<a href="/index.html">首页</a>
+<#include "./comps/adminLink.ftl"/>
 
 <hr>
 <table style="margin: auto">
+    <tr>
+        <th>标题</th>
+        <th>状态</th>
+        <th>创建时间</th>
+        <th>最后修改时间</th>
+        <th>操作</th>
+    </tr>
     <#list page.records! as page>
         <tr>
-            <td>${page.id!""}</td>
             <td>${page.title!""}</td>
-            <td>${page.status!""}</td>
+            <td>
+                <#if (page.status == 1)> 正常
+                <#else> 已屏蔽
+                </#if>
+            </td>
+            <td>${page.createAt?string("yyyy-MM-dd HH:mm:ss")}</td>
+            <td>${page.updateAt?string("yyyy-MM-dd HH:mm:ss")}</td>
             <td>
                 <input class="updatePage"
                 type="button"
                 data-id="${page.id!''}" value="修改">
-            </td>
-            <td>
+                |
                 <input class="delPage"
                 type="button"
                 data-c="${page.id!''}" value="屏蔽">
@@ -36,8 +45,8 @@
         </#if>
     </div>
 <hr>
-<div>
-    <h5>新增文章</h5>
+<div style="max-width: 50rem;margin: auto">
+    <h5>文章编辑</h5>
     <form id="addPageForm">
         <input type="hidden" name="id"/>
         <div>
@@ -45,6 +54,7 @@
                 标题：<input type="text" style="width: 40rem" name="title"/>
             </label>
         </div>
+        <br>
         <div id="editor" style="text-align:left"></div>
         <input id="addPageBtn" type="button" value="提交">
     </form>

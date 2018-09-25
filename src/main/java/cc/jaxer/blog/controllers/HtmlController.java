@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,19 +31,8 @@ public class HtmlController
     @RequestMapping(path = {"/", "/index.html"})
     public String index(ModelMap modelMap,String pageNum)
     {
-        List<ConfigEntity> configEntities = configMapper.selectList(new QueryWrapper<ConfigEntity>()
-                .orderByAsc("code"));
-        HashMap<String, String> map = new HashMap<>();
-        for (ConfigEntity configEntity : configEntities)
-        {
-            map.put(configEntity.getCode(),configEntity.getV());
-        }
-        BlogInfoEntity blogInfoEntity = new BlogInfoEntity();
-        blogInfoEntity.setTitle(map.get("blog_title"));
-        blogInfoEntity.setDesc(map.get("blog_desc"));
-        blogInfoEntity.setLogoUrl(map.get("blog_logo_url"));
         // blog信息
-        modelMap.put("blogInfo", blogInfoEntity);
+        modelMap.put("blogInfo", getBlogInfo());
 
         // page列表
         int pageN = 1;
@@ -58,74 +46,65 @@ public class HtmlController
         modelMap.put("total", pageEntityIPage.getPages());
         modelMap.put("pNum", pageN);
 
-        // 链接列表
-        List<LinkEntity> linkList = new ArrayList<>();
-        for (ConfigEntity configEntity : configEntities)
-        {
-            if(configEntity.getCode().startsWith("hl_")){
-                LinkEntity link = new LinkEntity();
-                link.setName(configEntity.getCode().replace("hl_",""));
-                link.setLink(configEntity.getV());
-                linkList.add(link);
-            }
-        }
-        modelMap.put("linkList", linkList);
-        // 底部列表
-        List<String> footerList = new ArrayList<>();
-        for (ConfigEntity configEntity : configEntities)
-        {
-            if(configEntity.getCode().startsWith("footer_")){
-                footerList.add(configEntity.getV());
-            }
-        }
-        modelMap.put("footerList", footerList);
         return "index";
     }
 
+    private BlogInfoEntity getBlogInfo(){
+        List<ConfigEntity> configEntities = configMapper.selectList(new QueryWrapper<ConfigEntity>()
+                .likeRight("code","hl_")
+                .or().likeRight("code","footer_")
+                .or().likeRight("code","blog_title")
+                .orderByAsc("code"));
+
+
+        BlogInfoEntity blogInfoEntity = new BlogInfoEntity();
+        // 链接列表
+        List<LinkEntity> linkList = blogInfoEntity.getLinkList();
+        // 底部列表
+        List<String> footerList = blogInfoEntity.getFooterList();
+
+        for (ConfigEntity configEntity : configEntities)
+        {
+            String code = configEntity.getCode();
+            String v = configEntity.getV();
+            if (code.startsWith("hl_"))
+            {
+                LinkEntity link = new LinkEntity();
+                link.setName(code.replace("hl_", ""));
+                link.setLink(v);
+                linkList.add(link);
+            }
+            else if (code.startsWith("footer_"))
+            {
+                footerList.add(v);
+            }
+            else if ("blog_title".equals(code))
+            {
+                blogInfoEntity.setTitle(v);
+            }
+            else if ("blog_title".equals(code))
+            {
+                blogInfoEntity.setDesc(v);
+            }
+            else if ("blog_logo_url".equals(code))
+            {
+                blogInfoEntity.setLogoUrl(v);
+            }
+        }
+        return blogInfoEntity;
+    }
 
     @RequestMapping(path = {"/page.html"})
     public String page(ModelMap modelMap,String id)
     {
-        List<ConfigEntity> configEntities = configMapper.selectList(new QueryWrapper<ConfigEntity>()
-                .orderByAsc("code"));
-        HashMap<String, String> map = new HashMap<>();
-        for (ConfigEntity configEntity : configEntities)
-        {
-            map.put(configEntity.getCode(),configEntity.getV());
-        }
-        BlogInfoEntity blogInfoEntity = new BlogInfoEntity();
-        blogInfoEntity.setTitle(map.get("blog_title"));
-        blogInfoEntity.setDesc(map.get("blog_desc"));
-        blogInfoEntity.setLogoUrl(map.get("blog_logo_url"));
         // blog信息
-        modelMap.put("blogInfo", blogInfoEntity);
+        BlogInfoEntity blogInfo = getBlogInfo();
+        modelMap.put("blogInfo", blogInfo);
 
         // page
         PageEntity pageEntity = pageMapper.selectById(id);
         modelMap.put("page", pageEntity);
 
-        // 链接列表
-        List<LinkEntity> linkList = new ArrayList<>();
-        for (ConfigEntity configEntity : configEntities)
-        {
-            if(configEntity.getCode().startsWith("hl_")){
-                LinkEntity link = new LinkEntity();
-                link.setName(configEntity.getCode().replace("hl_",""));
-                link.setLink(configEntity.getV());
-                linkList.add(link);
-            }
-        }
-
-        modelMap.put("linkList", linkList);
-        // 底部列表
-        List<String> footerList = new ArrayList<>();
-        for (ConfigEntity configEntity : configEntities)
-        {
-            if(configEntity.getCode().startsWith("footer_")){
-                footerList.add(configEntity.getV());
-            }
-        }
-        modelMap.put("footerList", footerList);
         return "page";
     }
 
@@ -157,7 +136,7 @@ public class HtmlController
         }
         IPage<PageEntity> page = pageMapper.selectPage(new Page<>(pageN,5),
                 new QueryWrapper<PageEntity>().orderByDesc("create_at"));
-                
+
         modelMap.put("page", page);
         modelMap.put("total",page.getPages());
         return "editPage";
