@@ -1,5 +1,6 @@
 package cc.jaxer.blog.controllers;
 
+import cc.jaxer.blog.common.ConfigCodeEnum;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.entities.BlogInfoEntity;
 import cc.jaxer.blog.entities.ConfigEntity;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -29,7 +29,7 @@ public class HtmlController
     private PageMapper pageMapper;
 
     @RequestMapping(path = {"/", "/index.html"})
-    public String index(ModelMap modelMap,String pageNum)
+    public String index(ModelMap modelMap, String pageNum)
     {
         // blog信息
         modelMap.put("blogInfo", getBlogInfo());
@@ -40,8 +40,8 @@ public class HtmlController
         {
             pageN = Integer.parseInt(pageNum);
         }
-        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN,5),
-                new QueryWrapper<PageEntity>().orderByDesc("create_at"));
+        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 5), new QueryWrapper<PageEntity>
+                ().orderByDesc("create_at"));
         modelMap.put("pageList", pageEntityIPage.getRecords());
         modelMap.put("total", pageEntityIPage.getPages());
         modelMap.put("pNum", pageN);
@@ -49,12 +49,15 @@ public class HtmlController
         return "index";
     }
 
-    private BlogInfoEntity getBlogInfo(){
-        List<ConfigEntity> configEntities = configMapper.selectList(new QueryWrapper<ConfigEntity>()
-                .likeRight("code","hl_")
-                .or().likeRight("code","footer_")
-                .or().likeRight("code","blog_title")
-                .orderByAsc("code"));
+    private BlogInfoEntity getBlogInfo()
+    {
+        QueryWrapper<ConfigEntity> queryWrapper = new QueryWrapper<ConfigEntity>().likeRight("code", "hl_")
+                                                                                  .or()
+                                                                                  .likeRight("code", "footer_")
+                                                                                  .or()
+                                                                                  .likeRight("code", "blog_")
+                                                                                  .orderByAsc("code");
+        List<ConfigEntity> configEntities = configMapper.selectList(queryWrapper);
 
 
         BlogInfoEntity blogInfoEntity = new BlogInfoEntity();
@@ -78,15 +81,15 @@ public class HtmlController
             {
                 footerList.add(v);
             }
-            else if ("blog_title".equals(code))
+            else if (ConfigCodeEnum.blog_title.toString().equals(code))
             {
                 blogInfoEntity.setTitle(v);
             }
-            else if ("blog_title".equals(code))
+            else if (ConfigCodeEnum.blog_desc.toString().equals(code))
             {
                 blogInfoEntity.setDesc(v);
             }
-            else if ("blog_logo_url".equals(code))
+            else if (ConfigCodeEnum.blog_logo_url.toString().equals(code))
             {
                 blogInfoEntity.setLogoUrl(v);
             }
@@ -95,7 +98,7 @@ public class HtmlController
     }
 
     @RequestMapping(path = {"/page.html"})
-    public String page(ModelMap modelMap,String id)
+    public String page(ModelMap modelMap, String id)
     {
         // blog信息
         BlogInfoEntity blogInfo = getBlogInfo();
@@ -112,9 +115,8 @@ public class HtmlController
     @NeedLogin(isPage = true)
     public String config(ModelMap modelMap)
     {
-        List<ConfigEntity> configEntities =
-                configMapper.selectList(new QueryWrapper<ConfigEntity>()
-                .orderByAsc("code"));
+        List<ConfigEntity> configEntities = configMapper.selectList(new QueryWrapper<ConfigEntity>().orderByAsc
+                ("code"));
         modelMap.put("configList", configEntities);
         return "config";
     }
@@ -127,18 +129,18 @@ public class HtmlController
 
     @RequestMapping(path = {"/editPage.html"})
     @NeedLogin(isPage = true)
-    public String editPage(ModelMap modelMap,String pageNum)
+    public String editPage(ModelMap modelMap, String pageNum)
     {
         int pageN = 1;
         if (NumberUtils.isDigits(pageNum))
         {
             pageN = Integer.parseInt(pageNum);
         }
-        IPage<PageEntity> page = pageMapper.selectPage(new Page<>(pageN,5),
-                new QueryWrapper<PageEntity>().orderByDesc("create_at"));
+        IPage<PageEntity> page = pageMapper.selectPage(new Page<>(pageN, 5), new QueryWrapper<PageEntity>()
+                .orderByDesc("create_at"));
 
         modelMap.put("page", page);
-        modelMap.put("total",page.getPages());
+        modelMap.put("total", page.getPages());
         return "editPage";
     }
 

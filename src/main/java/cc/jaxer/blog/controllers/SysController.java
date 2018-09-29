@@ -1,5 +1,6 @@
 package cc.jaxer.blog.controllers;
 
+import cc.jaxer.blog.common.ConfigCodeEnum;
 import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
@@ -28,8 +29,8 @@ public class SysController
     @RequestMapping("/sys/login")
     public R login(@RequestBody HashMap<String, String> request,HttpServletResponse response)
     {
-        String access = request.get("access");
-        ConfigEntity conf = configMapper.selectById("access");
+        String access = request.get(ConfigCodeEnum.access.toString());
+        ConfigEntity conf = configMapper.selectById(ConfigCodeEnum.access.toString());
         if (!StringUtils.equals(access, conf==null?"j4bj4b":conf.getV()))
         {
             return R.error(500,"密码错误");
@@ -45,37 +46,6 @@ public class SysController
         return R.ok("token", token);
     }
 
-
-    @RequestMapping("/sys/updateBlogInfo")
-    @NeedLogin
-    public R updateBlogInfo(@RequestBody BlogInfoEntity entity)
-    {
-        String title = entity.getTitle();
-        if (!StringUtils.isEmpty(title))
-        {
-            ConfigEntity entity1 = new ConfigEntity();
-            entity1.setCode("blog_title");
-            entity1.setV(title);
-            configMapper.updateById(entity1);
-        }
-        String desc = entity.getDesc();
-        if (!StringUtils.isEmpty(title))
-        {
-            ConfigEntity entity1 = new ConfigEntity();
-            entity1.setCode("blog_desc");
-            entity1.setV(desc);
-            configMapper.updateById(entity1);
-        }
-        String logoUrl = entity.getLogoUrl();
-        if (!StringUtils.isEmpty(title))
-        {
-            ConfigEntity entity1 = new ConfigEntity();
-            entity1.setCode("blog_logo_url");
-            entity1.setV(logoUrl);
-            configMapper.updateById(entity1);
-        }
-        return R.ok();
-    }
 
     @RequestMapping("/sys/config/update")
     @NeedLogin
