@@ -12,8 +12,13 @@
         <tr>
             <td>${config.code!""}</td>
             <td>${config.v!""}</td>
-            <td><input class="updateConfig"
-             type="button" data-c="${config.code!''}" value="修改"></td>
+            <td>
+                <input class="updateConfig"
+                    type="button" data-c="${config.code!''}" value="修改">
+                    |
+                <input class="deleteConfig"
+                    type="button" data-c="${config.code!''}" value="删除">
+             </td>
         </tr>
     </#list>
 </table>

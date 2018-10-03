@@ -63,7 +63,7 @@ public class SysController
     @NeedLogin
     public R deleteConfig(@RequestBody ConfigEntity entity)
     {
-        int i = configMapper.deleteById(entity.getCode());
+        configMapper.deleteById(entity.getCode());
         return R.ok();
     }
 
