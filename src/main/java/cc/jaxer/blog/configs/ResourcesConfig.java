@@ -18,16 +18,13 @@ package cc.jaxer.blog.configs;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 资源
- *
- * @author Mark sunlightcs@gmail.com
- * @since 3.0.0 2018-01-25
  */
 @Configuration
-public class ResourcesConfig extends WebMvcConfigurerAdapter
+public class ResourcesConfig implements WebMvcConfigurer
 {
     @Value("${fileupload.path}")
     String antiquePath;

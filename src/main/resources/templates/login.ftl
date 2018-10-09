@@ -1,10 +1,12 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <body>
-<label>
+<div style="text-align:center;padding:10rem">
     <input id="access" type="password"/>
-    <input type="button" id="submit" value="login" />
-</label>
+    <br/>
+    <input type="button" id="submit" value="Go" />
+</div>
+
 
 <script src="https://zeptojs.com/zepto.min.js"></script>
 <script src="/admin/login.js"></script>

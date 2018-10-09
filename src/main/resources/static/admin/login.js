@@ -1,5 +1,13 @@
 Zepto(function ($) {
+    $("#access").on("keydown",function(ev){
+        if(ev.keyCode == "13") {
+            login()
+        }
+    })
     $("#submit").on("click", function () {
+        login()
+    })
+    function login(){
         $.ajax(
             {
                 type: 'POST',
@@ -18,6 +26,5 @@ Zepto(function ($) {
                 }
             }
         )
-    })
-
+    }
 })
