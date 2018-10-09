@@ -67,6 +67,9 @@ footer{
     border-top:1px solid;
     font: 0.8rem serif;
 }
+footer a{
+    text-decoration: none;
+}
 footer > div{
     display: inline-block;
     width: 25rem;
@@ -99,15 +102,23 @@ footer > div{
     padding: 1rem;
     border-top: 1px grey dotted;
 }
+.m-reply .u-reply .form{
+    display: inline-block;
+    width: 10rem;
+    overflow: hidden;
+    vertical-align: bottom;
+}
 .m-reply .u-reply p{
     padding:1rem;
 }
 .m-reply .u-reply .time{
+    display: inline-block;
     font-size: 0.8rem;
     color: #999999;
+    vertical-align: bottom;
 }
 .o-reply textarea{
     width:20rem;
-    height:10rem;
+    height:3rem;
     padding:1rem;
 }
