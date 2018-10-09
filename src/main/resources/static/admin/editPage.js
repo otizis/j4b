@@ -1,24 +1,17 @@
 Zepto(function($){
-    var E = window.wangEditor
-    var editor = new E('#editor')
-    editor.customConfig.menus = [
-        'head',  // 标题
-        'bold',  // 粗体
-        'fontSize',  // 字号
-        'strikeThrough',  // 删除线
+    tinymce.init({
+        selector:'#editor',
+        language:'zh_CN',
+        plugins: "hr lists link image imagetools",
+        height: 600,
+        menubar: false,
+        toolbar:"undo redo | formatselect bold italic underline fontsizeselect image | hr bullist | link | removeformat",
+        file_browser_callback:function(){
 
-        'link',  // 插入链接
-        'list',  // 列表
-        'justify',  // 对齐方式
-        'quote',  // 引用
-        'emoticon',  // 表情
-        'image',  // 插入图片
+        },
+        images_upload_url: '/upload'
+    });
 
-        'code',  // 插入代码
-        'undo',  // 撤销
-        'redo'  // 重复
-    ]
-    editor.create()
 
     $('.updatePage').on("click",function(){
         var id = $(this).data("id");
@@ -32,7 +25,7 @@ Zepto(function($){
             success: function (resp) {
                 if(resp.code === 0){
                     console.log(resp);
-                    editor.txt.html(resp.page.content)
+                    tinymce.activeEditor.setContent(resp.page.content,{format: 'raw'})
                     $("#addPageForm")[0].title.value = resp.page.title;
                 }
                 else{
@@ -68,7 +61,7 @@ Zepto(function($){
             $.each(data,function(index,item){
                 jsonData[item.name] = item.value;
             });
-            jsonData.content = editor.txt.html();
+            jsonData.content = tinymce.activeEditor.getContent({format: 'raw'});
             $.ajax(
                 {
                     type: 'POST',

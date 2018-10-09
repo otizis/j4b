@@ -5,6 +5,7 @@ html{
 h2,p{
     margin: 0
 }
+
 header{
     padding-bottom:1rem;
 }
@@ -79,4 +80,7 @@ footer > div{
     border-right: 1px solid ;
     padding: 1rem;
     min-height: 40rem;
+}
+.u-page p {
+    margin: 0.5rem 0;
 }

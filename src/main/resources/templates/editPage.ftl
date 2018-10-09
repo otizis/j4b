@@ -60,7 +60,7 @@
     </form>
 </div>
 <!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
-<script type="text/javascript" src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+<script src="/libs/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
 
 </script>

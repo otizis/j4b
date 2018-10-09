@@ -15,6 +15,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -97,8 +98,8 @@ public class HtmlController
         return blogInfoEntity;
     }
 
-    @RequestMapping(path = {"/page.html"})
-    public String page(ModelMap modelMap, String id)
+    @RequestMapping(path = {"/page/{id}"})
+    public String page(ModelMap modelMap, @PathVariable("id") String id)
     {
         // blog信息
         BlogInfoEntity blogInfo = getBlogInfo();

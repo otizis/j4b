@@ -25,7 +25,7 @@
         空
     </#if>
     <#list pageList! as page>
-        <div class="u-card"  onclick="location.href='/page.html?id=${page.id!}'">
+        <div class="u-card"  onclick="location.href='/page/${page.id!}'">
             <h3>${page.title!}</h3>
             <div class="u-card-plane">${page.createAt?string('yyyy-MM-dd')}</div>
         </div>
