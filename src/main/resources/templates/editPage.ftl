@@ -59,11 +59,7 @@
         <input id="addPageBtn" type="button" value="提交">
     </form>
 </div>
-<!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
 <script src="/libs/tinymce/tinymce.min.js"></script>
-<script type="text/javascript">
-
-</script>
 <script src="https://zeptojs.com/zepto.min.js"></script>
 <script src="/admin/editPage.js"></script>
 </body>

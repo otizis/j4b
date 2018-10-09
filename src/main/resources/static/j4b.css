@@ -80,7 +80,34 @@ footer > div{
     border-right: 1px solid ;
     padding: 1rem;
     min-height: 40rem;
+    font-size:1.2rem;
 }
 .u-page p {
     margin: 0.5rem 0;
+}
+
+.m-reply{
+    text-align: left;
+    font-size: 1rem;
+}
+.m-reply .u-reply{
+    color: #333333;
+    padding: 1rem;
+}
+.m-reply .u-reply + .u-reply{
+    color: #333333;
+    padding: 1rem;
+    border-top: 1px grey dotted;
+}
+.m-reply .u-reply p{
+    padding:1rem;
+}
+.m-reply .u-reply .time{
+    font-size: 0.8rem;
+    color: #999999;
+}
+.o-reply textarea{
+    width:20rem;
+    height:10rem;
+    padding:1rem;
 }

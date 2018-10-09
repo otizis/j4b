@@ -6,8 +6,11 @@ import cc.jaxer.blog.entities.BlogInfoEntity;
 import cc.jaxer.blog.entities.ConfigEntity;
 import cc.jaxer.blog.entities.LinkEntity;
 import cc.jaxer.blog.entities.PageEntity;
+import cc.jaxer.blog.entities.ReplyEntity;
 import cc.jaxer.blog.mapper.ConfigMapper;
 import cc.jaxer.blog.mapper.PageMapper;
+import cc.jaxer.blog.mapper.ReplyMapper;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,6 +31,10 @@ public class HtmlController
 
     @Autowired
     private PageMapper pageMapper;
+
+    @Autowired
+    private ReplyMapper replyMapper;
+
 
     @RequestMapping(path = {"/", "/index.html"})
     public String index(ModelMap modelMap, String pageNum)
@@ -145,4 +152,22 @@ public class HtmlController
         return "editPage";
     }
 
+
+    @RequestMapping(path = {"/editReply.html"})
+    @NeedLogin(isPage = true)
+    public String editReply(ModelMap modelMap, String pageNum)
+    {
+        int pageN = 1;
+        if (NumberUtils.isDigits(pageNum))
+        {
+            pageN = Integer.parseInt(pageNum);
+        }
+        IPage<ReplyEntity> replyPage = replyMapper.selectPage(new Page<>(pageN, 10), new
+                QueryWrapper<ReplyEntity>()
+                .orderByDesc("create_at"));
+
+        modelMap.put("page", replyPage);
+        modelMap.put("total", replyPage.getPages());
+        return "editReply";
+    }
 }
