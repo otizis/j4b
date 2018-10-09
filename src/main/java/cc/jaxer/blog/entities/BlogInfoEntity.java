@@ -1,6 +1,5 @@
 package cc.jaxer.blog.entities;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.ArrayList;

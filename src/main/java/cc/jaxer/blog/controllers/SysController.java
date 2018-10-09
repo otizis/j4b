@@ -4,7 +4,6 @@ import cc.jaxer.blog.common.ConfigCodeEnum;
 import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
-import cc.jaxer.blog.entities.BlogInfoEntity;
 import cc.jaxer.blog.entities.ConfigEntity;
 import cc.jaxer.blog.mapper.ConfigMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -63,7 +61,7 @@ public class SysController
     @NeedLogin
     public R deleteConfig(@RequestBody ConfigEntity entity)
     {
-        int i = configMapper.deleteById(entity.getCode());
+        configMapper.deleteById(entity.getCode());
         return R.ok();
     }
 

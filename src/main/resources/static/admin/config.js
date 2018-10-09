@@ -11,6 +11,26 @@ Zepto(function($){
         $("#addConfig")[0].code.value = $(this).data("c");
     })
 
+    $(".deleteConfig").on("click",function(){
+        $.ajax(
+            {
+                type: 'POST',
+                url: "/sys/config/delete",
+                contentType: 'application/json',
+                data: JSON.stringify({code:$(this).data("c")}),
+                success: function (resp) {
+                    console.log(resp);
+                    if(resp.code === 0){
+                        location.reload()
+                    }
+                    else{
+                        window.alert(resp.msg||'error')
+                    }
+                }
+            }
+        )
+    })
+
     $("#addConfigBtn").one("click",function(){
         var data = $("#addConfig").serializeArray();
         console.log(data)
