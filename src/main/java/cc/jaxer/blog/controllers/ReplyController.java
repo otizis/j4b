@@ -50,6 +50,9 @@ public class ReplyController
         {
             return R.error();
         }
+        if(reply.getContent().length() > 1000){
+            return R.error(500,"留言过长，超过1000");
+        }
         reply.setIp(request.getRemoteAddr());
 
 

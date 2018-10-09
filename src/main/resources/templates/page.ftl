@@ -18,13 +18,13 @@
     <div class="m-reply">
     </div>
     <div class="o-reply">
-        <input type="button" id="loadReply" data-pid="${page.id!}" value="加载更多评论">
+        <input type="button" id="loadReply" data-pid="${page.id!}" value="加载更多留言">
         <hr>
         <form id="addReplyForm">
             <input type="hidden" name="pageId" value="${page.id!}">
-            <textarea name="content" placeholder="评论审核后可显示"></textarea>
+            <textarea name="content" placeholder="留言审后可见"></textarea>
             <br>
-            <input type="button" id="addReply" value="发表评论">
+            <input type="button" id="addReply" value="留言">
         </form>
 
     </div>

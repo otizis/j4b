@@ -37,7 +37,7 @@ Zepto(function($){
                 if(resp.code === 0){
                     console.log(resp);
                     if(resp.page.total == 0){
-                        window.alert("无评论")
+                        $("#loadReply").hide();
                     }else{
                         page++;
                         if(page > resp.page.pages){
