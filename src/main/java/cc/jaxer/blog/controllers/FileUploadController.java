@@ -4,13 +4,11 @@ import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.velocity.shaded.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,11 +26,12 @@ public class FileUploadController
     public R upload(@RequestParam("file") MultipartFile file)
     {
         String day = DateFormatUtils.format(new Date(), "YYYYMMDD");
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        String originalFilename = file.getOriginalFilename();
+        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String filename = UUID.randomUUID().toString();
         if (StringUtils.isNotBlank(extension))
         {
-            filename += ("." + extension);
+            filename += extension;
         }
         try
         {
