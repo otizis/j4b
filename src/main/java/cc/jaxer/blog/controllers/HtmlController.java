@@ -25,7 +25,7 @@ import java.util.List;
 @Controller
 public class HtmlController implements ErrorController
 {
-    private static final String PATH = "/error";
+    private static final String ERROR_PATH = "/error";
 
     @Autowired
     private ConfigMapper configMapper;
@@ -61,6 +61,19 @@ public class HtmlController implements ErrorController
         return "index";
     }
 
+    @Override
+    public String getErrorPath()
+    {
+        return ERROR_PATH;
+    }
+
+    @RequestMapping(path = {ERROR_PATH})
+    public String error(ModelMap modelMap)
+    {
+        // blog信息
+        modelMap.put("blogInfo", configService.getBlogInfo());
+        return "error";
+    }
 
     @RequestMapping(path = {"/page/{id}"})
     public String page(ModelMap modelMap, @PathVariable("id") String id)
@@ -96,13 +109,7 @@ public class HtmlController implements ErrorController
         return "login";
     }
 
-    @RequestMapping(path = {PATH})
-    public String error(ModelMap modelMap)
-    {
-        // blog信息
-        modelMap.put("blogInfo", configService.getBlogInfo());
-        return "error";
-    }
+
 
     @RequestMapping(path = {"/editPage.html"})
     @NeedLogin(isPage = true)
@@ -139,9 +146,5 @@ public class HtmlController implements ErrorController
         return "editReply";
     }
 
-    @Override
-    public String getErrorPath()
-    {
-        return PATH;
-    }
+
 }
