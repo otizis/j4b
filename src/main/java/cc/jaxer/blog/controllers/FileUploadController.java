@@ -35,7 +35,12 @@ public class FileUploadController
         }
         try
         {
-            String path = nginxServerPath + File.separator + day + File.separator;
+            if (!nginxServerPath.endsWith(File.separator))
+            {
+                nginxServerPath += File.separator;
+            }
+
+            String path = nginxServerPath + day + File.separator;
             File dayDir = new File(path);
             if (!dayDir.exists())
             {
