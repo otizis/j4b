@@ -5,7 +5,11 @@
 
 <header>
     <h3>${page.title!}</h3>
-    <div>${page.createAt?string("yyyy-MM-dd HH:mm")}</div>
+    <div>
+        <span>
+        ${page.createAt?string("yyyy-MM-dd HH:mm")}
+        </span>
+    </div>
 </header>
 
 <#include "./comps/link.ftl"/>

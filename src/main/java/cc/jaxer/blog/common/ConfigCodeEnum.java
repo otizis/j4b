@@ -7,5 +7,7 @@ public enum ConfigCodeEnum
     blog_title,
     blog_desc,
     blog_logo_url,
+    blog_keywords,
+    blog_description,
 
 }

@@ -6,6 +6,7 @@ import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import cc.jaxer.blog.entities.ConfigEntity;
 import cc.jaxer.blog.mapper.ConfigMapper;
+import cc.jaxer.blog.services.ConfigService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,9 @@ public class SysController
 {
     @Autowired
     private ConfigMapper configMapper;
+
+    @Autowired
+    private ConfigService configService;
 
     @RequestMapping("/sys/login")
     public R login(@RequestBody HashMap<String, String> request,HttpServletResponse response)
@@ -54,6 +58,7 @@ public class SysController
         {
             configMapper.insert(entity);
         }
+        configService.reloadBlogInfo();
         return R.ok();
     }
 
