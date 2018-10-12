@@ -9,7 +9,7 @@
 <div style="max-width: 50rem;margin: auto">
 
     <form id="savePageForm">
-        <input type="hidden" name="id" value="${pageEntity.id!''}"/>
+        <input type="hidden" name="id" value="${(pageEntity.id)!''}"/>
 
         <div class="inline-left">
             <span> 标题：</span>

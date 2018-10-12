@@ -8,5 +8,5 @@ simple blog by java.
 - [x] 使用所见所得编辑器，tinymce
 - [x] 自带图床功能
 - [x] 文章存在H2数据库
-- [ ] 增加文章标签
+- [x] 增加文章标签
 - [ ] 第三方引图（参考Ghost，使用Unsplash
