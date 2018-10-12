@@ -19,7 +19,7 @@ header{
     margin: auto
 }
 .u-link{
-    border-bottom: 1px solid;
+    border-bottom: 1px dotted;
 }
 
 .u-link a{
