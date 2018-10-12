@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
 <html lang="en">
 
-<#include "./comps/head.ftl"/>
+<#include "../comps/head.ftl"/>
 
 <body>
-<#include "./comps/adminLink.ftl"/>
+<#include "../comps/adminLink.ftl"/>
 <hr>
 
 <table style="margin: auto">

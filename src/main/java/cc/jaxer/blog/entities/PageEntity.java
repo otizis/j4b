@@ -23,5 +23,5 @@ public class PageEntity
     private Date updateAt;
     private Integer status;
     @TableField(exist = false)
-    private List<LabelEntity> labelList;
+    private List<TagEntity> tagList;
 }

@@ -3,17 +3,25 @@ package cc.jaxer.blog.controllers;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import cc.jaxer.blog.entities.PageEntity;
+import cc.jaxer.blog.entities.PageTagEntity;
+import cc.jaxer.blog.entities.TagEntity;
 import cc.jaxer.blog.mapper.PageMapper;
+import cc.jaxer.blog.mapper.PageTagMapper;
+import cc.jaxer.blog.mapper.TagMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,6 +29,12 @@ public class PageController
 {
     @Autowired
     private PageMapper pageMapper;
+
+    @Autowired
+    private TagMapper tagMapper;
+
+    @Autowired
+    private PageTagMapper pageTagMapper;
 
     @RequestMapping("/page/list")
     public R list(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
@@ -38,8 +52,15 @@ public class PageController
 
     @RequestMapping("/page/save")
     @NeedLogin
-    public R add(@RequestBody PageEntity page)
+    public R addOrUpdate(@RequestBody PageEntity page)
     {
+        if(StringUtils.isNotBlank(page.getId())){
+            updatePageTag(page);
+
+            page.setUpdateAt(new Date());
+            pageMapper.updateById(page);
+            return R.ok();
+        }
         Date now = new Date();
         page.setCreateAt(now);
         page.setUpdateAt(now);
@@ -52,19 +73,25 @@ public class PageController
             page.setDesc(content.substring(0, len));
         }
         pageMapper.insert(page);
-
+        updatePageTag(page);
         return R.ok();
     }
 
-
-    @RequestMapping("/page/edit")
-    @NeedLogin
-    public R list(@RequestBody PageEntity page)
+    private void updatePageTag(PageEntity page)
     {
-        page.setUpdateAt(new Date());
-        pageMapper.updateById(page);
-        return R.ok();
+        pageTagMapper.delete(new QueryWrapper<PageTagEntity>().eq("PAGE_ID",page.getId()));
+        List<TagEntity> tagList = page.getTagList();
+        if (CollectionUtils.isEmpty(tagList))
+        {
+            return;
+        }
+        for (TagEntity tagEntity : tagList)
+        {
+            PageTagEntity pageTagEntity = new PageTagEntity(page.getId(),tagEntity.getId());
+            pageTagMapper.insert(pageTagEntity);
+        }
     }
+
 
     @RequestMapping("/page/info")
     @NeedLogin

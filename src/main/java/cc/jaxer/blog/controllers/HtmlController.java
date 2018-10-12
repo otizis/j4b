@@ -1,25 +1,23 @@
 package cc.jaxer.blog.controllers;
 
 import cc.jaxer.blog.common.NeedLogin;
-import cc.jaxer.blog.entities.BlogInfoEntity;
-import cc.jaxer.blog.entities.ConfigEntity;
-import cc.jaxer.blog.entities.PageEntity;
-import cc.jaxer.blog.entities.ReplyEntity;
-import cc.jaxer.blog.mapper.ConfigMapper;
-import cc.jaxer.blog.mapper.PageMapper;
-import cc.jaxer.blog.mapper.ReplyMapper;
+import cc.jaxer.blog.entities.*;
+import cc.jaxer.blog.mapper.*;
 import cc.jaxer.blog.services.ConfigService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -39,6 +37,12 @@ public class HtmlController implements ErrorController
     @Autowired
     private ConfigService configService;
 
+    @Autowired
+    private TagMapper tagMapper;
+
+    @Autowired
+    private PageTagMapper pageTagMapper;
+
 
     @RequestMapping(path = {"/", "/index.html"})
     public String index(ModelMap modelMap, String pageNum)
@@ -52,8 +56,8 @@ public class HtmlController implements ErrorController
         {
             pageN = Integer.parseInt(pageNum);
         }
-        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 5), new QueryWrapper<PageEntity>
-                ().orderByDesc("create_at"));
+        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 27), new QueryWrapper<PageEntity>
+                ().eq("status",1).orderByDesc("create_at"));
         modelMap.put("pageList", pageEntityIPage.getRecords());
         modelMap.put("total", pageEntityIPage.getPages());
         modelMap.put("pNum", pageN);
@@ -88,8 +92,25 @@ public class HtmlController implements ErrorController
         {
             return "redirect:/error";
         }
-        modelMap.put("page", pageEntity);
 
+        List<TagEntity> tagEntities = tagMapper.selectList(new QueryWrapper<>());
+        List<PageTagEntity> pageTagR = pageTagMapper.selectList(new QueryWrapper<PageTagEntity>().eq("PAGE_ID", id));
+        for (PageTagEntity pageTagEntity : pageTagR)
+        {
+            for (TagEntity tagEntity : tagEntities)
+            {
+                if(StringUtils.equals(tagEntity.getId(),pageTagEntity.getTagId())){
+                    List<TagEntity> tagList = pageEntity.getTagList();
+                    if(tagList==null){
+                        tagList = new ArrayList<>();
+                        pageEntity.setTagList(tagList);
+                    }
+                    tagList.add(tagEntity);
+                }
+            }
+        }
+
+        modelMap.put("page", pageEntity);
         return "page";
     }
 
@@ -100,7 +121,7 @@ public class HtmlController implements ErrorController
         List<ConfigEntity> configEntities = configMapper.selectList(new QueryWrapper<ConfigEntity>().orderByAsc
                 ("code"));
         modelMap.put("configList", configEntities);
-        return "config";
+        return "admin/config";
     }
 
     @RequestMapping(path = {"/login.html"})
@@ -111,9 +132,9 @@ public class HtmlController implements ErrorController
 
 
 
-    @RequestMapping(path = {"/editPage.html"})
+    @RequestMapping(path = {"/editPageList.html"})
     @NeedLogin(isPage = true)
-    public String editPage(ModelMap modelMap, String pageNum)
+    public String editPageList(ModelMap modelMap, String pageNum)
     {
         int pageN = 1;
         if (NumberUtils.isDigits(pageNum))
@@ -125,7 +146,33 @@ public class HtmlController implements ErrorController
 
         modelMap.put("page", page);
         modelMap.put("total", page.getPages());
-        return "editPage";
+        return "admin/editPageList";
+    }
+
+    @RequestMapping(path = {"/editPageContent.html"})
+    @NeedLogin(isPage = true)
+    public String editPageContent(ModelMap modelMap, String id)
+    {
+        PageEntity pageEntity = pageMapper.selectById(id);
+        modelMap.put("pageEntity",pageEntity);
+
+        List<PageTagEntity> pageTagEntities = pageTagMapper.selectList(new QueryWrapper<PageTagEntity>().eq("PAGE_ID",id));
+        if(!CollectionUtils.isEmpty(pageTagEntities))
+        {
+            List<String> tagIdList = new ArrayList<>();
+            for (PageTagEntity tagEntity : pageTagEntities)
+            {
+                String tagId = tagEntity.getTagId();
+                tagIdList.add(tagId);
+            }
+            modelMap.put("tagIdList",tagIdList);
+        }
+
+
+        List<TagEntity> tagEntities = tagMapper.selectList(new QueryWrapper<>());
+        modelMap.put("tagEntities",tagEntities);
+
+        return "admin/editPageContent";
     }
 
 
@@ -143,7 +190,7 @@ public class HtmlController implements ErrorController
 
         modelMap.put("page", replyPage);
         modelMap.put("total", replyPage.getPages());
-        return "editReply";
+        return "admin/editReply";
     }
 
 

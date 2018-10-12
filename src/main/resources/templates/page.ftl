@@ -6,21 +6,28 @@
 <header>
     <h3>${page.title!}</h3>
     <div>
-        <span>
-        ${page.createAt?string("yyyy-MM-dd HH:mm")}
-        </span>
+        <span>${page.createAt?string("yyyy-MM-dd HH:mm")}</span>
     </div>
 </header>
 
 <#include "./comps/link.ftl"/>
 
 <div class="container">
-    <div class="u-page">
-    ${page.content}
+    <div>
+        <#list (page.tagList)! as tag>
+            <a href="/pageFilter/tag/${tag.id}">${tag.tag}</a>
+        </#list>
     </div>
+
+    <div class="u-page">
+        ${page.content}
+    </div>
+
     <hr>
+
     <div class="m-reply">
     </div>
+
     <div class="o-reply">
         <input type="button" id="loadReply" data-pid="${page.id!}" value="加载更多留言">
         <hr>
