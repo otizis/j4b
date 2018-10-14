@@ -4,5 +4,6 @@
     <a href="/editPageList.html">文章列表</a>
     <a href="/editPageContent.html">新增文章</a>
     <a href="/editReply.html">留言管理</a>
+    <a href="/editTagList.html">标签管理</a>
 </div>
 

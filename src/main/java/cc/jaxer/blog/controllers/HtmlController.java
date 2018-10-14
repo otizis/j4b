@@ -65,6 +65,40 @@ public class HtmlController implements ErrorController
         return "index";
     }
 
+
+    @RequestMapping(path = {"/pageFilter/tag/{tagId}"})
+    public String pageFilter(ModelMap modelMap,  String pageNum, @PathVariable String tagId)
+    {
+        // blog信息
+        modelMap.put("blogInfo", configService.getBlogInfo());
+
+        // page列表
+        int pageN = 1;
+        if (NumberUtils.isDigits(pageNum))
+        {
+            pageN = Integer.parseInt(pageNum);
+        }
+
+        TagEntity tag = tagMapper.selectById(tagId);
+        if(tag == null)
+        {
+            return "redict:/error";
+        }
+        modelMap.put("tag",tag);
+
+        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 27),
+         new QueryWrapper<PageEntity>()
+         .eq("status",1)
+         .exists(" select 1 from T_PAGE_TAG where T_PAGE.ID = T_PAGE_TAG.PAGE_ID AND T_PAGE_TAG.TAG_ID = '" + tagId +"'")
+         .orderByDesc("create_at")
+         );
+        modelMap.put("pageList", pageEntityIPage.getRecords());
+        modelMap.put("total", pageEntityIPage.getPages());
+        modelMap.put("pNum", pageN);
+
+        return "pageFilter";
+    }
+
     @Override
     public String getErrorPath()
     {
@@ -191,6 +225,17 @@ public class HtmlController implements ErrorController
         modelMap.put("page", replyPage);
         modelMap.put("total", replyPage.getPages());
         return "admin/editReply";
+    }
+
+
+    @RequestMapping(path = {"/editTagList.html"})
+    @NeedLogin(isPage = true)
+    public String editTagList(ModelMap modelMap)
+    {
+        List<TagEntity> list = tagMapper.selectList(new QueryWrapper<TagEntity>());
+
+        modelMap.put("tagList", list);
+        return "admin/editTagList";
     }
 
 

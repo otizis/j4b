@@ -34,8 +34,12 @@ public class ReplyController
         @RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
         @RequestParam(name= "limit", defaultValue = "5", required = false) Integer limit)
     {
+        if(StringUtils.isEmpty(pageId)){
+            return R.error();
+        }
         IPage<ReplyEntity> replyPage = replyMapper.selectPage(new Page<>(page, limit), new
                 QueryWrapper<ReplyEntity>()
+                .eq("page_id",pageId)
                 .eq("status",1)
                 .orderByDesc("create_at"));
 

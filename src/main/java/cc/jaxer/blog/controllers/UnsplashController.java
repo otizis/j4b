@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cc.jaxer.blog.common.NeedLogin;
+import cc.jaxer.blog.entities.ConfigEntity;
 import cc.jaxer.blog.mapper.ConfigMapper;
 
 @RestController
@@ -26,16 +27,20 @@ public class UnsplashController
     @Autowired
     private ConfigMapper configMapper;
 
-    private final String appid = "b857176babeceddbe3163cd7592dc24662642f4bf66e7869fc3694dda7300b45";
-
     private static CloseableHttpClient httpclient = HttpClients.createDefault();
 
     @RequestMapping("/unsplash/search")
     @NeedLogin
-    public void searchImage(String keyword,HttpServletResponse response) throws Exception{
+    public void searchImage(String keyword,HttpServletResponse response) throws Exception
+    {
+
         if(StringUtils.isEmpty(keyword)){
             return ;
         }
+        // b857176babeceddbe3163cd7592dc24662642f4bf66e7869fc3694dda7300b45
+        ConfigEntity config = configMapper.selectById("unsplash_appid");
+        String appid = config.getV();
+
         URI uri = new URIBuilder()
         .setScheme("https")
         .setHost("api.unsplash.com")
