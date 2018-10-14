@@ -7,7 +7,10 @@ import java.util.HashMap;
 @Getter
 public class R extends HashMap<String,Object>
 {
-    public static R error(int code, String msg){
+
+    private static final long serialVersionUID = -8544019625615246677L;
+
+    public static R error(int code, String msg) {
         R r = new R();
         r.put("code", code);
         r.put("msg", msg);

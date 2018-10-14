@@ -7,7 +7,7 @@ public class J4bUtils
     /**
      * token池
      */
-    static ConcurrentHashMap<String, Long> tokenMap = new ConcurrentHashMap();
+    static ConcurrentHashMap<String, Long> tokenMap = new ConcurrentHashMap<>();
 
     public static void addToken(String token, long timeInMillis)
     {
