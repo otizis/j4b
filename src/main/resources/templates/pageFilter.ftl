@@ -25,7 +25,7 @@
             <div class="u-card-plane">${page.createAt?string('yyyy-MM-dd')}</div>
         </div>
     </#list>
-    <div>
+    <div class="u-pagition">
         <#if pNum gt  1>
             <a href="?pageNum=${pNum - 1}">上一页</a>
         </#if>

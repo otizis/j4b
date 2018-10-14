@@ -13,16 +13,14 @@
 <#include "./comps/link.ftl"/>
 
 <div class="container">
-    <div>
+    <div class="u-page">
+        ${page.content}
+    </div>
+    <div class="u-tag">
         <#list (page.tagList)! as tag>
             <a href="/pageFilter/tag/${tag.id}">${tag.tag}</a>
         </#list>
     </div>
-
-    <div class="u-page">
-        ${page.content}
-    </div>
-
     <hr>
 
     <div class="m-reply">

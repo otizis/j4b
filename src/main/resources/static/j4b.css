@@ -19,7 +19,9 @@ header{
     margin: auto
 }
 .u-link{
-    border-bottom: 1px dotted;
+    border-bottom: 1px #333 dashed;
+    max-width: 60rem;
+    margin: auto;
 }
 
 .u-link a{
@@ -32,7 +34,7 @@ header{
 .container{
     max-width: 60rem;
     margin: auto;
-    padding: 2rem 0;
+    padding: 0.5rem 0;
 }
 .container .u-card{
     display: inline-block;
@@ -40,7 +42,7 @@ header{
     height: 10rem;
     padding: 1rem;
     border:1px solid black;
-    margin-bottom:1rem;
+    margin-top:1rem;
     vertical-align: top;
     position: relative;
     overflow: hidden;
@@ -63,32 +65,43 @@ header{
     background: white;
     line-height: 3rem;
 }
+.u-pagition{
+    padding: 1rem;
+}
+
 footer{
-    border-top:1px solid;
-    font: 0.8rem serif;
+    max-width: 60rem;
+    margin: auto;
+    border-top:1px #818181 dotted;
+    font-size: 0;
 }
 footer a{
     text-decoration: none;
 }
 footer > div{
     display: inline-block;
-    width: 25rem;
+    width: 50%;
     padding: 1rem 0;
-    text-align: left
+    font: 0.8rem serif;
 }
 
 .u-page{
     text-align: left;
     border-left: 1px solid ;
     border-right: 1px solid ;
-    padding: 1rem;
+    padding: 0 1rem;
     min-height: 40rem;
-    font-size:1.2rem;
+    /* font-size:1.2rem; */
+    border-radius: 1%;
 }
 .u-page p {
     margin: 0.5rem 0;
 }
 
+.u-tag{
+    text-align: left;
+    padding: 0.5rem 4em;
+}
 .m-reply{
     text-align: left;
     font-size: 1rem;
@@ -125,4 +138,10 @@ footer > div{
 .inline-left{
     text-align: left;
     padding: 0.5rem;
+}
+blockquote {
+    background: #eee;
+    font-size: 1rem;
+    padding: 0.5rem;
+    color: #333;
 }

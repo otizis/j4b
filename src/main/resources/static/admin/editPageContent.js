@@ -5,7 +5,7 @@ Zepto(function($){
         plugins: "hr lists link image imagetools",
         height: 600,
         menubar: false,
-        toolbar:"undo redo | formatselect bold italic underline fontsizeselect image | hr bullist | link | removeformat",
+        toolbar:"undo redo | formatselect bold italic underline alignleft aligncenter fontsizeselect image | hr bullist blockquote | link | removeformat",
         file_browser_callback:function(){
 
         },
