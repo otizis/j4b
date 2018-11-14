@@ -1,4 +1,5 @@
 Zepto(function($){
+
     tinymce.init({
         selector:'#editor',
         language:'zh_CN',
@@ -6,7 +7,10 @@ Zepto(function($){
         height: 600,
         menubar: false,
         toolbar:"undo redo | formatselect bold italic underline alignleft aligncenter fontsizeselect image | hr bullist blockquote | link | removeformat",
-        images_upload_base_path: '/',
+        urlconverter_callback : function(url, node, on_save, name) {
+            // 不转化最前面的/
+            return url;
+        },
         images_upload_url: '/upload'
     });
 
