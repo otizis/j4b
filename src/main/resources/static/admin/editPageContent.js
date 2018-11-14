@@ -6,9 +6,7 @@ Zepto(function($){
         height: 600,
         menubar: false,
         toolbar:"undo redo | formatselect bold italic underline alignleft aligncenter fontsizeselect image | hr bullist blockquote | link | removeformat",
-        file_browser_callback:function(){
-
-        },
+        images_upload_base_path: '/',
         images_upload_url: '/upload'
     });
 
