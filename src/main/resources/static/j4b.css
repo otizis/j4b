@@ -91,13 +91,15 @@ footer > div{
     border-right: 1px solid ;
     padding: 0 1rem;
     min-height: 40rem;
-    /* font-size:1.2rem; */
     border-radius: 1%;
 }
 .u-page p {
     margin: 0.5rem 0;
 }
-
+.u-page img {
+    max-width: 100%;
+    height: auto;
+}
 .u-tag{
     text-align: left;
     padding: 0.5rem 4em;
