@@ -3,10 +3,14 @@ Zepto(function($){
     tinymce.init({
         selector:'#editor',
         language:'zh_CN',
-        plugins: "hr lists link image imagetools",
+        plugins: "hr lists link image imagetools paste code",
+        paste_as_text : true,
+        paste_remove_styles: true,
+        paste_remove_styles_if_webkit: true,
+        paste_strip_class_attributes: true,
         height: 600,
         menubar: false,
-        toolbar:"undo redo | formatselect bold italic underline alignleft aligncenter fontsizeselect image | hr bullist blockquote | link | removeformat",
+        toolbar:"undo redo | formatselect bold italic underline alignleft aligncenter fontsizeselect image | hr bullist blockquote | link | removeformat code",
         urlconverter_callback : function(url, node, on_save, name) {
             // 不转化最前面的/
             return url;
