@@ -1,5 +1,5 @@
 <head>
-    <title>${(blogInfo.title)!"j4b"}</title>
+    <title>${(page.title)!(blogInfo.title)!"j4b"}</title>
     <meta charset="UTF-8">
     <meta name="keywords"  content="${(blogInfo.keywords)!"j4b"}" />
     <meta name="description" content="${(blogInfo.description)!"j4b"}" />

@@ -56,7 +56,7 @@ public class HtmlController implements ErrorController
         {
             pageN = Integer.parseInt(pageNum);
         }
-        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 27), new QueryWrapper<PageEntity>
+        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 5), new QueryWrapper<PageEntity>
                 ().eq("status",1).orderByDesc("create_at"));
         modelMap.put("pageList", pageEntityIPage.getRecords());
         modelMap.put("total", pageEntityIPage.getPages());

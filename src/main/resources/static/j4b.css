@@ -38,7 +38,7 @@ header{
 }
 .container .u-card{
     display: inline-block;
-    width: 10rem;
+    width: 58rem;
     height: 10rem;
     padding: 1rem;
     border:1px solid black;
@@ -48,8 +48,13 @@ header{
     overflow: hidden;
     cursor: pointer;
 }
+.container .u-card h3{
+    text-align: left;
+    padding-left: 4rem;
+}
 .container .u-card:hover{
     border:1px solid cornflowerblue;
+    color: cornflowerblue;
 }
 .container .u-card img{
     display: block;
@@ -59,11 +64,12 @@ header{
 .container .u-card .u-card-plane{
     position: absolute;
     bottom: 0;
-    left: 0 ;
-    right:0;
+    left: 0;
+    right: 2rem;
     height: 3rem;
     background: white;
     line-height: 3rem;
+    text-align: right;
 }
 .u-pagition{
     padding: 1rem;
