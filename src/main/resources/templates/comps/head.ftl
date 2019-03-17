@@ -1,5 +1,7 @@
 <head>
     <title>${(page.title)!(blogInfo.title)!"j4b"}</title>
+    <link rel="icon" href="${blogInfo.logoUrl!"/logo.jpg"}">
+
     <meta charset="UTF-8">
     <meta name="keywords"  content="${(blogInfo.keywords)!"j4b"}" />
     <meta name="description" content="${(blogInfo.description)!"j4b"}" />
