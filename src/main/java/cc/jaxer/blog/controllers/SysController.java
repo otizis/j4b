@@ -1,9 +1,6 @@
 package cc.jaxer.blog.controllers;
 
-import cc.jaxer.blog.common.ConfigCodeEnum;
-import cc.jaxer.blog.common.J4bUtils;
-import cc.jaxer.blog.common.NeedLogin;
-import cc.jaxer.blog.common.R;
+import cc.jaxer.blog.common.*;
 import cc.jaxer.blog.entities.ConfigEntity;
 import cc.jaxer.blog.mapper.ConfigMapper;
 import cc.jaxer.blog.services.ConfigService;
@@ -42,10 +39,10 @@ public class SysController
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DAY_OF_YEAR, 1);
         J4bUtils.addToken(token, now.getTimeInMillis());
-        Cookie cookie = new Cookie("token", token);
+        Cookie cookie = new Cookie(AppConstant.HEADER_TOKEN_KEY, token);
         cookie.setPath("/");
         response.addCookie(cookie);
-        return R.ok("token", token);
+        return R.ok(AppConstant.HEADER_TOKEN_KEY, token).put("from",request.get("from"));
     }
 
 

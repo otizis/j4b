@@ -18,6 +18,10 @@ Zepto(function ($) {
                     console.log(resp);
                     if(resp.code === 0){
                         localStorage.setItem("token", resp.token);
+                        if(location.search.length>10){
+                            location.href = decodeURIComponent(location.search.substring(1));
+                            return;
+                        }
                         location.href = "/config.html";
                     }
                     else{

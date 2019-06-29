@@ -20,6 +20,7 @@
         <#list (page.tagList)! as tag>
             <a href="/pageFilter/tag/${tag.id}">${tag.tag}</a>
         </#list>
+        <a href="/editPageContent.html?id=${page.id}">编辑</a>
     </div>
     <hr>
 

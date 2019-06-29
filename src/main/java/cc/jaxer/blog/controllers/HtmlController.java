@@ -1,5 +1,6 @@
 package cc.jaxer.blog.controllers;
 
+import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.entities.*;
 import cc.jaxer.blog.mapper.*;

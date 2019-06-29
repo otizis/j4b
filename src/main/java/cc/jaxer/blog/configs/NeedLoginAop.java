@@ -1,5 +1,6 @@
 package cc.jaxer.blog.configs;
 
+import cc.jaxer.blog.common.AppConstant;
 import cc.jaxer.blog.common.BException;
 import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
@@ -16,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
 
 @Aspect
 @Component
@@ -35,7 +37,7 @@ public class NeedLoginAop
         HttpServletRequest request = requestAttributes.getRequest();
         HttpServletResponse response = requestAttributes.getResponse();
 
-        String token = request.getHeader("token");
+        String token = request.getHeader(AppConstant.HEADER_TOKEN_KEY);
         if (StringUtils.isEmpty(token))
         {
             Cookie[] cookies = request.getCookies();
@@ -43,7 +45,7 @@ public class NeedLoginAop
             {
                 for (Cookie cookie : cookies)
                 {
-                    if (StringUtils.equals(cookie.getName(), "token"))
+                    if (StringUtils.equals(cookie.getName(), AppConstant.HEADER_TOKEN_KEY))
                     {
                         token = cookie.getValue();
                         break;
@@ -59,7 +61,7 @@ public class NeedLoginAop
         NeedLogin needLogin = signature.getMethod().getAnnotation(NeedLogin.class);
         if (needLogin.isPage())
         {
-            response.sendRedirect("/login.html");
+            response.sendRedirect("/login.html?"+URLEncoder.encode(request.getRequestURL() +"?"+ request.getQueryString()));
             return;
         }
         throw new BException("未登录");
