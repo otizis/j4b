@@ -21,6 +21,15 @@
             <a href="/pageFilter/tag/${tag.id}">${tag.tag}</a>
         </#list>
         <a href="/editPageContent.html?id=${page.id}">编辑</a>
+
+    </div>
+    <div class="u-append">
+        <form id="appendForm">
+            <input type="hidden" name="id" value="${page.id!}">
+            <textarea name="content"></textarea>
+            <br>
+            <input type="button" id="append" value="内容追加" />
+        </form>
     </div>
     <hr>
 
