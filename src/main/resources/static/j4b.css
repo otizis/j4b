@@ -9,6 +9,10 @@ h2,p{
 header{
     padding-bottom:1rem;
 }
+header .header-info{
+    color: #333;
+    font-size: 0.9rem;
+}
 .u-logo{
     display: inline-flex;
     width: 5rem;
@@ -19,7 +23,6 @@ header{
     margin: auto
 }
 .u-link{
-    border-bottom: 1px #333 dashed;
     max-width: 60rem;
     margin: auto;
 }
@@ -93,11 +96,10 @@ footer > div{
 
 .u-page{
     text-align: left;
-    border-left: 1px solid ;
-    border-right: 1px solid ;
+    border: 1px solid #a8a8a8;
+    box-shadow: #a8a8a8 3px 3px 3px;
     padding: 0 1rem;
     min-height: 40rem;
-    border-radius: 1%;
 }
 .u-page p {
     margin: 0.5rem 0;

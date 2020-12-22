@@ -6,7 +6,7 @@
 <header>
     <h3>${page.title!}</h3>
     <div>
-        <span>${page.createAt?string("yyyy-MM-dd HH:mm")}</span>
+        <span class="header-info">${page.createAt?string("yyyy-MM-dd HH:mm")}</span>
     </div>
 </header>
 
