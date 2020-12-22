@@ -7,6 +7,9 @@
     <h3>${page.title!}</h3>
     <div>
         <span class="header-info">${page.createAt?string("yyyy-MM-dd HH:mm")}</span>
+        <@hasLogin>
+            <a href="/editPageContent.html?id=${page.id}">编辑</a>
+        </@hasLogin>
     </div>
 </header>
 
@@ -20,17 +23,18 @@
         <#list (page.tagList)! as tag>
             <a href="/pageFilter/tag/${tag.id}">${tag.tag}</a>
         </#list>
-        <a href="/editPageContent.html?id=${page.id}">编辑</a>
+    </div>
+    <@hasLogin>
+        <div class="u-append">
+            <form id="appendForm">
+                <input type="hidden" name="id" value="${page.id!}">
+                <textarea name="content"></textarea>
+                <br>
+                <input class="u-button" type="button" id="append" value="内容追加" />
+            </form>
+        </div>
+    </@hasLogin>
 
-    </div>
-    <div class="u-append">
-        <form id="appendForm">
-            <input type="hidden" name="id" value="${page.id!}">
-            <textarea name="content"></textarea>
-            <br>
-            <input type="button" id="append" value="内容追加" />
-        </form>
-    </div>
     <hr>
 
     <div class="m-reply">

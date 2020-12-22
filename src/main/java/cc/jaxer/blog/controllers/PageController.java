@@ -30,23 +30,8 @@ public class PageController
     @Autowired
     private PageMapper pageMapper;
 
-
     @Autowired
     private PageTagMapper pageTagMapper;
-
-    @RequestMapping("/page/list")
-    public R list(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
-                  @RequestParam(name= "limit", defaultValue = "5", required = false) Integer limit)
-    {
-        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(page, limit), new
-                QueryWrapper<PageEntity>()
-                .eq("status",1)
-                .excludeColumns(PageEntity.class, "content")
-                .orderByDesc("create_at"));
-
-        return R.ok("page", pageEntityIPage);
-    }
-
 
     @RequestMapping("/page/save")
     @NeedLogin

@@ -33,18 +33,19 @@
             <span>标签:</span>
             <#list tagEntities! as tagEntity>
                 <label >
-                    <input type="checkbox"  <#if (tagIdList?seq_contains(tagEntity.id))!false>checked</#if>
+                    <input type="checkbox" <#if (tagIdList?seq_contains(tagEntity.id))!false>checked</#if>
                            name="tags"
                            value="${tagEntity.id}">
                     ${tagEntity.tag}
                 </label>
             </#list>
-            <input id="newTag" ><input class="u-button" type="button" id="addTagBtn" value="新建标签">
+            <input id="newTag" type="text"><input class="u-button" type="button" id="addTagBtn" value="新建标签">
         </div>
 
         <div id="editor" style="text-align:left">
             ${(pageEntity.content)!''}
         </div>
+        <br>
         <input id="savePageBtn" class="u-button" type="button" value="提交">
     </form>
 </div>

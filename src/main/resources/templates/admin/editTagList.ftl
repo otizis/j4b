@@ -16,7 +16,7 @@
         <tr>
             <td>${(tag.id)!""}</td>
             <td>
-                <input id='${(tag.id)!""}' value='${(tag.tag)!""}'/>
+                <input type="text" id='${(tag.id)!""}' value='${(tag.tag)!""}'/>
             </td>
             <td>
                 <input class="u-button updateTag"

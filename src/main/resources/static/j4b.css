@@ -170,3 +170,8 @@ blockquote {
     box-shadow: grey 1px 1px 1px;
     cursor: pointer;
 }
+input[type="text"] {
+    height: 24px;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+}

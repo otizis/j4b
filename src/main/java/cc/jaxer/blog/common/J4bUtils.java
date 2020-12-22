@@ -1,11 +1,9 @@
 package cc.jaxer.blog.common;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
