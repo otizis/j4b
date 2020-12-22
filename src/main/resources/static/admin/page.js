@@ -23,6 +23,29 @@ Zepto(function($){
             }
         })
     })
+    $('#append').on("click",function(){
+        var data = $("#appendForm").serializeArray();
+        console.log(data)
+        var jsonData={}
+        $.each(data,function(index,item){
+            jsonData[item.name] = item.value;
+        });
+        $.ajax({
+            type:'POST',
+            url:'/page/append',
+            contentType: 'application/json',
+            data: JSON.stringify(jsonData),
+            success: function (resp) {
+                if(resp.code === 0){
+                    console.log(resp);
+                    location.reload();
+                }
+                else{
+                    window.alert(resp.msg||'error')
+                }
+            }
+        })
+    })
     $('#loadReply').on("click",function(){
         var pageId = $(this).data("pid");
         loadReply(pageId);

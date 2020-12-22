@@ -2,6 +2,7 @@ package cc.jaxer.blog.controllers;
 
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
+import cc.jaxer.blog.common.validation.Update;
 import cc.jaxer.blog.entities.PageEntity;
 import cc.jaxer.blog.entities.PageTagEntity;
 import cc.jaxer.blog.entities.TagEntity;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -70,6 +72,19 @@ public class PageController
         }
         pageMapper.insert(page);
         updatePageTag(page);
+        return R.ok();
+    }
+
+    @RequestMapping("/page/append")
+    @NeedLogin
+    public R append(@RequestBody @Validated(value = Update.class) PageEntity page)
+    {
+        PageEntity pageEntity = pageMapper.selectById(page.getId());
+        String content1 = pageEntity.getContent();
+        content1 += "<hr/>";
+        content1 = content1 + page.getContent();
+        pageEntity.setContent(content1);
+        pageMapper.updateById(pageEntity);
         return R.ok();
     }
 
