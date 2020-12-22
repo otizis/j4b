@@ -21,7 +21,7 @@
     </div>
     <div class="u-tag">
         <#list (page.tagList)! as tag>
-            <a href="/pageFilter/tag/${tag.id}">${tag.tag}</a>
+            <a href="/pageFilter/tag/${tag.id}"># ${tag.tag}</a>
         </#list>
     </div>
     <@hasLogin>
