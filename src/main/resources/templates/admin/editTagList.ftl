@@ -19,11 +19,11 @@
                 <input id='${(tag.id)!""}' value='${(tag.tag)!""}'/>
             </td>
             <td>
-                <input class="updateTag"
+                <input class="u-button updateTag"
                 type="button"
                 data-id="${tag.id!''}" value="修改">
                 |
-                <input class="delTag"
+                <input class="u-button delTag"
                 type="button"
                 data-id="${tag.id!''}" value="删除">
             </td>

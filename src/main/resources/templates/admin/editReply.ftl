@@ -24,11 +24,11 @@
             </td>
             <td>${reply.createAt?string("yyyy-MM-dd HH:mm:ss")}</td>
             <td>
-                <input class="onlineReply"
+                <input class="u-button onlineReply"
                 type="button"
                 data-id="${reply.id!''}" value="上线">
                 |
-                <input class="offlineReply"
+                <input class="u-button offlineReply"
                 type="button"
                 data-c="${reply.id!''}" value="屏蔽">
             </td>

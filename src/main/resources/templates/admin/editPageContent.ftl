@@ -39,13 +39,13 @@
                     ${tagEntity.tag}
                 </label>
             </#list>
-            <input id="newTag" ><input type="button" id="addTagBtn" value="新建标签">
+            <input id="newTag" ><input class="u-button" type="button" id="addTagBtn" value="新建标签">
         </div>
 
         <div id="editor" style="text-align:left">
             ${(pageEntity.content)!''}
         </div>
-        <input id="savePageBtn" type="button" value="提交">
+        <input id="savePageBtn" class="u-button" type="button" value="提交">
     </form>
 </div>
 <script src="/libs/tinymce/tinymce.min.js"></script>

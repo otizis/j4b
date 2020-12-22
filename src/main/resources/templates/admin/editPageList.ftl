@@ -25,11 +25,11 @@
             <td>${page.createAt?string("yyyy-MM-dd HH:mm:ss")}</td>
             <td>${page.updateAt?string("yyyy-MM-dd HH:mm:ss")}</td>
             <td>
-                <input class="updatePage"
+                <input class="u-button updatePage"
                 type="button"
                 data-id="${page.id!''}" value="修改">
                 |
-                <input class="delPage"
+                <input class="u-button delPage"
                 type="button"
                 data-id="${page.id!''}" value="屏蔽">
             </td>

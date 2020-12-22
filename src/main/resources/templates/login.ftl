@@ -4,7 +4,7 @@
 <div style="text-align:center;padding:10rem">
     <input id="access" type="password"/>
     <br/>
-    <input type="button" id="submit" value="Go" />
+    <input class="u-button"  type="button" id="submit" value="Go" />
 </div>
 
 

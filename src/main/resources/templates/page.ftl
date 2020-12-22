@@ -28,13 +28,13 @@
     </div>
 
     <div class="o-reply">
-        <input type="button" id="loadReply" data-pid="${page.id!}" value="加载更多留言">
+        <input class="u-button"  type="button" id="loadReply" data-pid="${page.id!}" value="加载更多留言">
         <hr>
         <form id="addReplyForm">
             <input type="hidden" name="pageId" value="${page.id!}">
             <textarea name="content" placeholder="留言审后可见"></textarea>
             <br>
-            <input type="button" id="addReply" value="留言">
+            <input class="u-button" type="button" id="addReply" value="留言">
         </form>
 
     </div>

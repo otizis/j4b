@@ -13,10 +13,10 @@
             <td>${config.code!""}</td>
             <td>${config.v!""}</td>
             <td>
-                <input class="updateConfig"
+                <input class="u-button updateConfig"
                     type="button" data-c="${config.code!''}" value="修改">
                     |
-                <input class="deleteConfig"
+                <input class="u-button deleteConfig"
                     type="button" data-c="${config.code!''}" value="删除">
              </td>
         </tr>
@@ -32,7 +32,7 @@
         <label >
             value：<input type="text" name="v"/>
         </label>
-        <input id="addConfigBtn" type="button" value="提交">
+        <input class="u-button" id="addConfigBtn" type="button" value="提交">
     </form>
 </div>
 
