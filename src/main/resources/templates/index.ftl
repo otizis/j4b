@@ -25,7 +25,20 @@
         空
     </#if>
     <#list pageList! as page>
-        <div class="u-card"  onclick="location.href='/page/${page.id!}'">
+        <div class="u-card"
+             onclick="location.href='/page/${page.id!}'">
+            <#if page.bgUrl?length gt 1>
+            <div style="background-image: url('${unsplashDomain}${page.bgUrl}');
+                    background-size: cover;
+                    background-position: center;
+                    height: 30px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;">
+
+            </div>
+            </#if>
             <h3>${page.title!}</h3>
             <div>
                 <#assign summary=page.content?replace("<.*?>","","r")>

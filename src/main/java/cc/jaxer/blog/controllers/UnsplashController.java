@@ -1,64 +1,29 @@
 package cc.jaxer.blog.controllers;
 
-import java.io.InputStream;
-import java.net.URI;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import cc.jaxer.blog.common.NeedLogin;
-import cc.jaxer.blog.entities.ConfigEntity;
-import cc.jaxer.blog.mapper.ConfigMapper;
+import cc.jaxer.blog.services.UnsplashService;
+import cc.jaxer.blog.unsplash.SearchReq;
+import cc.jaxer.blog.unsplash.SearchResp;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
+@Controller
+@Slf4j
 public class UnsplashController
 {
-    private static final Logger logger = LoggerFactory.getLogger(UnsplashController.class);
-
     @Autowired
-    private ConfigMapper configMapper;
+    UnsplashService unsplashService;
 
-    private static CloseableHttpClient httpclient = HttpClients.createDefault();
-
-    @RequestMapping("/unsplash/search")
+    @RequestMapping("/unsplash/list")
     @NeedLogin
-    public void searchImage(String keyword,HttpServletResponse response) throws Exception
+    public String searchImage(ModelMap modelMap, SearchReq searchReq)
     {
-
-        if(StringUtils.isEmpty(keyword)){
-            return ;
-        }
-        // b857176babeceddbe3163cd7592dc24662642f4bf66e7869fc3694dda7300b45
-        ConfigEntity config = configMapper.selectById("unsplash_appid");
-        String appid = config.getV();
-
-        URI uri = new URIBuilder()
-        .setScheme("https")
-        .setHost("api.unsplash.com")
-        .setPath("/search/photos")
-        .setParameter("query", keyword)
-        .setParameter("per_page", "50")
-        .build();
-
-        HttpGet httpGet = new HttpGet(uri);
-        httpGet.addHeader("Accept-Version", "v1");
-        httpGet.addHeader("Authorization", "Client-ID " + appid);
-        CloseableHttpResponse result = httpclient.execute(httpGet);
-        HttpEntity entity = result.getEntity();
-        InputStream content = entity.getContent();
-        IOUtils.copy(content, response.getOutputStream());
+        SearchResp resp = unsplashService.search(searchReq);
+        modelMap.addAttribute("resp",resp);
+        modelMap.addAttribute("searchReq",searchReq);
+        return "unsplash/list";
     }
 }

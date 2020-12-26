@@ -89,4 +89,12 @@ public class ConfigService
     {
         blogInfoEntity = null;
     }
+
+    public String getConfDefault(ConfigCodeEnum key,String defaultStr) {
+        ConfigEntity configEntity = configMapper.selectById(key.toString());
+        return configEntity == null ? defaultStr :configEntity.getV();
+    }
+    public String getConf(ConfigCodeEnum key) {
+        return getConfDefault(key, "");
+    }
 }

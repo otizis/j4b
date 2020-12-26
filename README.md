@@ -9,4 +9,8 @@ simple blog by java.
 - [x] 自带图床功能
 - [x] 文章存在H2数据库
 - [x] 增加文章标签
-- [ ] 第三方引图（参考Ghost，使用Unsplash
+- [x] 第三方引图（参考Ghost，使用Unsplash
+
+## 配置项列表
+    unsplash_appid unsplash 开发者id
+    unsplash_proxy 代理地址替换

@@ -77,4 +77,39 @@ Zepto(function($){
             }
         )
     })
+
+    $("#unsplashBtn").on("click",function(){
+        $.ajax(
+            {
+                type: 'POST',
+                url: "/unsplash/list",
+                data: {query:"page"},
+                success: function (resp) {
+                    console.log(resp);
+                    $("#unsplashList").show().html(resp)
+                }
+            }
+        )
+    })
+    $("#unsplashSearchHandler").on("click",function(){
+        $.ajax(
+            {
+                type: 'POST',
+                url: "/unsplash/list",
+                data: {query:$("#unsplashQuery").val()},
+                success: function (resp) {
+                    console.log(resp);
+                    $("#unsplashList").show().html(resp)
+                }
+            }
+        )
+    })
+    $("#unsplashList").on("click",".select",function(){
+        var src = $(this).data("src")
+        var domain = $(this).data("domain")
+        $("#bgImg").attr("src",domain+src);
+        $("#bgUrl").val(src);
+        $("#unsplashList").hide()
+
+    })
 })

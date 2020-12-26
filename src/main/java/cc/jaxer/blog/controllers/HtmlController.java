@@ -1,5 +1,7 @@
 package cc.jaxer.blog.controllers;
 
+import cc.jaxer.blog.common.AppConstant;
+import cc.jaxer.blog.common.ConfigCodeEnum;
 import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.entities.*;
@@ -50,6 +52,9 @@ public class HtmlController implements ErrorController
     {
         // blog信息
         modelMap.put("blogInfo", configService.getBlogInfo());
+
+        String conf = configService.getConfDefault(ConfigCodeEnum.unsplash_proxy, AppConstant.UNSPLASH_DOMAIN);
+        modelMap.put("unsplashDomain", conf);
 
         // page列表
         int pageN = 1;
@@ -120,6 +125,9 @@ public class HtmlController implements ErrorController
         // blog信息
         BlogInfoEntity blogInfo = configService.getBlogInfo();
         modelMap.put("blogInfo", blogInfo);
+
+        String conf = configService.getConfDefault(ConfigCodeEnum.unsplash_proxy, AppConstant.UNSPLASH_DOMAIN);
+        modelMap.put("unsplashDomain", conf);
 
         // page
         PageEntity pageEntity = pageMapper.selectById(id);

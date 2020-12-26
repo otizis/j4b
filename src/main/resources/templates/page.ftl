@@ -1,9 +1,16 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <#include "./comps/head.ftl"/>
-<body>
-
+<body >
+<#if page.bgUrl?length gt 1>
+<div style="background-image: url('${unsplashDomain}${page.bgUrl}');
+        background-size: cover;
+        background-position: center;
+        height: 50vh"
+></div>
+</#if>
 <header>
+
     <h3>${page.title!}</h3>
     <div>
         <span class="header-info">${page.createAt?string("yyyy-MM-dd HH:mm")}</span>
