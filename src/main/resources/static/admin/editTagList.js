@@ -23,7 +23,7 @@ Zepto(function($){
 
         $.ajax({
             type:'POST',
-            url:'/tag/update',
+            url:'/tag/save',
             contentType: 'application/json',
             data: JSON.stringify({id:id,tag:$("#"+id).val()}),
             success: function (resp) {
