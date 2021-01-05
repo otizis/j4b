@@ -21,7 +21,6 @@ Zepto(function($){
     // 文章部分
     $("#savePageBtn").one("click",function(){
         var data = $("#savePageForm").serializeArray();
-        console.log(data)
         var jsonData={tagList:[]}
         $.each(data,function(index,item){
             jsonData[item.name] = item.value;
@@ -39,7 +38,6 @@ Zepto(function($){
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData),
                 success: function (resp) {
-                    console.log(resp);
                     if(resp.code === 0){
                         window.alert('操作成功');
                         location.reload();
@@ -63,7 +61,6 @@ Zepto(function($){
                 contentType: 'application/json',
                 data: JSON.stringify({tag:tag}),
                 success: function (resp) {
-                    console.log(resp);
                     if(resp.code === 0){
                         console.log(resp)
                         $(btn).parent().prepend(" <label >\n" +
@@ -85,31 +82,27 @@ Zepto(function($){
                 url: "/unsplash/list",
                 data: {query:"page"},
                 success: function (resp) {
-                    console.log(resp);
                     $("#unsplashList").show().html(resp)
                 }
             }
         )
     })
-    $("#unsplashSearchHandler").on("click",function(){
-        $.ajax(
-            {
+    $("#unsplashList")
+        .on("click","#unsplashSearchHandler",function(){
+            $.ajax({
                 type: 'POST',
                 url: "/unsplash/list",
                 data: {query:$("#unsplashQuery").val()},
                 success: function (resp) {
-                    console.log(resp);
                     $("#unsplashList").show().html(resp)
                 }
-            }
-        )
-    })
-    $("#unsplashList").on("click",".select",function(){
-        var src = $(this).data("src")
-        var domain = $(this).data("domain")
-        $("#bgImg").attr("src",domain+src);
-        $("#bgUrl").val(src);
-        $("#unsplashList").hide()
-
-    })
+            })
+        })
+        .on("click",".select",function(){
+            var src = $(this).data("src")
+            var domain = $(this).data("domain")
+            $("#bgImg").attr("src",domain+src);
+            $("#bgUrl").val(src);
+            $("#unsplashList").hide()
+        })
 })

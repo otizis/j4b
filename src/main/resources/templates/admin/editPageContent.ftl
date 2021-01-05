@@ -12,7 +12,7 @@
         <input type="hidden" name="id" value="${(pageEntity.id)!''}"/>
 
         <div class="inline-left">
-            <span> 标题：</span>
+            <span>标题：</span>
             <label >
                <input type="text" style="width: 40rem" name="title" value="${(pageEntity.title)!''}"/>
             </label>
