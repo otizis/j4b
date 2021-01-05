@@ -1,3 +1,4 @@
+-- 新数据库建表
 create table if not exists T_CONFIG
 (
     CODE VARCHAR2(32),
@@ -12,8 +13,7 @@ CREATE TABLE IF NOT EXISTS T_PAGE
     CREATE_AT DATETIME,
     UPDATE_AT DATETIME,
     STATUS TINYINT(4) default 1,
-    DESC VARCHAR2(256),
-    BG_URL VARCHAR2(256)
+    DESC VARCHAR2(256)
 );
 
 

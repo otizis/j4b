@@ -27,7 +27,7 @@
     <#list pageList! as page>
         <div class="u-card"
              onclick="location.href='/page/${page.id!}'">
-            <#if page.bgUrl?length gt 1>
+            <#if page.bgUrl?? && page.bgUrl?length gt 1>
             <div style="background-image: url('${unsplashDomain}${page.bgUrl}');
                     background-size: cover;
                     background-position: center;

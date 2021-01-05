@@ -13,8 +13,6 @@ import java.util.List;
 
 @Data
 @TableName("T_PAGE")
-// ALTER TABLE T_PAGE ADD desc varchar2(256) NULL;
-// ALTER TABLE T_PAGE ADD BG_URL VARCHAR2(256) NULL;
 public class PageEntity
 {
     @TableId(type = IdType.INPUT)
