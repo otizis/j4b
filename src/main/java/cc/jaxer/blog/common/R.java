@@ -19,6 +19,9 @@ public class R extends HashMap<String,Object>
     public static R error(){
         return error(500,"服务器错误");
     }
+    public static R error(String msg){
+        return error(500,msg);
+    }
     public static R ok(){
         R r = new R();
         r.put("code", 0);

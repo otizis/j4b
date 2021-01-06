@@ -14,6 +14,7 @@ simple blog by java.
 ## 运行配置项列表
     unsplash_appid #unsplash 开发者id
     unsplash_proxy #代理地址替换 https://images.unsplash.com
+    access #覆盖登录密码
 ## 部署
 - 安装jdk环境
 - 下载dist中的jar包文件 blog-x.jar
@@ -21,6 +22,7 @@ simple blog by java.
 
         nohup java -jar blog-x.jar & 
 - 会在home目录生成 h2.db 数据库文件
+- 点击下方“管理”，默认密码j4bj4b登入后台
 - 中止进程，找到pid，kill -9 pid 即可。
 ## 部署配置项
 - server.port=8080 端口
