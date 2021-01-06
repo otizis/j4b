@@ -43,12 +43,11 @@
             <input class="u-button" type="button" id="addTagBtn" value="新建标签">
         </div>
         <div class="inline-left">
-            <span>图片:</span>
+            <span>配图:</span>
             <img id="bgImg" src="${(pageEntity.bgUrl)!''}" style="width: 200px;"/>
             <input id="bgUrl" name="bgUrl" type="text" value="${(pageEntity.bgUrl)!''}">
             <input id="unsplashBtn" class="u-button" type="button" value="unsplash">
-            <div id="unsplashList" style="display: none;border: 1px solid;padding:5px">
-            </div>
+            <div id="unsplashList" style="display: none;border: 1px solid;padding:5px"></div>
         </div>
 
         <div id="editor" style="text-align:left">

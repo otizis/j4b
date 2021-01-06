@@ -92,8 +92,7 @@ footer a{
 }
 footer > div{
     display: inline-block;
-    width: 50%;
-    padding: 1rem 0;
+    padding: 1rem 1.2rem;
     font: 0.8rem serif;
 }
 
@@ -164,6 +163,35 @@ blockquote {
     height:3rem;
     padding:1rem;
 }
+
+.m-unsplash-ul{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.m-unsplash-li{
+    width: 160px;
+    height: 200px;
+    list-style: none;
+    position: relative;
+    border: 1px solid #a5a5a5;
+    text-align: center;
+    margin: 1px;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.m-unsplash-li .m-unsplash-img{
+    max-width: 150px;
+    max-height: 150px;
+}
+
+.m-unsplash-li .select{
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+}
+
 /**
  common
  */

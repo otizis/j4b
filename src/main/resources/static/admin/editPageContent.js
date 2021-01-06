@@ -74,29 +74,26 @@ Zepto(function($){
             }
         )
     })
-
-    $("#unsplashBtn").on("click",function(){
-        $.ajax(
-            {
-                type: 'POST',
-                url: "/unsplash/list",
-                data: {query:"page"},
-                success: function (resp) {
-                    $("#unsplashList").show().html(resp)
-                }
+    function unsplashSearch(query,page){
+        $.ajax({
+            type: 'POST',
+            url: "/unsplash/list",
+            data: {query:query,page:page||1},
+            success: function (resp) {
+                $("#unsplashList").show().html(resp)
             }
-        )
+        })
+    }
+    $("#unsplashBtn").on("click",function(){
+        unsplashSearch("")
     })
+
     $("#unsplashList")
         .on("click","#unsplashSearchHandler",function(){
-            $.ajax({
-                type: 'POST',
-                url: "/unsplash/list",
-                data: {query:$("#unsplashQuery").val()},
-                success: function (resp) {
-                    $("#unsplashList").show().html(resp)
-                }
-            })
+            unsplashSearch($("#unsplashQuery").val())
+        })
+        .on("click","#unsplashPageHandler",function(){
+            unsplashSearch($("#unsplashQuery").val(), $(this).data("page"))
         })
         .on("click",".select",function(){
             var src = $(this).data("src")
