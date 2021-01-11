@@ -7,7 +7,7 @@ body,h2,p{
 }
 
 header{
-    padding-bottom:1rem;
+    padding:1rem;
 }
 header .header-info{
     color: #333333;
@@ -46,7 +46,7 @@ header .header-info{
     padding: 1rem;
     border: 1px solid #acacac;
     box-shadow: #acacac 2px 2px 2px;
-    margin-top:1rem;
+    margin:1rem;
     vertical-align: top;
     position: relative;
     overflow: hidden;
@@ -193,7 +193,6 @@ blockquote {
     bottom: 2px;
     right: 2px;
 }
-
 /**
  common
  */
