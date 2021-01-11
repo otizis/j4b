@@ -2,7 +2,6 @@ package cc.jaxer.blog.controllers;
 
 import cc.jaxer.blog.common.AppConstant;
 import cc.jaxer.blog.common.ConfigCodeEnum;
-import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.entities.*;
 import cc.jaxer.blog.mapper.*;
@@ -103,6 +102,34 @@ public class HtmlController implements ErrorController
         modelMap.put("pNum", pageN);
 
         return "pageFilter";
+    }
+
+
+    @RequestMapping(path = {"/pageFilter/search"})
+    public String pageFilterByKeyword(ModelMap modelMap,  String pageNum, String keyword)
+    {
+        // blog信息
+        modelMap.put("blogInfo", configService.getBlogInfo());
+
+        // page列表
+        int pageN = 1;
+        if (NumberUtils.isDigits(pageNum))
+        {
+            pageN = Integer.parseInt(pageNum);
+        }
+        modelMap.put("keyword",keyword);
+
+        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 27),
+         new QueryWrapper<PageEntity>()
+         .eq("status",1)
+         .like("content",keyword)
+         .orderByDesc("create_at")
+         );
+        modelMap.put("pageList", pageEntityIPage.getRecords());
+        modelMap.put("total", pageEntityIPage.getPages());
+        modelMap.put("pNum", pageN);
+
+        return "pageSearch";
     }
 
     @Override
