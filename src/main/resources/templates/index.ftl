@@ -28,19 +28,10 @@
         <div class="u-card"
              onclick="location.href='/page/${page.id!}'">
             <#if page.bgUrl?? && page.bgUrl?length gt 1>
-            <div style="background-image: url('${unsplashDomain}${page.bgUrl}');
-                    background-size: cover;
-                    background-position: center;
-                    height: 30px;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;">
-
-            </div>
+            <div class="bg" style="background-image: url('${unsplashDomain}${page.bgUrl}')"></div>
             </#if>
             <h3>${page.title!}</h3>
-            <div>
+            <div class="content">
                 <#assign summary=page.content?replace("<.*?>","","r")>
                 <#assign summary=summary?replace("&nbsp;","")>
                 <#assign summary=summary?replace("  "," ")>

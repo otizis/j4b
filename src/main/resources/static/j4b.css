@@ -42,7 +42,7 @@ header .header-info{
 .container .u-card{
     display: inline-block;
     width: 18rem;
-    height: 10rem;
+    min-height: 10rem;
     padding: 1rem;
     border: 1px solid #acacac;
     box-shadow: #acacac 2px 2px 2px;
@@ -52,9 +52,17 @@ header .header-info{
     overflow: hidden;
     cursor: pointer;
 }
+.container .u-card .bg{
+    background-size: cover;
+    background-position: center;
+    height: 9rem;
+}
 .container .u-card h3{
     text-align: left;
     padding-left: 1rem;
+}
+.container .u-card .content{
+    min-height: 5rem;
 }
 .container .u-card:hover{
     border:1px solid cornflowerblue;
@@ -67,12 +75,6 @@ header .header-info{
     height: 5rem;
 }
 .container .u-card .u-card-plane{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 2rem;
-    height: 3rem;
-    line-height: 3rem;
     text-align: right;
     color: #333333;
     font-size: 0.9rem;
