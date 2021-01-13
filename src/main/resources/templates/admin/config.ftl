@@ -34,6 +34,16 @@
         </label>
         <input class="u-button" id="addConfigBtn" type="button" value="提交">
     </form>
+    <hr>
+    <h6>支持的配置</h6>
+    <table style="margin: auto">
+    <#list supportConfigList! as config>
+        <tr>
+            <td>${config!""}</td>
+            <td>${config.desc!""}</td>
+        </tr>
+    </#list>
+    </table>
 </div>
 
 

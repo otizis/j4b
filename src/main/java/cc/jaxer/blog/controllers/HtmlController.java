@@ -49,8 +49,6 @@ public class HtmlController implements ErrorController
     @RequestMapping(path = {"/", "/index.html"})
     public String index(ModelMap modelMap, String pageNum)
     {
-        // blog信息
-        modelMap.put("blogInfo", configService.getBlogInfo());
 
         String conf = configService.getConfDefault(ConfigCodeEnum.unsplash_proxy, AppConstant.UNSPLASH_DOMAIN);
         modelMap.put("unsplashDomain", conf);
@@ -74,8 +72,6 @@ public class HtmlController implements ErrorController
     @RequestMapping(path = {"/pageFilter/tag/{tagId}"})
     public String pageFilter(ModelMap modelMap,  String pageNum, @PathVariable String tagId)
     {
-        // blog信息
-        modelMap.put("blogInfo", configService.getBlogInfo());
 
         // page列表
         int pageN = 1;
@@ -108,8 +104,7 @@ public class HtmlController implements ErrorController
     @RequestMapping(path = {"/pageFilter/search"})
     public String pageFilterByKeyword(ModelMap modelMap,  String pageNum, String keyword)
     {
-        // blog信息
-        modelMap.put("blogInfo", configService.getBlogInfo());
+
 
         // page列表
         int pageN = 1;
@@ -141,17 +136,13 @@ public class HtmlController implements ErrorController
     @RequestMapping(path = {ERROR_PATH})
     public String error(ModelMap modelMap)
     {
-        // blog信息
-        modelMap.put("blogInfo", configService.getBlogInfo());
         return "error";
     }
 
     @RequestMapping(path = {"/page/{id}"})
     public String page(ModelMap modelMap, @PathVariable("id") String id)
     {
-        // blog信息
-        BlogInfoEntity blogInfo = configService.getBlogInfo();
-        modelMap.put("blogInfo", blogInfo);
+
 
         String conf = configService.getConfDefault(ConfigCodeEnum.unsplash_proxy, AppConstant.UNSPLASH_DOMAIN);
         modelMap.put("unsplashDomain", conf);
@@ -188,9 +179,14 @@ public class HtmlController implements ErrorController
     @NeedLogin(isPage = true)
     public String config(ModelMap modelMap)
     {
-        List<ConfigEntity> configEntities = configMapper.selectList(new QueryWrapper<ConfigEntity>().orderByAsc
-                ("code"));
+        QueryWrapper<ConfigEntity> code = new QueryWrapper<ConfigEntity>().orderByAsc("code");
+        List<ConfigEntity> configEntities = configMapper.selectList(code);
         modelMap.put("configList", configEntities);
+
+        ConfigCodeEnum[] supportConfigList = ConfigCodeEnum.values();
+
+        modelMap.put("supportConfigList", supportConfigList);
+
         return "admin/config";
     }
 
