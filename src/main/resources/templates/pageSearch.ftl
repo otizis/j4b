@@ -2,14 +2,15 @@
 <html lang="en">
 <#include "./comps/head.ftl"/>
 <body>
-<h2>关键字搜索</h2>
+<h3>关键字搜索</h3>
 <#include "./comps/link.ftl"/>
+<br>
+<br>
 <div>
     <form action="/pageFilter/search">
         <input type="text" name="keyword" placeholder="搜索关键字" value="${keyword!}">
         <input type="submit" class="u-button" value="搜索">
     </form>
-
 </div>
 <div class="container">
 
