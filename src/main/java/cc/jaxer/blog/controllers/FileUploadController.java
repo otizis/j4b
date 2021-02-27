@@ -4,6 +4,7 @@ import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -136,6 +137,26 @@ public class FileUploadController
             logger.error("",e);
         }
         return "redirect:/fileList.html?currPath="+path;
+    }
+
+    @RequestMapping(path = {"/downloadByUrl"})
+    @NeedLogin
+    public String downloadByUrl(@RequestParam("url") String url)
+    {
+        LocalDate now = LocalDate.now();
+        String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
+        String path = nginxServerPath + day + File.separator;
+        File dayDir = new File( path);
+        if (!dayDir.exists())
+        {
+            boolean create = createDirWithParent(dayDir);
+            if (!create)
+            {
+                return "redirect:/fileList.html";
+            }
+        }
+        long length = HttpUtil.downloadFile(url, path);
+        return "redirect:/fileList.html";
     }
 
     @RequestMapping(path = {"/createDir"})

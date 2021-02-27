@@ -7,6 +7,11 @@
 <#include "../comps/adminLink.ftl"/>
 <hr>
 <h3>当前目录：${currPath!"/"}</h3>
+<h4>远程下载文件</h4>
+<form action="/downloadByUrl" method="POST">
+<input type="text" name="url" placeholder="http地址">
+<input type="submit" class="u-button" value="提交下载">
+</form>
 <h4>上传文件</h4>
 <form action="/uploadOrig"  method="POST" enctype="multipart/form-data">
 <input type="file" name="file">
@@ -33,7 +38,7 @@
         <td>${file?index}</td>
         <td>
             <#if (file.directory)>
-            <a href="?currPath=${currPath}&path=${file.name}">${file.name!""}</a>
+            📁<a href="?currPath=${currPath}&path=${file.name}">${file.name!""}</a>
             <#else>
             ${file.name!""}
             </#if>
