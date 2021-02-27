@@ -41,6 +41,7 @@ public class SysController
         J4bUtils.addToken(token, now.getTimeInMillis());
         Cookie cookie = new Cookie(AppConstant.HEADER_TOKEN_KEY, token);
         cookie.setPath("/");
+        cookie.setMaxAge(60 * 60 * 24 * 30);
         response.addCookie(cookie);
         return R.ok(AppConstant.HEADER_TOKEN_KEY, token).put("from",request.get("from"));
     }
