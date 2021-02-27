@@ -30,6 +30,8 @@
     <tr>
         <th>序号</th>
         <th>文件名</th>
+        <th>大小</th>
+        <th>最后修改时间</th>
         <th>url</th>
         <th>操作</th>
     </tr>
@@ -42,6 +44,12 @@
             <#else>
             ${file.name!""}
             </#if>
+        </td>
+        <td>
+            ${file.length()}
+        </td>
+        <td>
+            ${file.lastModified()?number_to_datetime?string("yyyy/MM/dd HH:mm:ss")}
         </td>
         <td>
             <#if (file.directory)>
