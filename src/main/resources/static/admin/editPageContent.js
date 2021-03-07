@@ -8,6 +8,7 @@ Zepto(function($){
         paste_remove_styles: true,
         paste_remove_styles_if_webkit: true,
         paste_strip_class_attributes: true,
+        paste_data_images: true, // 设置为“true”将允许粘贴图像，而将其设置为“false”将不允许粘贴图像。
         height: 600,
         menubar: false,
         toolbar:"undo redo | formatselect bold italic underline alignleft aligncenter fontsizeselect image | hr bullist blockquote | link | removeformat code",
@@ -15,7 +16,39 @@ Zepto(function($){
             // 不转化最前面的/
             return url;
         },
-        images_upload_url: '/upload'
+        images_upload_url: '/upload',
+        paste_preprocess: function(plugin, args) {
+            var bUrl =  args.content.split('"')[1]
+            args.content = ""
+            if(!bUrl){
+                return
+            }
+            $.ajax({
+                type:"GET",
+                xhrFields: {responseType: 'blob'},
+                url:bUrl,
+                success: function (blobFile){
+                    console.log(blobFile)
+                    var file = new File([blobFile], "blob.png");
+                    var formData = new FormData();
+                    formData.append("file",file)
+                    $.ajax({
+                        type:"POST",
+                        url:"/upload",
+                        data:formData,
+                        dataType:"json",
+                        processData: false,
+                        contentType: false,
+                        success:function(resp){
+                            tinymce.activeEditor
+                                .execCommand('mceInsertContent',
+                                    false,
+                                    `<img src="${resp.location}">`);
+                        }
+                    })
+                }
+            })
+        }
     });
 
     // 文章部分
