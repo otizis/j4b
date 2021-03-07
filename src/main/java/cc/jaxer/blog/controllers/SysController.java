@@ -34,14 +34,15 @@ public class SysController
         {
             return R.error(500,"密码错误");
         }
+        int loginStayDay = 30;
         UUID uuid = UUID.randomUUID();
         String token = uuid.toString();
         Calendar now = Calendar.getInstance();
-        now.add(Calendar.DAY_OF_YEAR, 1);
+        now.add(Calendar.DAY_OF_YEAR, loginStayDay);
         J4bUtils.addToken(token, now.getTimeInMillis());
         Cookie cookie = new Cookie(AppConstant.HEADER_TOKEN_KEY, token);
         cookie.setPath("/");
-        cookie.setMaxAge(60 * 60 * 24 * 30);
+        cookie.setMaxAge(60 * 60 * 24 * loginStayDay);
         response.addCookie(cookie);
         return R.ok(AppConstant.HEADER_TOKEN_KEY, token).put("from",request.get("from"));
     }
