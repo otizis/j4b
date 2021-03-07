@@ -1,5 +1,5 @@
 # java for blog
-simple blog by java.
+simple blog by java. 样例: http://jaxer.cc
 
 一点点css，几个文件，看看能不能搭起来写几篇文章。
 - [x] 基于springboot，单文件部署，依赖jdk环境即可启动
