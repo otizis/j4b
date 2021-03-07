@@ -45,7 +45,7 @@
         <div class="inline-left">
             <span>配图:</span>
             <img id="bgImg" src="${(pageEntity.bgUrl)!''}" style="width: 200px;"/>
-            <input id="bgUrl" name="bgUrl" type="text" value="${(pageEntity.bgUrl)!''}">
+            <input id="bgUrl" placeholder="http开头地址，或点击unsplash选择" name="bgUrl" type="text" value="${(pageEntity.bgUrl)!''}">
             <input id="unsplashBtn" class="u-button" type="button" value="unsplash">
             <div id="unsplashList" style="display: none;border: 1px solid;padding:5px"></div>
         </div>

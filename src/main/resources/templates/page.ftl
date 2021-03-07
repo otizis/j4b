@@ -3,7 +3,7 @@
 <#include "./comps/head.ftl"/>
 <body >
 <#if page.bgUrl?? && page.bgUrl?length gt 1>
-<div style="background-image: url('${unsplashDomain}${page.bgUrl}');
+<div style="background-image: url('<#if !page.bgUrl?contains("http")>${unsplashDomain}</#if>${page.bgUrl}');
         background-size: cover;
         background-position: center;
         height: 50vh"

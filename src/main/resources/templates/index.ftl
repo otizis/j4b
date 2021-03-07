@@ -28,7 +28,7 @@
         <div class="u-card"
              onclick="location.href='/page/${page.id!}'">
             <#if page.bgUrl?? && page.bgUrl?length gt 1>
-            <div class="bg" style="background-image: url('${unsplashDomain}${page.bgUrl}')"></div>
+            <div class="bg" style="background-image: url('<#if !page.bgUrl?contains("http")>${unsplashDomain}</#if>${page.bgUrl}')"></div>
             </#if>
             <h3>${page.title!}</h3>
             <div class="content">
