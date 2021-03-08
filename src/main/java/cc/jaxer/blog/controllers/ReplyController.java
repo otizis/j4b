@@ -54,8 +54,11 @@ public class ReplyController
         if(reply.getContent().length() > 1000){
             return R.error(500,"留言过长，超过1000");
         }
-        reply.setIp(request.getRemoteAddr());
-
+        String realIp = request.getHeader("X-Real-IP");
+        if(StringUtils.isBlank(realIp)){
+            realIp = request.getRemoteAddr();
+        }
+        reply.setIp(realIp);
         reply.setCreateAt(new Date());
         reply.setId(UUID.randomUUID().toString().replace("-", ""));
         replyMapper.insert(reply);
