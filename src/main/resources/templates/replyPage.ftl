@@ -16,8 +16,8 @@
         </form>
     </div>
     <hr>
-    <#if pageList?size == 0>
-        空
+    <#if replyList?size == 0>
+        暂无留言
     </#if>
     <div class="m-reply">
         <#list replyList! as reply>
