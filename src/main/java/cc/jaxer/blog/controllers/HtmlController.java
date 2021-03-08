@@ -104,8 +104,6 @@ public class HtmlController implements ErrorController
     @RequestMapping(path = {"/pageFilter/search"})
     public String pageFilterByKeyword(ModelMap modelMap,  String pageNum, String keyword)
     {
-
-
         // page列表
         int pageN = 1;
         if (NumberUtils.isDigits(pageNum))
@@ -125,6 +123,28 @@ public class HtmlController implements ErrorController
         modelMap.put("pNum", pageN);
 
         return "pageSearch";
+    }
+
+    @RequestMapping(path = {"/reply/page"})
+    public String replayPage(ModelMap modelMap, String pageNum)
+    {
+        // page列表
+        int pageN = 1;
+        if (NumberUtils.isDigits(pageNum))
+        {
+            pageN = Integer.parseInt(pageNum);
+        }
+
+        IPage<ReplyEntity> replyPage = replyMapper.selectPage(new Page<>(pageN, 27), new
+                QueryWrapper<ReplyEntity>()
+                .eq("status",1)
+                .orderByDesc("create_at"));
+
+        modelMap.put("replyList", replyPage.getRecords());
+        modelMap.put("total", replyPage.getPages());
+        modelMap.put("pNum", pageN);
+
+        return "replyPage";
     }
 
     @Override

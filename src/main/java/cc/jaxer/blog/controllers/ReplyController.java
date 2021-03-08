@@ -30,16 +30,13 @@ public class ReplyController
 
     @RequestMapping("/reply/list")
     public R list(
-        @RequestParam(name = "pageId") String pageId,
+        @RequestParam(name = "pageId", required = false) String pageId,
         @RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
         @RequestParam(name= "limit", defaultValue = "5", required = false) Integer limit)
     {
-        if(StringUtils.isEmpty(pageId)){
-            return R.error();
-        }
         IPage<ReplyEntity> replyPage = replyMapper.selectPage(new Page<>(page, limit), new
                 QueryWrapper<ReplyEntity>()
-                .eq("page_id",pageId)
+                .eq(StringUtils.isNotBlank(pageId),"page_id",pageId)
                 .eq("status",1)
                 .orderByDesc("create_at"));
 
@@ -50,7 +47,7 @@ public class ReplyController
     @RequestMapping("/reply/save")
     public R add(@RequestBody ReplyEntity reply,HttpServletRequest request)
     {
-        if(StringUtils.isBlank(reply.getContent())|| StringUtils.isBlank(reply.getPageId()))
+        if(StringUtils.isBlank(reply.getContent()))
         {
             return R.error();
         }
@@ -59,17 +56,7 @@ public class ReplyController
         }
         reply.setIp(request.getRemoteAddr());
 
-
-        int count = replyMapper.selectCount(new QueryWrapper<ReplyEntity>()
-        .eq(reply.getIp()!=null, "ip", reply.getIp())
-        .eq("page_id",reply.getPageId())
-        );
-        if(count > 5)
-        {
-            return R.error();
-        }
-        Date now = new Date();
-        reply.setCreateAt(now);
+        reply.setCreateAt(new Date());
         reply.setId(UUID.randomUUID().toString().replace("-", ""));
         replyMapper.insert(reply);
 
