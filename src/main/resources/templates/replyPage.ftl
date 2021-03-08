@@ -22,6 +22,13 @@
     <div class="m-reply">
         <#list replyList! as reply>
             <div class="u-reply">
+                <span>
+                <#if reply.pageId?? >
+                    <a href="/page/${reply.pageId}">文章留言</a>
+                <#else>
+                    播客留言
+                </#if>
+                ：</span>
                 <span class="form">${reply.ip}</span>
                 <span class="time">${reply.createAt?string('yyyy-MM-dd')}</span>
                 <p>${reply.content}</p>
