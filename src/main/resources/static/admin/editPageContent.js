@@ -18,6 +18,9 @@ Zepto(function($){
         },
         images_upload_url: '/upload',
         paste_preprocess: function(plugin, args) {
+            if(args.content.indexOf("<img") === -1){
+                return
+            }
             var bUrl =  args.content.split('"')[1]
             args.content = ""
             if(!bUrl){
