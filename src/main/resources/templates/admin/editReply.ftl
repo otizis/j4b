@@ -7,22 +7,31 @@
 <hr>
 <table style="margin: auto">
     <tr>
-        <th>ip</th>
+        <th>来源</th>
+        <th>创建时间</th>
         <th>内容</th>
         <th>状态</th>
-        <th>创建时间</th>
         <th>操作</th>
     </tr>
     <#list page.records! as reply>
-        <tr>
-            <td>${reply.ip!""}</td>
-            <td>${reply.content!""}</td>
+        <tr class="u-table-line">
+            <td style="width: 7rem">
+                ${reply.ip!""}
+                <span>
+                <#if reply.pageId?? >
+                    <a href="/page/${reply.pageId}">文章留言</a>
+                <#else>
+                    blog留言
+                </#if>
+                </span>
+            </td>
+            <td style="width: 8rem">${reply.createAt?string("yyyy-MM-dd HH:mm:ss")}</td>
+            <td style="max-width: 15rem">${reply.content!""}</td>
             <td>
                 <#if (reply.status == 1)> 正常
                 <#else> 已屏蔽
                 </#if>
             </td>
-            <td>${reply.createAt?string("yyyy-MM-dd HH:mm:ss")}</td>
             <td>
                 <input class="u-button onlineReply"
                 type="button"
@@ -30,7 +39,7 @@
                 |
                 <input class="u-button offlineReply"
                 type="button"
-                data-c="${reply.id!''}" value="屏蔽">
+                data-id="${reply.id!''}" value="屏蔽">
             </td>
         </tr>
     </#list>
@@ -45,7 +54,11 @@
         </#if>
     </div>
 <hr>
-
+<style>
+    .u-table-line:hover{
+        background-color: #d7ffb5;
+    }
+</style>
 <script src="https://zeptojs.com/zepto.min.js"></script>
 <script src="/admin/editReply.js"></script>
 </body>
