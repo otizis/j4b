@@ -12,6 +12,7 @@ public enum ConfigCodeEnum
     blog_description("meta的描述"),
     hl_num("头部链接。html格式（链接使用<a href=''></a>添加），可添加多个，从1开始 hl_1, hl_2 .. 类推"),
     footer_num("底部链接。html格式，可添加多个，从1开始 footer_1, footer_2 .. 类推"),
+    bgm_url("首页bgm的url地址，请以http开头"),
     ;
 
     String desc;

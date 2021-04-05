@@ -14,6 +14,11 @@
 
     <div class="u-b-desc">
         <p>${blogInfo.desc!"j4b desc"}</p>
+        <div>
+            <#if bgmUrl?? >
+                <audio src="${bgmUrl}" controls autoplay></audio>
+            </#if>
+        </div>
     </div>
 
 </header>

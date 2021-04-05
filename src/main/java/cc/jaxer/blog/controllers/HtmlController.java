@@ -54,6 +54,11 @@ public class HtmlController implements ErrorController
         String conf = configService.getConfDefault(ConfigCodeEnum.unsplash_proxy, AppConstant.UNSPLASH_DOMAIN);
         modelMap.put("unsplashDomain", conf);
 
+        String bgmUrl = configService.getConf(ConfigCodeEnum.bgm_url);
+        if(StringUtils.isNotBlank(bgmUrl)){
+            modelMap.put("bgmUrl", bgmUrl);
+        }
+
         // page列表
         int pageN = 1;
         if (NumberUtils.isDigits(pageNum))
