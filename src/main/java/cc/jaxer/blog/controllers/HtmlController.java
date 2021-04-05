@@ -6,6 +6,7 @@ import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.entities.*;
 import cc.jaxer.blog.mapper.*;
 import cc.jaxer.blog.services.ConfigService;
+import cc.jaxer.blog.services.PageService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -31,7 +32,7 @@ public class HtmlController implements ErrorController
     private ConfigMapper configMapper;
 
     @Autowired
-    private PageMapper pageMapper;
+    private PageService pageService;
 
     @Autowired
     private ReplyMapper replyMapper;
@@ -59,9 +60,19 @@ public class HtmlController implements ErrorController
         {
             pageN = Integer.parseInt(pageNum);
         }
-        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 5), new QueryWrapper<PageEntity>
-                ().eq("status",1).orderByDesc("create_at"));
+        QueryWrapper<PageEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", 1).orderByDesc("create_at");
+        IPage<PageEntity> pageEntityIPage = pageService.page(new Page<>(pageN, 5), queryWrapper);
         modelMap.put("pageList", pageEntityIPage.getRecords());
+
+
+        TagEntity tagEntity = tagMapper.selectOne(new QueryWrapper<TagEntity>()
+                .eq("tag", "置顶").or().eq("tag", "top"));
+        if(tagEntity!=null){
+            IPage<PageEntity> topPageList = pageService.getPageListByTag(tagEntity.getId(), new Page<>(pageN, 3));
+            modelMap.put("topPageList", topPageList.getRecords());
+        }
+
         modelMap.put("total", pageEntityIPage.getPages());
         modelMap.put("pNum", pageN);
 
@@ -87,12 +98,7 @@ public class HtmlController implements ErrorController
         }
         modelMap.put("tag",tag);
 
-        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 27),
-         new QueryWrapper<PageEntity>()
-         .eq("status",1)
-         .exists(" select 1 from T_PAGE_TAG where T_PAGE.ID = T_PAGE_TAG.PAGE_ID AND T_PAGE_TAG.TAG_ID = '" + tagId +"'")
-         .orderByDesc("create_at")
-         );
+        IPage<PageEntity> pageEntityIPage = pageService.getPageListByTag(tagId,new Page<>(pageN, 27));
         modelMap.put("pageList", pageEntityIPage.getRecords());
         modelMap.put("total", pageEntityIPage.getPages());
         modelMap.put("pNum", pageN);
@@ -112,7 +118,7 @@ public class HtmlController implements ErrorController
         }
         modelMap.put("keyword",keyword);
 
-        IPage<PageEntity> pageEntityIPage = pageMapper.selectPage(new Page<>(pageN, 27),
+        IPage<PageEntity> pageEntityIPage = pageService.page(new Page<>(pageN, 27),
          new QueryWrapper<PageEntity>()
          .eq("status",1)
          .like("content",keyword)
@@ -168,28 +174,13 @@ public class HtmlController implements ErrorController
         modelMap.put("unsplashDomain", conf);
 
         // page
-        PageEntity pageEntity = pageMapper.selectById(id);
+        PageEntity pageEntity = pageService.getById(id);
         if (pageEntity == null)
         {
             return "redirect:/error";
         }
-
-        List<TagEntity> tagEntities = tagMapper.selectList(new QueryWrapper<>());
-        List<PageTagEntity> pageTagR = pageTagMapper.selectList(new QueryWrapper<PageTagEntity>().eq("PAGE_ID", id));
-        for (PageTagEntity pageTagEntity : pageTagR)
-        {
-            for (TagEntity tagEntity : tagEntities)
-            {
-                if(StringUtils.equals(tagEntity.getId(),pageTagEntity.getTagId())){
-                    List<TagEntity> tagList = pageEntity.getTagList();
-                    if(tagList==null){
-                        tagList = new ArrayList<>();
-                        pageEntity.setTagList(tagList);
-                    }
-                    tagList.add(tagEntity);
-                }
-            }
-        }
+        List<TagEntity> tagListByPageId = pageService.getTagListByPageId(id);
+        pageEntity.setTagList(tagListByPageId);
 
         modelMap.put("page", pageEntity);
         return "page";
@@ -227,7 +218,7 @@ public class HtmlController implements ErrorController
         {
             pageN = Integer.parseInt(pageNum);
         }
-        IPage<PageEntity> page = pageMapper.selectPage(new Page<>(pageN, 5), new QueryWrapper<PageEntity>()
+        IPage<PageEntity> page = pageService.page(new Page<>(pageN, 5), new QueryWrapper<PageEntity>()
                 .orderByDesc("create_at"));
 
         modelMap.put("page", page);
@@ -239,7 +230,7 @@ public class HtmlController implements ErrorController
     @NeedLogin(isPage = true)
     public String editPageContent(ModelMap modelMap, String id)
     {
-        PageEntity pageEntity = pageMapper.selectById(id);
+        PageEntity pageEntity = pageService.getById(id);
         modelMap.put("pageEntity",pageEntity);
 
         List<PageTagEntity> pageTagEntities = pageTagMapper.selectList(new QueryWrapper<PageTagEntity>().eq("PAGE_ID",id));
