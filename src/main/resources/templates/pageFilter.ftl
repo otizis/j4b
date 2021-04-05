@@ -22,6 +22,12 @@
     <#list pageList! as page>
         <div class="u-card"  onclick="location.href='/page/${page.id!}'">
             <h3>${page.title!}</h3>
+            <div class="content">
+                <#assign summary=page.content?replace("<.*?>","","r")>
+                <#assign summary=summary?replace("&nbsp;","")>
+                <#assign summary=summary?replace("  "," ")>
+                <#if summary?length gt 30>${summary[0..29]}...<#else>${summary}</#if>
+            </div>
             <div class="u-card-plane">${page.createAt?string('yyyy-MM-dd')}</div>
         </div>
     </#list>
