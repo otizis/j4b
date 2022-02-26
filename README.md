@@ -10,6 +10,7 @@ simple blog by java. 样例: http://jaxer.cc
 - [x] 文章标签管理
 - [x] 第三方引图（参考Ghost，使用Unsplash，需要配置开发者id
 - [x] flyway管理表结构版本
+- [x] 备份导出
 
 ## 运行配置项列表
     unsplash_appid #unsplash 开发者id
