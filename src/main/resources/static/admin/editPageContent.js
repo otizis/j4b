@@ -75,8 +75,7 @@ Zepto(function($){
                 data: JSON.stringify(jsonData),
                 success: function (resp) {
                     if(resp.code === 0){
-                        window.alert('操作成功');
-                        location.reload();
+                        location.replace("/editPageList.html");
                     }
                     else{
                         window.alert(resp.msg||'error')
