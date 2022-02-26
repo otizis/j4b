@@ -97,13 +97,15 @@ public class SysController
 
         // 打包 下载
         File backupFile = new File("./" + now + ".zip");
+        File h2zip = new File("./" + now + "h2.zip");
         ZipUtil.zip(backupFile,true,
-                new File("./"+now+"h2.zip"),
+                h2zip,
                 new File(uploadPath)
                 );
 
         File target = new File(uploadPath + File.separator +"backup"+ backupFile.getName());
         FileUtil.move(backupFile, target,true);
+        FileUtil.del(h2zip);
         return R.ok().put("target" , target.getAbsolutePath());
     }
 }
