@@ -26,7 +26,7 @@
 </form>
 <h4>文件列表 <a href="?currPath=${currPath}&path=.."> 向上一级</a></h4>
 
-<table style="margin: auto">
+<table style="margin: auto"  class="hover-line">
     <tr>
         <th>序号</th>
         <th>文件名</th>

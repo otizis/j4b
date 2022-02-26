@@ -7,7 +7,7 @@
 <#include "../comps/adminLink.ftl"/>
 <hr>
 
-<table style="margin: auto">
+<table style="margin: auto" class="hover-line">
     <#list configList! as config>
         <tr>
             <td>${config.code!""}</td>

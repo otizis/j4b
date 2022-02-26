@@ -5,7 +5,7 @@
 <#include "../comps/adminLink.ftl"/>
 
 <hr>
-<table style="margin: auto">
+<table style="margin: auto"  class="hover-line">
     <tr>
         <th>来源</th>
         <th>创建时间</th>

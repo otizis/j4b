@@ -6,7 +6,7 @@
 
 <hr>
 
-<table style="margin: auto">
+<table style="margin: auto"  class="hover-line">
     <tr>
         <th>标题</th>
         <th>状态</th>

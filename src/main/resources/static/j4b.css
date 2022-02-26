@@ -208,3 +208,9 @@ input[type="text"] {
     font-size: 1.1rem;
     padding: 0 0.5rem;
 }
+/**
+table
+ */
+table.hover-line tr:hover{
+    background-color: lightgray;
+}
