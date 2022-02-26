@@ -4,15 +4,22 @@ import cc.jaxer.blog.common.*;
 import cc.jaxer.blog.entities.ConfigEntity;
 import cc.jaxer.blog.mapper.ConfigMapper;
 import cc.jaxer.blog.services.ConfigService;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ZipUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -74,5 +81,29 @@ public class SysController
     public R check()
     {
         return R.ok();
+    }
+
+    @Value("${fileupload.path}")
+    private String uploadPath;
+
+    @RequestMapping("/sys/backup")
+    @NeedLogin
+    public R backup()
+    {
+        // 导出数据库的sql语句
+        String now = DateUtil.format(new Date(), DatePattern.PURE_DATETIME_FORMAT);
+        configMapper.backup(now+"h2.zip");
+        // 找到upload的地址
+
+        // 打包 下载
+        File backupFile = new File("./" + now + ".zip");
+        ZipUtil.zip(backupFile,true,
+                new File("./"+now+"h2.zip"),
+                new File(uploadPath)
+                );
+
+        File target = new File(uploadPath + File.separator +"backup"+ backupFile.getName());
+        FileUtil.move(backupFile, target,true);
+        return R.ok().put("target" , target.getAbsolutePath());
     }
 }

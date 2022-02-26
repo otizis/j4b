@@ -6,5 +6,6 @@
     <a href="/editPageContent.html">新增文章</a>
     <a href="/editReply.html">留言管理</a>
     <a href="/editTagList.html">标签管理</a>
+    <a href="/export.html">导出备份</a>
 </div>
 

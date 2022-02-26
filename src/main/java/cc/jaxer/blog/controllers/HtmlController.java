@@ -286,5 +286,12 @@ public class HtmlController implements ErrorController
         return "admin/editTagList";
     }
 
+    @RequestMapping(path = {"/export.html"})
+    @NeedLogin(isPage = true)
+    public String export(ModelMap modelMap)
+    {
+        return "admin/export";
+    }
+
 
 }
