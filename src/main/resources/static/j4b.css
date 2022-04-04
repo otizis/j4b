@@ -51,6 +51,10 @@ header .header-info{
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    text-decoration: none;
+}
+.container a.u-card {
+    color: #333333;
 }
 .container .u-card .bg{
     background-size: cover;

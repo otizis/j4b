@@ -28,8 +28,8 @@
 
 <div class="container">
     <#list topPageList! as page>
-        <div class="u-card"
-             onclick="location.href='/page/${page.id!}'">
+        <a class="u-card"
+             href="/page/${page.id!}">
             <#if page.bgUrl?? && page.bgUrl?length gt 1>
             <div class="bg" style="background-image: url('<#if !page.bgUrl?contains("http")>${unsplashDomain}</#if>${page.bgUrl}')"></div>
             </#if>
@@ -45,14 +45,14 @@
                     <a href="/pageFilter/tag/${tag.id}"># ${tag.tag}</a>
                 </#list>
                 ${page.createAt?string('yyyy-MM-dd')}</div>
-        </div>
+        </a>
     </#list>
     <#if pageList?size == 0>
         空
     </#if>
     <#list pageList! as page>
-        <div class="u-card"
-             onclick="location.href='/page/${page.id!}'">
+        <a class="u-card"
+             href="/page/${page.id!}">
             <#if page.bgUrl?? && page.bgUrl?length gt 1>
             <div class="bg" style="background-image: url('<#if !page.bgUrl?contains("http")>${unsplashDomain}</#if>${page.bgUrl}')"></div>
             </#if>
@@ -64,7 +64,7 @@
                 <#if summary?length gt 30>${summary[0..29]}...<#else>${summary}</#if>
             </div>
             <div class="u-card-plane">${page.createAt?string('yyyy-MM-dd')}</div>
-        </div>
+        </a>
     </#list>
     <div class="u-pagition">
         <#if pNum gt  1>
