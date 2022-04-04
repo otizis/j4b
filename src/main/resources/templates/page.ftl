@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
+<#assign description="${page.title}"/>
+<#assign keywords="${page.title}"/>
 <#include "./comps/head.ftl"/>
 <body >
 <#if page.bgUrl?? && page.bgUrl?length gt 1>

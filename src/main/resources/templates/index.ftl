@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
-
+<#assign description>${blogInfo.title},${blogInfo.desc}</#assign>
+<#assign keywords>${blogInfo.title},${blogInfo.desc}</#assign>
 <#include "./comps/head.ftl"/>
 
 <body>
