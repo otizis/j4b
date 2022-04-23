@@ -17,7 +17,7 @@
         <p>${blogInfo.desc!"j4b desc"}</p>
         <div>
             <#if bgmUrl?? >
-                <audio src="${bgmUrl}" controls autoplay></audio>
+                <audio src="${bgmUrl}" controls autoplay loop></audio>
             </#if>
         </div>
     </div>
@@ -29,6 +29,7 @@
 <div class="container">
     <#list topPageList! as page>
         <a class="u-card"
+           target="_blank"
              href="/page/${page.id!}">
             <#if page.bgUrl?? && page.bgUrl?length gt 1>
             <div class="bg" style="background-image: url('<#if !page.bgUrl?contains("http")>${unsplashDomain}</#if>${page.bgUrl}')"></div>
@@ -42,7 +43,7 @@
             </div>
             <div class="u-card-plane">
                 <#list page.tagList! as tag>
-                    <a href="/pageFilter/tag/${tag.id}"># ${tag.tag}</a>
+                    <a href="/pageFilter/tag/${tag.id}" target="_blank"># ${tag.tag}</a>
                 </#list>
                 ${page.createAt?string('yyyy-MM-dd')}</div>
         </a>
@@ -52,6 +53,7 @@
     </#if>
     <#list pageList! as page>
         <a class="u-card"
+           target="_blank"
              href="/page/${page.id!}">
             <#if page.bgUrl?? && page.bgUrl?length gt 1>
             <div class="bg" style="background-image: url('<#if !page.bgUrl?contains("http")>${unsplashDomain}</#if>${page.bgUrl}')"></div>
@@ -68,11 +70,11 @@
     </#list>
     <div class="u-pagition">
         <#if pNum gt  1>
-            <a href="?pageNum=${pNum - 1}">上一页</a>
+            <a href="?pageNum=${pNum - 1}" target="_blank">上一页</a>
         </#if>
         <span>第${pNum}页 共${total}页</span>
         <#if pNum lt total>
-            <a href="?pageNum=${pNum + 1}">下一页</a>
+            <a href="?pageNum=${pNum + 1}" target="_blank">下一页</a>
         </#if>
     </div>
 </div>
