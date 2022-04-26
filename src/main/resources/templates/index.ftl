@@ -42,10 +42,13 @@
                 <#if summary?length gt 30>${summary[0..29]}...<#else>${summary}</#if>
             </div>
             <div class="u-card-plane">
-                <#list page.tagList! as tag>
-                    <a href="/pageFilter/tag/${tag.id}" target="_blank"># ${tag.tag}</a>
-                </#list>
-                ${page.createAt?string('yyyy-MM-dd')}</div>
+                <object>
+                    <#list page.tagList! as tag>
+                        <a href="/pageFilter/tag/${tag.id}" target="_blank"># ${tag.tag}</a>
+                    </#list>
+                </object>
+                ${page.createAt?string('yyyy-MM-dd')}
+            </div>
         </a>
     </#list>
     <#if pageList?size == 0>
