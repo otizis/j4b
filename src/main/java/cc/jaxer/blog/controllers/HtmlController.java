@@ -20,6 +20,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +86,34 @@ public class HtmlController implements ErrorController
         modelMap.put("pNum", pageN);
 
         return "index";
+    }
+
+    @RequestMapping(path = {"/robots.txt"})
+    public void sitemap(HttpServletResponse response) throws IOException
+    {
+        String blogDomain = configService.getConf(ConfigCodeEnum.blog_domain);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        PrintWriter writer = response.getWriter();
+        writer.println("User-agent: *");
+        writer.println("Disallow: /admin/");
+        writer.println("Disallow: /libs/");
+        writer.println("Sitemap: "+blogDomain+"/sitemap.xml");
+        writer.flush();
+        writer.close();
+    }
+
+    @RequestMapping(path = {"/sitemap.xml"})
+    public String sitemap(ModelMap modelMap)
+    {
+        String blogDomain = configService.getConf(ConfigCodeEnum.blog_domain);
+
+        List<PageEntity> pageList = pageService.list(new QueryWrapper<PageEntity>()
+                                                         .select("id","update_at")
+                                                         .eq("status", 1)
+                                                         .orderByDesc("create_at"));
+        modelMap.put("pageList", pageList);
+        modelMap.put("blogDomain",blogDomain);
+        return "sitemap";
     }
 
 
