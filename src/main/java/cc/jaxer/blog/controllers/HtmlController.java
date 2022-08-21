@@ -158,7 +158,8 @@ public class HtmlController implements ErrorController
         IPage<PageEntity> pageEntityIPage = pageService.page(new Page<>(pageN, 27),
          new QueryWrapper<PageEntity>()
          .eq("status",1)
-         .like("content",keyword)
+         .and(w-> w.like("content", keyword)
+               .or().like("title", keyword))
          .orderByDesc("create_at")
          );
         modelMap.put("pageList", pageEntityIPage.getRecords());
