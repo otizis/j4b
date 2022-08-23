@@ -46,7 +46,7 @@
     </#if>
 </div>
 <hr>
-<script src="https://zeptojs.com/zepto.min.js"></script>
+<script src="/libs/zepto/zepto.1.2.min.js"></script>
 <script src="/admin/editPageList.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@
     <input id="backup" type="button" class="u-button" value="开始备份">
 </div>
 
-<script src="https://zeptojs.com/zepto.min.js"></script>
+<script src="/libs/zepto/zepto.1.2.min.js"></script>
 <script>
     Zepto(function($){
         function backup(query,page){
