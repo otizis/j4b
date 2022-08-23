@@ -20,7 +20,7 @@
         空
     </#if>
     <#list pageList! as page>
-        <div class="u-card"  onclick="location.href='/page/${page.id!}'">
+        <a class="u-card" href="/page/${page.id!}">
             <h3>${page.title!}</h3>
             <div class="content">
                 <#assign summary=page.content?replace("<.*?>","","r")>
@@ -29,7 +29,7 @@
                 <#if summary?length gt 30>${summary[0..29]}...<#else>${summary}</#if>
             </div>
             <div class="u-card-plane">${page.createAt?string('yyyy-MM-dd')}</div>
-        </div>
+        </a>
     </#list>
     <div class="u-pagition">
         <#if pNum gt  1>
