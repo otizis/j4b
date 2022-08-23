@@ -2,17 +2,16 @@ package cc.jaxer.blog.controllers;
 
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
-import cc.jaxer.blog.common.validation.Update;
 import cc.jaxer.blog.entities.PageEntity;
 import cc.jaxer.blog.entities.PageTagEntity;
 import cc.jaxer.blog.entities.TagEntity;
 import cc.jaxer.blog.mapper.PageMapper;
 import cc.jaxer.blog.mapper.PageTagMapper;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,8 +61,11 @@ public class PageController
 
     @RequestMapping("/page/append")
     @NeedLogin
-    public R append(@RequestBody @Validated(value = Update.class) PageEntity page)
+    public R append(@RequestBody PageEntity page)
     {
+        if(StrUtil.isBlank(page.getId())){
+            return R.error();
+        }
         PageEntity pageEntity = pageMapper.selectById(page.getId());
         String content1 = pageEntity.getContent();
         content1 += "<hr/>";

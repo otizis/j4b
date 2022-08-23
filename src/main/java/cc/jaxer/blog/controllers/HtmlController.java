@@ -30,8 +30,6 @@ import java.util.List;
 @Controller
 public class HtmlController implements ErrorController
 {
-    private static final String ERROR_PATH = "/error";
-
     @Autowired
     private ConfigMapper configMapper;
 
@@ -201,13 +199,7 @@ public class HtmlController implements ErrorController
         return "replyPage";
     }
 
-    @Override
-    public String getErrorPath()
-    {
-        return ERROR_PATH;
-    }
-
-    @RequestMapping(path = {ERROR_PATH})
+    @RequestMapping(path = {"/error"})
     public String error(ModelMap modelMap)
     {
         return "error";
