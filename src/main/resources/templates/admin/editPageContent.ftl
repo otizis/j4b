@@ -31,16 +31,19 @@
 
         <div class="inline-left">
             <span>标签:</span>
-            <#list tagEntities! as tagEntity>
-                <label >
-                    <input type="checkbox" <#if (tagIdList?seq_contains(tagEntity.id))!false>checked</#if>
-                           name="tags"
-                           value="${tagEntity.id}">
-                    ${tagEntity.tag}
-                </label>
-            </#list>
-            <input id="newTag" type="text" placeholder="可选">
-            <input class="u-button" type="button" id="addTagBtn" value="新建标签">
+            <div id="tagList" style="display: inline-block">
+                <#list tagEntities! as tagEntity>
+                    <label>
+                        <input type="checkbox" <#if (tagIdList?seq_contains(tagEntity.id))!false>checked</#if>
+                               name="tags"
+                               value="${tagEntity.id}">
+                        ${tagEntity.tag}
+                    </label>
+                </#list>
+            </div>
+
+            <input id="newTag" type="text" placeholder="新增标签名称">
+            <input class="u-button" type="button" id="addTagBtn" value="新增标签">
         </div>
         <div class="inline-left">
             <span>配图:</span>

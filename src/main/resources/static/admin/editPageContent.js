@@ -87,8 +87,6 @@ Zepto(function($){
 
     $("#addTagBtn").on("click",function(){
         var tag = $("#newTag").val();
-        console.log(tag);
-        var btn = this;
         $.ajax(
             {
                 type: 'POST',
@@ -98,9 +96,10 @@ Zepto(function($){
                 success: function (resp) {
                     if(resp.code === 0){
                         console.log(resp)
-                        $(btn).parent().prepend(" <label >\n" +
-                            "                    <input type='checkbox' name='tags' value='"+resp.tag.id+"'> " +resp.tag.tag+
-                            "                </label>")
+                        $("#tagList").prepend("<label >" +
+                            "<input type='checkbox' name='tags' value='"+resp.tag.id+"'> " +resp.tag.tag+
+                            "</label>")
+                        $("#newTag").val("");
                     }
                     else{
                         window.alert(resp.msg||'error')

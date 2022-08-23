@@ -206,11 +206,22 @@ blockquote {
     border: 0;
     box-shadow: grey 1px 1px 1px;
     cursor: pointer;
+    vertical-align: middle;
 }
 input[type="text"] {
     height: 24px;
     font-size: 1.1rem;
     padding: 0 0.5rem;
+    vertical-align: middle;
+}
+input[type="checkbox"],
+input[type="radio"]
+{
+    margin-right: 0;
+}
+label{
+    padding-right: 5px;
+    min-width: 60px;
 }
 /**
 table
