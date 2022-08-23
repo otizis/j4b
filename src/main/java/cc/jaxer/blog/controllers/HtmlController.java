@@ -72,14 +72,23 @@ public class HtmlController implements ErrorController
         QueryWrapper<PageEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", 1).orderByDesc("create_at");
         IPage<PageEntity> pageEntityIPage = pageService.page(new Page<>(pageN, 5), queryWrapper);
-        modelMap.put("pageList", pageEntityIPage.getRecords());
+        List<PageEntity> records = pageEntityIPage.getRecords();
+        for (PageEntity record : records)
+        {
+            List<TagEntity> tagList = pageService.getTagListByPageId(record.getId());
+            record.setTagList(tagList);
+        }
+        modelMap.put("pageList", records);
 
 
         TagEntity tagEntity = tagMapper.selectOne(new QueryWrapper<TagEntity>()
-                .eq("tag", "置顶").or().eq("tag", "top"));
+                                                          .eq("tag", "置顶")
+                                                          .or()
+                                                          .eq("tag", "top")
+                                                          .last("limit 1"));
         if(tagEntity!=null){
             IPage<PageEntity> topPageList = pageService.getPageListByTag(tagEntity.getId(), new Page<>(pageN, 3));
-            modelMap.put("topPageList", topPageList.getRecords());
+            records.addAll(0, topPageList.getRecords());
         }
 
         modelMap.put("total", pageEntityIPage.getPages());
