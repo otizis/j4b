@@ -75,7 +75,7 @@ Zepto(function($){
                 data: JSON.stringify(jsonData),
                 success: function (resp) {
                     if(resp.code === 0){
-                        location.replace("/editPageList.html");
+                        location.replace("/page/"+resp.id);
                     }
                     else{
                         window.alert(resp.msg||'error')

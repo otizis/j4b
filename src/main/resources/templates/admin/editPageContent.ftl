@@ -6,7 +6,7 @@
 
 <hr>
 
-<div style="max-width: 50rem;margin: auto">
+<div style="max-width: 50rem;margin: auto;padding-bottom: 2rem">
 
     <form id="savePageForm">
         <input type="hidden" name="id" value="${(pageEntity.id)!''}"/>
@@ -57,7 +57,7 @@
             ${(pageEntity.content)!''}
         </div>
         <br>
-        <input id="savePageBtn" class="u-button" type="button" value="提交">
+        <input id="savePageBtn" class="u-button" type="button" value="确认发表">
     </form>
 </div>
 <script src="/libs/tinymce/tinymce.min.js"></script>

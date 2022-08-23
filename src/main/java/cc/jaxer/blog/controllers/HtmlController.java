@@ -88,6 +88,7 @@ public class HtmlController implements ErrorController
                                                           .last("limit 1"));
         if(tagEntity!=null){
             IPage<PageEntity> topPageList = pageService.getPageListByTag(tagEntity.getId(), new Page<>(pageN, 3));
+            records.removeAll(topPageList.getRecords());
             records.addAll(0, topPageList.getRecords());
         }
 

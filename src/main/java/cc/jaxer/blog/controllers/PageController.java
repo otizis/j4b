@@ -42,7 +42,7 @@ public class PageController
 
             page.setUpdateAt(new Date());
             pageMapper.updateById(page);
-            return R.ok();
+            return R.ok("id",page.getId());
         }
         Date now = new Date();
         page.setCreateAt(now);
@@ -57,7 +57,7 @@ public class PageController
         }
         pageMapper.insert(page);
         updatePageTag(page);
-        return R.ok();
+        return R.ok("id",page.getId());
     }
 
     @RequestMapping("/page/append")
