@@ -64,6 +64,8 @@ header .header-info{
 .container .u-card h3{
     text-align: left;
     padding-left: 1rem;
+    max-height: 3rem;
+    overflow: hidden;
 }
 .container .u-card .content{
     min-height: 5rem;
