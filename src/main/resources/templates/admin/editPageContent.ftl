@@ -12,7 +12,7 @@
         <input type="hidden" name="id" value="${(pageEntity.id)!''}"/>
 
         <div class="inline-left">
-            <span>标题：</span>
+            <span>标题:</span>
             <label >
                <input type="text" style="width: 40rem" name="title" value="${(pageEntity.title)!''}"/>
             </label>
@@ -21,13 +21,19 @@
         <div class="inline-left">
             <span>状态:</span>
             <label>
-                <input type="radio" <#if pageEntity.status == 1>checked</#if> name="status" value="1"> 上线
+                <input type="radio"
+                       <#if pageEntity ??>
+                           <#if pageEntity.status == 1>checked</#if>
+                       <#else >
+                          checked
+                       </#if>
+                       name="status" value="1"> 上线
             </label>
             <label >
-                <input type="radio" <#if pageEntity.status == 0>checked</#if> name="status" value="0"> 回收站
+                <input type="radio" <#if pageEntity?? && pageEntity.status == 0>checked</#if> name="status" value="0"> 回收站
             </label>
             <label >
-                <input type="radio" <#if pageEntity.status == 2>checked</#if> name="status" value="2"> 私密
+                <input type="radio" <#if pageEntity?? && pageEntity.status == 2>checked</#if> name="status" value="2"> 私密
             </label>
         </div>
 
