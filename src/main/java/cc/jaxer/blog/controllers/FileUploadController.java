@@ -100,6 +100,7 @@ public class FileUploadController
         if(file.exists() && file.isDirectory()){
             File[] list = file.listFiles();
             if(list != null){
+
                 Arrays.sort(list,(a,b)-> {
                     if (!a.isDirectory() && b.isDirectory())
                     {
@@ -109,6 +110,7 @@ public class FileUploadController
                     {
                         return -1;
                     }
+
                     return (int) (a.lastModified() - b.lastModified());
                 });
             }

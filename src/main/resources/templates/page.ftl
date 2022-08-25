@@ -8,14 +8,15 @@
 <div style="background-image: url('<#if !page.bgUrl?contains("http")>${unsplashDomain}</#if>${page.bgUrl}');
         background-size: cover;
         background-position: center;
-        height: 50vh"
-></div>
+        height: 50vh"></div>
 </#if>
 <header>
-
-    <h3>${page.title!}</h3>
+    <h3 >${page.title!}</h3>
     <div>
         <span class="header-info">${page.createAt?string("yyyy-MM-dd HH:mm")}</span>
+        <#if page.status == 2>
+            <span style="color: darkred">私密文章</span>
+        </#if>
         <@hasLogin>
             <a href="/editPageContent.html?id=${page.id}">编辑</a>
         </@hasLogin>
@@ -25,7 +26,7 @@
 <#include "./comps/link.ftl"/>
 
 <div class="container">
-    <div class="u-page">
+    <div class="u-page <#if page.status == 2>u-self-page</#if>" >
         ${page.content}
     </div>
     <div class="u-tag">

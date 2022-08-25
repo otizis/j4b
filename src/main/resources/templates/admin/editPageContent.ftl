@@ -20,12 +20,14 @@
 
         <div class="inline-left">
             <span>状态:</span>
-            <#assign foo=(((pageEntity.status)!1) == 1) />
             <label>
-                <input type="radio" <#if foo>checked</#if> name="status" value="1"> 上线
+                <input type="radio" <#if pageEntity.status == 1>checked</#if> name="status" value="1"> 上线
             </label>
             <label >
-                <input type="radio" <#if !foo>checked</#if> name="status" value="0"> 屏蔽
+                <input type="radio" <#if pageEntity.status == 0>checked</#if> name="status" value="0"> 回收站
+            </label>
+            <label >
+                <input type="radio" <#if pageEntity.status == 2>checked</#if> name="status" value="2"> 私密
             </label>
         </div>
 

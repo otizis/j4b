@@ -31,7 +31,7 @@
         空
     </#if>
     <#list pageList! as page>
-        <a class="u-card"
+        <a class="u-card <#if page.status==2>u-self-page</#if>"
            target="_blank"
            href="/page/${page.id!}">
             <#if page.bgUrl?? && page.bgUrl?length gt 1>

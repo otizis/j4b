@@ -85,6 +85,15 @@ header .header-info{
     color: #333333;
     font-size: 0.9rem;
 }
+
+.container .u-card.u-self-page{
+    border: 1px solid darkred;
+    box-shadow: darkred 2px 2px 2px;
+}
+.container .u-card.u-self-page h3{
+    color: darkred;
+}
+
 .u-pagition{
     padding: 1rem;
 }
@@ -111,6 +120,11 @@ footer > div{
     padding: 1.2rem 1rem;
     min-height: 40rem;
     word-break: break-all;
+    background: white;
+}
+.u-page.u-self-page{
+    border: 1px solid darkred;
+    box-shadow: darkred 3px 3px 3px;
 }
 .u-page p {
     margin: 0.5rem 0;

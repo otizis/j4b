@@ -20,6 +20,9 @@ public class PageEntity
     private String desc;
     private Date createAt;
     private Date updateAt;
+    /**
+     * 0 删除， 1 普通可见 ， 2 私密可见
+     */
     private Integer status;
     private String bgUrl;
     @TableField(exist = false)

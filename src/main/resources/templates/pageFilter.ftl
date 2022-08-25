@@ -20,7 +20,7 @@
         空
     </#if>
     <#list pageList! as page>
-        <a class="u-card" href="/page/${page.id!}">
+        <a class="u-card <#if page.status==2>u-self-page</#if>" href="/page/${page.id!}">
             <h3>${page.title!}</h3>
             <div class="content">
                 <#assign summary=page.content?replace("<.*?>","","r")>

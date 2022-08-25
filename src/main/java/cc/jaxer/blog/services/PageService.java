@@ -1,5 +1,7 @@
 package cc.jaxer.blog.services;
 
+import cc.jaxer.blog.common.AppConstant;
+import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.entities.PageEntity;
 import cc.jaxer.blog.entities.PageTagEntity;
 import cc.jaxer.blog.entities.TagEntity;
@@ -31,8 +33,12 @@ public class PageService  extends ServiceImpl<PageMapper,PageEntity>  implements
     private PageTagMapper pageTagMapper;
 
     public IPage<PageEntity> getPageListByTag(String tagId,IPage<PageEntity> page){
+        boolean login = J4bUtils.isLogin();
+
         QueryWrapper<PageEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status", 1)
+        queryWrapper
+                .eq(!login, "status", AppConstant.PAGE_STATE_NORMAL)
+                .ne(login,"status",AppConstant.PAGE_STATE_DEL)
                 .exists(" select 1 from T_PAGE_TAG where T_PAGE.ID = T_PAGE_TAG.PAGE_ID AND T_PAGE_TAG.TAG_ID = '" + tagId + "'")
                 .orderByDesc("create_at");
 
