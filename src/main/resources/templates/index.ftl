@@ -16,7 +16,7 @@
     <div class="u-b-desc">
         <p>${blogInfo.desc!"j4b desc"}</p>
         <div>
-            <#if bgmUrl?? >
+            <#if pNum==1 && bgmUrl?? >
                 <audio src="${bgmUrl}" controls autoplay loop></audio>
             </#if>
         </div>
@@ -77,8 +77,9 @@
         </#if>
         <span>第${pNum}页 共${total}页</span>
         <#if pNum lt total>
-            <a href="?pageNum=${pNum + 1}" target="_blank">下一页</a>
+            <a href="?pageNum=${pNum + 1}" <#if pNum==1>target="_blank"</#if>>下一页</a>
         </#if>
+
     </div>
 </div>
 
