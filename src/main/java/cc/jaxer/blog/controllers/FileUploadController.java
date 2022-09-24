@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Controller
@@ -98,6 +99,21 @@ public class FileUploadController
         }
         if(file.exists() && file.isDirectory()){
             File[] list = file.listFiles();
+            if(list != null){
+
+                Arrays.sort(list,(a,b)-> {
+                    if (!a.isDirectory() && b.isDirectory())
+                    {
+                        return 1;
+                    }
+                    if (!b.isDirectory() && a.isDirectory())
+                    {
+                        return -1;
+                    }
+
+                    return (int) (a.lastModified() - b.lastModified());
+                });
+            }
             modelMap.addAttribute("fileList", list);
             modelMap.addAttribute("currPath", gotoPath);
 

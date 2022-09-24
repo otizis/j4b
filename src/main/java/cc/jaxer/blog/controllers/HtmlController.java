@@ -2,6 +2,7 @@ package cc.jaxer.blog.controllers;
 
 import cc.jaxer.blog.common.AppConstant;
 import cc.jaxer.blog.common.ConfigCodeEnum;
+import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.entities.*;
 import cc.jaxer.blog.mapper.*;
@@ -30,8 +31,6 @@ import java.util.List;
 @Controller
 public class HtmlController implements ErrorController
 {
-    private static final String ERROR_PATH = "/error";
-
     @Autowired
     private ConfigMapper configMapper;
 
@@ -69,17 +68,31 @@ public class HtmlController implements ErrorController
         {
             pageN = Integer.parseInt(pageNum);
         }
+        boolean login = J4bUtils.isLogin();
         QueryWrapper<PageEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status", 1).orderByDesc("create_at");
+        queryWrapper
+                .eq(!login,"status",AppConstant.PAGE_STATE_NORMAL)
+                .ne(login,"status",AppConstant.PAGE_STATE_DEL)
+                .orderByDesc("create_at");
         IPage<PageEntity> pageEntityIPage = pageService.page(new Page<>(pageN, 5), queryWrapper);
-        modelMap.put("pageList", pageEntityIPage.getRecords());
+        List<PageEntity> records = pageEntityIPage.getRecords();
+        for (PageEntity record : records)
+        {
+            List<TagEntity> tagList = pageService.getTagListByPageId(record.getId());
+            record.setTagList(tagList);
+        }
+        modelMap.put("pageList", records);
 
 
         TagEntity tagEntity = tagMapper.selectOne(new QueryWrapper<TagEntity>()
-                .eq("tag", "置顶").or().eq("tag", "top"));
+                                                          .eq("tag", "置顶")
+                                                          .or()
+                                                          .eq("tag", "top")
+                                                          .last("limit 1"));
         if(tagEntity!=null){
             IPage<PageEntity> topPageList = pageService.getPageListByTag(tagEntity.getId(), new Page<>(pageN, 3));
-            modelMap.put("topPageList", topPageList.getRecords());
+            records.removeAll(topPageList.getRecords());
+            records.addAll(0, topPageList.getRecords());
         }
 
         modelMap.put("total", pageEntityIPage.getPages());
@@ -109,7 +122,7 @@ public class HtmlController implements ErrorController
 
         List<PageEntity> pageList = pageService.list(new QueryWrapper<PageEntity>()
                                                          .select("id","update_at")
-                                                         .eq("status", 1)
+                                                         .eq("status", AppConstant.PAGE_STATE_NORMAL)
                                                          .orderByDesc("create_at"));
         modelMap.put("pageList", pageList);
         modelMap.put("blogDomain",blogDomain);
@@ -120,7 +133,6 @@ public class HtmlController implements ErrorController
     @RequestMapping(path = {"/pageFilter/tag/{tagId}"})
     public String pageFilter(ModelMap modelMap,  String pageNum, @PathVariable String tagId)
     {
-
         // page列表
         int pageN = 1;
         if (NumberUtils.isDigits(pageNum))
@@ -135,7 +147,7 @@ public class HtmlController implements ErrorController
         }
         modelMap.put("tag",tag);
 
-        IPage<PageEntity> pageEntityIPage = pageService.getPageListByTag(tagId,new Page<>(pageN, 27));
+        IPage<PageEntity> pageEntityIPage = pageService.getPageListByTag(tagId,new Page<>(pageN, 9));
         modelMap.put("pageList", pageEntityIPage.getRecords());
         modelMap.put("total", pageEntityIPage.getPages());
         modelMap.put("pNum", pageN);
@@ -155,9 +167,12 @@ public class HtmlController implements ErrorController
         }
         modelMap.put("keyword",keyword);
 
-        IPage<PageEntity> pageEntityIPage = pageService.page(new Page<>(pageN, 27),
+        boolean login = J4bUtils.isLogin();
+
+        IPage<PageEntity> pageEntityIPage = pageService.page(new Page<>(pageN, 9),
          new QueryWrapper<PageEntity>()
-         .eq("status",1)
+         .eq(!login,"status", AppConstant.PAGE_STATE_NORMAL)
+         .ne(login,"status", AppConstant.PAGE_STATE_DEL)
          .and(w-> w.like("content", keyword)
                .or().like("title", keyword))
          .orderByDesc("create_at")
@@ -191,13 +206,7 @@ public class HtmlController implements ErrorController
         return "replyPage";
     }
 
-    @Override
-    public String getErrorPath()
-    {
-        return ERROR_PATH;
-    }
-
-    @RequestMapping(path = {ERROR_PATH})
+    @RequestMapping(path = {"/error"})
     public String error(ModelMap modelMap)
     {
         return "error";
@@ -206,14 +215,20 @@ public class HtmlController implements ErrorController
     @RequestMapping(path = {"/page/{id}"})
     public String page(ModelMap modelMap, @PathVariable("id") String id)
     {
-
-
         String conf = configService.getConfDefault(ConfigCodeEnum.unsplash_proxy, AppConstant.UNSPLASH_DOMAIN);
         modelMap.put("unsplashDomain", conf);
 
         // page
         PageEntity pageEntity = pageService.getById(id);
         if (pageEntity == null)
+        {
+            return "redirect:/error";
+        }
+        if(pageEntity.getStatus() == 0)
+        {
+            return "redirect:/error";
+        }
+        if(pageEntity.getStatus() == 2 && !J4bUtils.isLogin())
         {
             return "redirect:/error";
         }

@@ -19,7 +19,7 @@
             <td>${page.title!""}</td>
             <td>
                 <#if (page.status == 1)> 正常
-                <#else> 已屏蔽
+                <#else> 回收站
                 </#if>
             </td>
             <td>${page.createAt?string("yyyy-MM-dd HH:mm:ss")}</td>
@@ -31,7 +31,7 @@
                 |
                 <input class="u-button delPage"
                 type="button"
-                data-id="${page.id!''}" value="屏蔽">
+                data-id="${page.id!''}" value="进回收站">
             </td>
         </tr>
     </#list>
@@ -46,7 +46,7 @@
     </#if>
 </div>
 <hr>
-<script src="https://zeptojs.com/zepto.min.js"></script>
+<script src="/libs/zepto/zepto.1.2.min.js"></script>
 <script src="/admin/editPageList.js"></script>
 </body>
 </html>

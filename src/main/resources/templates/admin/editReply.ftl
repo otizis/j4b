@@ -59,7 +59,7 @@
         background-color: #d7ffb5;
     }
 </style>
-<script src="https://zeptojs.com/zepto.min.js"></script>
+<script src="/libs/zepto/zepto.1.2.min.js"></script>
 <script src="/admin/editReply.js"></script>
 </body>
 </html>

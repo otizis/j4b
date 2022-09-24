@@ -10,6 +10,9 @@ public class PageTagEntity
     private String pageId;
     private String tagId;
 
+    public static final String PAGE_ID = "page_id";
+    public static final String TAG_ID = "tag_id";
+
     public PageTagEntity()
     {
     }

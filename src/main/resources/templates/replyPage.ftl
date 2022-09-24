@@ -48,7 +48,7 @@
 </div>
 
 <#include "./comps/foot.ftl"/>
-<script src="https://zeptojs.com/zepto.min.js"></script>
+<script src="/libs/zepto/zepto.1.2.min.js"></script>
 <script >
     var page = 1;
     Zepto(function($) {

@@ -18,10 +18,10 @@
         空
     </#if>
     <#list pageList! as page>
-        <div class="u-card"  onclick="location.href='/page/${page.id!}'">
+        <a class="u-card <#if page.status==2>u-self-page</#if>" href="/page/${page.id!}">
             <h3>${page.title!}</h3>
             <div class="u-card-plane">${page.createAt?string('yyyy-MM-dd')}</div>
-        </div>
+        </a>
     </#list>
     <div class="u-pagition">
         <#if pNum gt  1>
