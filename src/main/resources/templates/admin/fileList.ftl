@@ -9,15 +9,38 @@
 <h3>当前目录：${currPath!"/"}</h3>
 <h4>远程下载文件</h4>
 <form action="/downloadByUrl" method="POST">
-<input type="text" name="url" placeholder="http地址">
-<input type="submit" class="u-button" value="提交下载">
+    <input type="text" name="url" placeholder="http地址">
+    <input type="submit" class="u-button" value="提交下载">
 </form>
+<table style="margin: auto"  class="hover-line">
+    <tr>
+        <th style="max-width: 10rem">url</th>
+        <th>保存路径</th>
+        <th>下载进度</th>
+        <th>状态</th>
+        <th>创建时间</th>
+        <th>更新时间</th>
+    </tr>
+    <#list downloadList! as download>
+        <tr>
+            <td style="max-width: 15rem;    word-break: break-all;">${download.url}</td>
+            <td>
+                <a href="?currPath=${currPath}&path=${download.savePath}">${download.savePath}</a>
+            </td>
+            <td>${download.progressSize}</td>
+            <td>${download.status}</td>
+            <td>${download.createAt?string("yyyy-MM-dd HH:mm:ss")}</td>
+            <td>${download.updateAt?string("yyyy-MM-dd HH:mm:ss")}</td>
+        </tr>
+    </#list>
+</table>
 <h4>上传文件</h4>
 <form action="/uploadOrig"  method="POST" enctype="multipart/form-data">
-<input type="file" name="file">
-<input type="hidden" name="path" value="${currPath}">
-<input type="submit" class="u-button" value="上传">
+    <input type="file" name="file">
+    <input type="hidden" name="path" value="${currPath}">
+    <input type="submit" class="u-button" value="上传">
 </form>
+
 <h4>创建目录</h4>
 <form action="/createDir"  method="POST" enctype="multipart/form-data">
     <input type="text" name="dirName" placeholder="新建文件夹名称">

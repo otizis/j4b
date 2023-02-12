@@ -2,13 +2,17 @@ package cc.jaxer.blog.controllers;
 
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
+import cc.jaxer.blog.entities.DownloadEntity;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.StreamProgress;
 import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,9 +24,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.Executors;
 
 @Controller
 @Slf4j
@@ -32,6 +40,8 @@ public class FileUploadController
 
     @Value("${fileupload.path}")
     private String nginxServerPath;
+
+    private static final ArrayList<DownloadEntity> downloadList = new ArrayList<>();
 
     @RequestMapping("/upload")
     @ResponseBody
@@ -97,7 +107,8 @@ public class FileUploadController
                 gotoPath = gotoPath.substring(0,gotoPath.lastIndexOf("/"));
             }
         }
-        if(file.exists() && file.isDirectory()){
+        if(file.exists() && file.isDirectory())
+        {
             File[] list = file.listFiles();
             if(list != null){
 
@@ -120,7 +131,7 @@ public class FileUploadController
         }else{
             return "redirect:/fileList.html";
         }
-
+        modelMap.addAttribute("downloadList", downloadList);
         return "admin/fileList";
     }
 
@@ -171,7 +182,43 @@ public class FileUploadController
                 return "redirect:/fileList.html";
             }
         }
-        long length = HttpUtil.downloadFile(url, path);
+        ThreadUtil.execAsync(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DownloadEntity entity = new DownloadEntity();
+                entity.setCreateAt(new Date());
+                entity.setUpdateAt(new Date());
+                entity.setStatus(1);
+                entity.setUrl(url);
+                entity.setSavePath(day);
+                downloadList.add(entity);
+                HttpUtil.downloadFile(url, FileUtil.file(path) , 10_000, new StreamProgress()
+                {
+                    @Override
+                    public void start() {
+                        entity.setStatus(1);
+                        entity.setUpdateAt(new Date());
+                    }
+
+                    @Override
+                    public void progress(long progressSize)
+                    {
+                        entity.setStatus(2);
+                        entity.setProgressSize(progressSize);
+                        entity.setUpdateAt(new Date());
+                    }
+
+                    @Override
+                    public void finish()
+                    {
+                        entity.setStatus(3);
+                        entity.setUpdateAt(new Date());
+                    }
+                });
+            }
+        });
         return "redirect:/fileList.html";
     }
 
