@@ -12,6 +12,8 @@ public class DownloadEntity
     Date createAt;// TIMESTAMP,
     Date updateAt;// TIMESTAMP,
     long progressSize;
+    long fileSize;
+
     /**
      * 1 初始化 2 进行中 3 已完成 4 错误
      */

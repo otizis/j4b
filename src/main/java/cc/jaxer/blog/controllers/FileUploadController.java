@@ -120,7 +120,7 @@ public class FileUploadController
                         return -1;
                     }
 
-                    return (int) (a.lastModified() - b.lastModified());
+                    return (int) (b.lastModified() - a.lastModified());
                 });
             }
             modelMap.addAttribute("fileList", list);
@@ -210,7 +210,10 @@ public class FileUploadController
                         .setFollowRedirects(true)
                         .timeout(10_000)
                         .executeAsync();
-                response.writeBody(FileUtil.file(path),new StreamProgress()
+                String header = response.header("content-length");
+                long fileSize = Long.parseLong(header);
+                entity.setFileSize(fileSize);
+                response.writeBody(FileUtil.file(path), new StreamProgress()
                 {
                     @Override
                     public void start()
@@ -235,7 +238,6 @@ public class FileUploadController
                     }
                 });
             }catch (Throwable e){
-                e.printStackTrace();
                 entity.setStatus(4);
                 entity.setUpdateAt(new Date());
             }
