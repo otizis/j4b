@@ -12,6 +12,7 @@
     <input type="text" name="url" placeholder="http地址">
     <input type="submit" class="u-button" value="提交下载">
 </form>
+<a href="/clearFinishDownload.html">清理已经下载完成的任务列表</a>
 <table style="margin: auto"  class="hover-line">
     <tr>
         <th style="max-width: 10rem">url</th>
@@ -23,12 +24,23 @@
     </tr>
     <#list downloadList! as download>
         <tr>
-            <td style="max-width: 15rem;    word-break: break-all;">${download.url}</td>
+            <td style="max-width: 15rem;word-break: break-all;">${download.url}</td>
             <td>
                 <a href="?currPath=${currPath}&path=${download.savePath}">${download.savePath}</a>
             </td>
             <td>${download.progressSize}</td>
-            <td>${download.status}</td>
+            <td>
+                <#switch download.status >
+                    <#case 1>初始化
+                        <#break>
+                    <#case 2>进行中
+                        <#break>
+                    <#case 3>已完成
+                        <#break>
+                    <#case 4>错误
+                        <#break>
+                </#switch>
+            </td>
             <td>${download.createAt?string("yyyy-MM-dd HH:mm:ss")}</td>
             <td>${download.updateAt?string("yyyy-MM-dd HH:mm:ss")}</td>
         </tr>
@@ -82,7 +94,7 @@
             </#if>
         </td>
         <td>
-            <form action="/delFile"  method="POST" enctype="multipart/form-data">
+            <form action="/delFile"  method="POST" enctype="multipart/form-data" onsubmit="return confirm('是否删除？')">
                 <input type="hidden" name="path" value="${currPath}/${file.name}">
                 <input type="submit" class="u-button" value="删除">
             </form>

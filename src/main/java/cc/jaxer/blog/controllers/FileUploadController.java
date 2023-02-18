@@ -7,12 +7,12 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.StreamProgress;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.http.HttpUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,13 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.Executors;
 
 @Controller
 @Slf4j
@@ -135,6 +133,21 @@ public class FileUploadController
         return "admin/fileList";
     }
 
+    @RequestMapping(path = {"/clearFinishDownload.html"})
+    @NeedLogin(isPage = true)
+    public String clearFinishDownload(ModelMap modelMap )
+    {
+        for (int i = 0; i < downloadList.size(); i++)
+        {
+            DownloadEntity downloadEntity = downloadList.get(i);
+            if(downloadEntity.getStatus().equals(3)){
+                downloadList.remove(i);
+                i++;
+            }
+        }
+        return "redirect:/fileList.html";
+    }
+
     @RequestMapping(path = {"/uploadOrig"})
     @NeedLogin
     public String uploadOrig(@RequestParam("path") String path,
@@ -182,22 +195,26 @@ public class FileUploadController
                 return "redirect:/fileList.html";
             }
         }
-        ThreadUtil.execAsync(new Runnable()
-        {
-            @Override
-            public void run()
+        ThreadUtil.execAsync(() -> {
+            DownloadEntity entity = new DownloadEntity();
+            entity.setCreateAt(new Date());
+            entity.setUpdateAt(new Date());
+            entity.setStatus(1);
+            entity.setUrl(url);
+            entity.setSavePath(day);
+            downloadList.add(entity);
+            try
             {
-                DownloadEntity entity = new DownloadEntity();
-                entity.setCreateAt(new Date());
-                entity.setUpdateAt(new Date());
-                entity.setStatus(1);
-                entity.setUrl(url);
-                entity.setSavePath(day);
-                downloadList.add(entity);
-                HttpUtil.downloadFile(url, FileUtil.file(path) , 10_000, new StreamProgress()
+                final HttpResponse response = HttpRequest
+                        .get(url)
+                        .setFollowRedirects(true)
+                        .timeout(10_000)
+                        .executeAsync();
+                response.writeBody(FileUtil.file(path),new StreamProgress()
                 {
                     @Override
-                    public void start() {
+                    public void start()
+                    {
                         entity.setStatus(1);
                         entity.setUpdateAt(new Date());
                     }
@@ -217,6 +234,10 @@ public class FileUploadController
                         entity.setUpdateAt(new Date());
                     }
                 });
+            }catch (Throwable e){
+                e.printStackTrace();
+                entity.setStatus(4);
+                entity.setUpdateAt(new Date());
             }
         });
         return "redirect:/fileList.html";
@@ -233,6 +254,7 @@ public class FileUploadController
         file.mkdir();
         return "redirect:/fileList.html?currPath"+currPath;
     }
+
     @RequestMapping(path = {"/delFile"})
     @NeedLogin
     public String uploadOrig(@RequestParam("path") String path)
