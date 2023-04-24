@@ -1,5 +1,6 @@
 package cc.jaxer.blog.controllers;
 
+import cc.jaxer.blog.common.AppConstant;
 import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import cn.hutool.core.io.FileUtil;
@@ -74,7 +75,7 @@ public class FileUploadController
             logger.error("",e);
             return R.error();
         }
-        return R.ok("location", "/oss/" + day + "/" + filename);
+        return R.ok("location", AppConstant.OSS_PATH + "/" + day + "/" + filename);
     }
 
     @RequestMapping(path = {"/fileList.html"})

@@ -15,6 +15,7 @@
 
 package cc.jaxer.blog.configs;
 
+import cc.jaxer.blog.common.AppConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -32,6 +33,6 @@ public class ResourcesConfig implements WebMvcConfigurer
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry)
     {
-        registry.addResourceHandler("/oss/**").addResourceLocations("file:"+antiquePath);
+        registry.addResourceHandler(AppConstant.OSS_PATH + "/**").addResourceLocations("file:"+antiquePath);
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * 播客文章的控制器
+ * 博客文章的控制器
  */
 @RestController
 public class PageController

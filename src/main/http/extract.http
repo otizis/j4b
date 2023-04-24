@@ -1,0 +1,30 @@
+POST http://localhost:8080/extract/add
+Content-Type: application/json
+auth: 38301d4eda7792e0
+
+{
+
+  "type": 2,
+  "title": "平面无限格填充着色问题：色数是15" ,
+  "content": "" ,
+  "sourceUrl":  "http://jandan.net/p/112868",
+  "memo": "abadfdf"
+
+}
+
+###
+POST http://localhost:8080/extract/add
+Content-Type: application/json
+auth: 38301d4eda7792e0
+
+{
+
+  "type": 1,
+  "title": "平面无限格填充着色问题：色数是15" ,
+  "content": "https://wx4.moyu.im/mw600/6d050af1ly1hd9rorli3fj20um1dln5x.jpg" ,
+  "sourceUrl":  "http://jandan.net/p/112868",
+  "memo": "abadfdf"
+
+}
+
+###

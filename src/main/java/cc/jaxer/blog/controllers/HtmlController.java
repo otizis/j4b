@@ -4,10 +4,13 @@ import cc.jaxer.blog.common.AppConstant;
 import cc.jaxer.blog.common.ConfigCodeEnum;
 import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
+import cc.jaxer.blog.configs.NeedAuthAop;
 import cc.jaxer.blog.entities.*;
 import cc.jaxer.blog.mapper.*;
 import cc.jaxer.blog.services.ConfigService;
+import cc.jaxer.blog.services.ExtractService;
 import cc.jaxer.blog.services.PageService;
+import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -48,6 +51,12 @@ public class HtmlController implements ErrorController
 
     @Autowired
     private PageTagMapper pageTagMapper;
+
+    @Autowired
+    private ExtractService extractService;
+
+    @Autowired
+    private NeedAuthAop needAuthAop;
 
 
     @RequestMapping(path = {"/", "/index.html"})
@@ -239,6 +248,25 @@ public class HtmlController implements ErrorController
         return "page";
     }
 
+    @RequestMapping(path = {"/extract.html"})
+    public String extract(ModelMap modelMap, String pageNum)
+    {
+        // page列表
+        int pageN = 1;
+        if (NumberUtils.isDigits(pageNum))
+        {
+            pageN = Integer.parseInt(pageNum);
+        }
+
+        QueryWrapper<ExtractEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("create_at");
+        IPage<ExtractEntity> page = extractService.page(new Page<>(pageN, 10), queryWrapper);
+        modelMap.put("page", page);
+        modelMap.put("total", page.getPages());
+        return "extract";
+    }
+
+
     @RequestMapping(path = {"/config.html"})
     @NeedLogin(isPage = true)
     public String config(ModelMap modelMap)
@@ -250,6 +278,9 @@ public class HtmlController implements ErrorController
         ConfigCodeEnum[] supportConfigList = ConfigCodeEnum.values();
 
         modelMap.put("supportConfigList", supportConfigList);
+
+        String string = needAuthAop.getAuthString();
+        modelMap.put("apiAuth", MD5.create().digestHex16(string));
 
         return "admin/config";
     }

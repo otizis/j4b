@@ -46,6 +46,9 @@
     </table>
 </div>
 
+<div  >
+    api auth : ${apiAuth}
+</div>
 
 
 <script src="/libs/zepto/zepto.1.2.min.js"></script>

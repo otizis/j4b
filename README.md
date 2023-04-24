@@ -12,6 +12,7 @@ simple blog by java. 样例: http://jaxer.cc
 - [x] flyway管理表结构版本
 - [x] 备份导出
 - [x] 文章列表 sitemap.xml 输出
+- [x] 支持接口新增摘录，支持图片ref下载
 
 ## 运行配置项列表
     unsplash_appid #unsplash 开发者id
