@@ -82,7 +82,7 @@ document.addEventListener("mouseup", (e) => {
     // 发送
     $(document.body).on("click", "._ex_send", function () {
         _extract.params.memo = $('#_ex_memo').val();
-        _extract.params.status = $('input[name="_extract_"]:checked').val();
+        _extract.params.status = $('input[name="_extract_status"]:checked').val();
         //console.log(_extract.params)
 
         GM_xmlhttpRequest({
