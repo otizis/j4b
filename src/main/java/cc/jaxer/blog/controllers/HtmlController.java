@@ -24,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -266,6 +267,24 @@ public class HtmlController implements ErrorController
         return "extract";
     }
 
+    /**
+     * 一键添加油猴脚本
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping(path = {"/extract.user.js"})
+    @NeedLogin(isPage = true)
+    public String extractUserjs(HttpServletRequest request, ModelMap modelMap)
+    {
+        String string = needAuthAop.getAuthString();
+        modelMap.put("apiAuth", MD5.create().digestHex16(string));
+
+        String serverName = request.getServerName();
+        int serverPort = request.getServerPort();
+        modelMap.put("domain", serverName+":"+serverPort);
+
+        return "extractUserjs";
+    }
 
     @RequestMapping(path = {"/config.html"})
     @NeedLogin(isPage = true)

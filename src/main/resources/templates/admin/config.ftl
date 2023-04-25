@@ -45,9 +45,10 @@
     </#list>
     </table>
 </div>
-
+<hr>
 <div  >
-    api auth : ${apiAuth}
+    <h5>油猴脚本-记录摘录-切勿公开别人可以往你服务器发消息</h5>
+    api auth: <a href="/extract.user.js" >install user js</a>
 </div>
 
 
