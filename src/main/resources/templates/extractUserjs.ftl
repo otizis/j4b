@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name extract
 // @namespace http://jaxer.cc/
-// @version 0.3
+// @version 0.6
 // @require http://jaxer.cc/libs/zepto/zepto.1.2.min.js
-// @description 每日见闻发送到服务器记录
+// @description 网页图片，文本等发送到服务器记录
 // @author jaxer
 // @match *://*/*
 // @icon http://jaxer.cc/oss/201810284/5530a058-6cd2-4a36-bd43-a8adbdabb6da.png
@@ -73,6 +73,7 @@ document.addEventListener("mouseup", (e) => {
     $(document.body).on("click", "#_ex_close", function () { $('._extract_preview').remove() })
 
     $(document.body).on("click", "._extract_content", function () { $("._extract_preview").toggleClass("expend") })
+    // 发送
     $(document.body).on("click", "._ex_send", function () {
         _extract.params.memo = $('#_ex_memo').val();
         console.log(_extract.params)
@@ -93,7 +94,8 @@ document.addEventListener("mouseup", (e) => {
                 //console.log(response.responseText);
                 var resp = JSON.parse(response.responseText)
                 if (resp.code === 0) {
-                    $('._extract_preview').remove()
+                    // 成功
+                    $('._extract_preview').html('发送成功').hide('slow',function(){$(this).remove()})
                 } else {
                     $('._extract_preview ._ex_send').removeProp('disabled')
                     alert('faild')
@@ -106,7 +108,7 @@ document.addEventListener("mouseup", (e) => {
                                         <button class="_ex_send" >发送</button>
                                         <button id="_ex_close" style='float:right'>关闭</button>
                                         <div class='_extract_content' style="">${html}</div>
-                                        <div><textarea style='width:80%;padding:0.5rem' rows=2 id="_ex_memo" ></textarea><br/><button class="_ex_send" style='width:200px'>发送</button></div>
+                                        <div><textarea style='width:29rem;padding:0.5rem' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea><br/><button class="_ex_send" style='width:200px'>发送</button></div>
                                     </div>`))
     }
 
@@ -122,11 +124,10 @@ document.addEventListener("mouseup", (e) => {
         z-index:9999999999;
         box-shadow: #888888 2px 2px 5px 0px;
         overflow:hidden;
+        transition: all 0.5s;
     }
     ._extract_preview.expend{
         left:25%;
-        top:20%;
-        bottom:unset;
         width:30rem;
         height:23rem;
         overflow:auto;
@@ -141,6 +142,12 @@ document.addEventListener("mouseup", (e) => {
     }
     .expend  ._extract_content{
         overflow:auto;
+    }
+    ._extract_preview button{
+        width:3rem;
+        height:1.5rem;
+        border: 1px solid grey;
+        background: lightgrey;
     }
     `)
 

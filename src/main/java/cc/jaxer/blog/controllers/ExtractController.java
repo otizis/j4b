@@ -2,6 +2,7 @@ package cc.jaxer.blog.controllers;
 
 import cc.jaxer.blog.common.AppConstant;
 import cc.jaxer.blog.common.NeedAuth;
+import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import cc.jaxer.blog.entities.ExtractEntity;
 import cc.jaxer.blog.services.ExtractService;
@@ -69,6 +70,14 @@ public class ExtractController
         request.setCreateAt(now);
         request.setUpdateAt(now);
         extractService.save(request);
+        return R.ok();
+    }
+
+    @RequestMapping("/updateStatus")
+    @NeedLogin
+    public R updateStatus(@RequestBody ExtractEntity request){
+        Assert.notNull(request.getStatus());
+        extractService.updateById(request);
         return R.ok();
     }
 }

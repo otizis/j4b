@@ -260,7 +260,9 @@ public class HtmlController implements ErrorController
         }
 
         QueryWrapper<ExtractEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_at");
+        queryWrapper
+                .ne("status",0)
+                .orderByDesc("create_at");
         IPage<ExtractEntity> page = extractService.page(new Page<>(pageN, 10), queryWrapper);
         modelMap.put("page", page);
         modelMap.put("total", page.getPages());

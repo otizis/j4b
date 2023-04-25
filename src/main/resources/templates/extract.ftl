@@ -58,8 +58,14 @@
         空
     </#if>
     <#list page.records! as page>
-        <#if page.type == 1>
-            <div class="u-extract">
+        <div class="u-extract" >
+            <@hasLogin>
+            <div>
+                <button class="f-update-state" data-id="${page.id}" data-state="0">删除</button>
+            </div>
+            </@hasLogin>
+
+            <#if page.type == 1>
                 <div class="u-extract-source">
                     <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
                     <span >${page.createAt?string('yyyy-MM-dd')}</span>
@@ -68,19 +74,15 @@
                 <div class="u-extract-memo">
                     <span>${page.memo!}</span>
                 </div>
-            </div>
             <#elseif page.type == 2>
-                <div class="u-extract">
-                    <div class="u-extract-source">
-                        <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
-                        <span>${page.createAt?string('yyyy-MM-dd')}</span>
-                    </div>
-                    <div class="u-extract-memo">
-                        <span>${page.memo!}</span>
-                    </div>
+                <div class="u-extract-source">
+                    <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
+                    <span>${page.createAt?string('yyyy-MM-dd')}</span>
+                </div>
+                <div class="u-extract-memo">
+                    <span>${page.memo!}</span>
                 </div>
             <#elseif page.type == 3>
-            <div class="u-extract">
                 <div class="u-extract-source">
                     <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
                     <span>${page.createAt?string('yyyy-MM-dd')}</span>
@@ -89,8 +91,8 @@
                 <div class="u-extract-memo">
                     <span>${page.memo!}</span>
                 </div>
-            </div>
         </#if>
+        </div>
 
     </#list>
     <div class="u-pagition">
@@ -106,4 +108,33 @@
 
 <#include "./comps/foot.ftl"/>
 </body>
+<script src="/libs/zepto/zepto.1.2.min.js"></script>
+<script>
+    Zepto(function($){
+        $('.f-update-state').on("click",function(){
+            if(!confirm("确认删除？")){
+                return
+            }
+            var jsonData={
+                id: $(this).data("id"),
+                status: $(this).data("state")
+            }
+            $.ajax({
+                type:'POST',
+                url:'/extract/updateStatus',
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData),
+                success: function (resp) {
+                    if(resp.code === 0){
+                        console.log(resp);
+                        location.reload();
+                    }
+                    else{
+                        window.alert(resp.msg||'error')
+                    }
+                }
+            })
+        })
+    })
+</script>
 </html>
