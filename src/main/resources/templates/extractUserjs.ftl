@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name extract
 // @namespace http://jaxer.cc/
-// @version 0.6
+// @version 0.7.1
 // @require http://jaxer.cc/libs/zepto/zepto.1.2.min.js
 // @description 网页图片，文本等发送到服务器记录
 // @author jaxer
@@ -10,6 +10,7 @@
 // @grant GM_registerMenuCommand
 // @grant GM_xmlhttpRequest
 // @grant GM_addStyle
+// @grant GM_openInTab
 // ==/UserScript==
 
 (function () {
@@ -21,7 +22,7 @@ var _extract = {
 }
 <#noparse>
 // 全局右键
-GM_registerMenuCommand('记录网页', (e) => {
+GM_registerMenuCommand('记录本网页', (e) => {
     if ($("._extract_preview.expend").length !== 0) { return }
     //console.log(e)
     _extract.params = {
@@ -33,7 +34,12 @@ GM_registerMenuCommand('记录网页', (e) => {
     }
     $('._extract_preview').remove()
     appendDialog(`<div>${htmlEncode(_extract.params.title)}</div><div>${htmlEncode(_extract.params.sourceUrl)}</div>`)
+    $("._extract_preview").toggleClass("expend")
 });
+
+    GM_registerMenuCommand('查看记录', (e) => {
+        GM_openInTab(`http://${_extract.domain}/extract.html`);
+    });
 
 document.addEventListener("mouseup", (e) => {
     //console.log("enter mouseup",e)
@@ -108,7 +114,7 @@ document.addEventListener("mouseup", (e) => {
                                         <button class="_ex_send" >发送</button>
                                         <button id="_ex_close" style='float:right'>关闭</button>
                                         <div class='_extract_content' style="">${html}</div>
-                                        <div><textarea style='width:29rem;padding:0.5rem' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea><br/><button class="_ex_send" style='width:200px'>发送</button></div>
+                                        <div><textarea style='width:29rem;padding:0.5rem' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea><br/><button class="_ex_send" style='width:29rem'>发送</button></div>
                                     </div>`))
     }
 
