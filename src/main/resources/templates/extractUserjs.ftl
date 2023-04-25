@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name extract
 // @namespace http://jaxer.cc/
-// @version 0.7.1
+// @version 0.7.2
 // @require http://jaxer.cc/libs/zepto/zepto.1.2.min.js
 // @description 网页图片，文本等发送到服务器记录
 // @author jaxer
@@ -82,7 +82,8 @@ document.addEventListener("mouseup", (e) => {
     // 发送
     $(document.body).on("click", "._ex_send", function () {
         _extract.params.memo = $('#_ex_memo').val();
-        console.log(_extract.params)
+        _extract.params.status = $('input[name="_extract_"]:checked').val();
+        //console.log(_extract.params)
 
         GM_xmlhttpRequest({
             method: "POST",
@@ -114,7 +115,11 @@ document.addEventListener("mouseup", (e) => {
                                         <button class="_ex_send" >发送</button>
                                         <button id="_ex_close" style='float:right'>关闭</button>
                                         <div class='_extract_content' style="">${html}</div>
-                                        <div><textarea style='width:29rem;padding:0.5rem' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea><br/><button class="_ex_send" style='width:29rem'>发送</button></div>
+                                        <div><textarea style='width:28rem;padding:0.5rem' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea>
+                                            <br>
+                                            <label>默认<input type="radio" value="1" name="_extract_status"></label>
+                                            <label>私有<input type="radio" value="10"  name="_extract_status"></label>
+                                            <br/><button class="_ex_send" style='width:28rem'>发送</button></div>
                                     </div>`))
     }
 

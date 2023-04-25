@@ -250,7 +250,7 @@ public class HtmlController implements ErrorController
     }
 
     @RequestMapping(path = {"/extract.html"})
-    public String extract(ModelMap modelMap, String pageNum)
+    public String extract(ModelMap modelMap, String pageNum, Integer status)
     {
         // page列表
         int pageN = 1;
@@ -258,10 +258,12 @@ public class HtmlController implements ErrorController
         {
             pageN = Integer.parseInt(pageNum);
         }
-
+        boolean login = J4bUtils.isLogin();
         QueryWrapper<ExtractEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper
                 .ne("status",0)
+                .ne(!login,"status",10)
+                .eq(status!=null,"status",status)
                 .orderByDesc("create_at");
         IPage<ExtractEntity> page = extractService.page(new Page<>(pageN, 10), queryWrapper);
         modelMap.put("page", page);

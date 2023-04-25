@@ -62,6 +62,7 @@
             <@hasLogin>
             <div>
                 <button class="f-update-state" data-id="${page.id}" data-state="0">删除</button>
+                <button class="f-update-state" data-id="${page.id}" data-state="10">私有</button>
             </div>
             </@hasLogin>
 
