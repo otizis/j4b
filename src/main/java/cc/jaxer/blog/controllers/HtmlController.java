@@ -261,7 +261,7 @@ public class HtmlController implements ErrorController
         boolean login = J4bUtils.isLogin();
         QueryWrapper<ExtractEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper
-                .ne("status",0)
+                .ne(status==null,"status",0)
                 .ne(!login,"status",10)
                 .eq(status!=null,"status",status)
                 .orderByDesc("create_at");
