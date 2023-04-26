@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name extract
 // @namespace http://jaxer.cc/
-// @version 0.7.2
+// @version 0.8
 // @require http://jaxer.cc/libs/zepto/zepto.1.2.min.js
 // @description 网页图片，文本等发送到服务器记录
 // @author jaxer
@@ -58,7 +58,7 @@ document.addEventListener("mouseup", (e) => {
             "sourceUrl": location.href,
             "memo": ""
         }
-        appendDialog(`<div><img style='height:15rem' src='${imageUrl}'/></div>`)
+        appendDialog(`<div><img style='max-height: 15rem;max-width: 100%;' src='${imageUrl}'/></div>`)
         return
     }
     var selected = window.getSelection();
@@ -77,6 +77,13 @@ document.addEventListener("mouseup", (e) => {
 });
 
     $(document.body).on("click", "#_ex_close", function () { $('._extract_preview').remove() })
+
+    $(document.body).on("click", function (e) {
+        if($.contains($("._extract_preview")[0], e.target)){
+            return
+        }
+        $("._extract_preview").removeClass("expend")
+    })
 
     $(document.body).on("click", "._extract_content", function () { $("._extract_preview").toggleClass("expend") })
     // 发送
@@ -110,17 +117,20 @@ document.addEventListener("mouseup", (e) => {
             }
         });
     })
+
     function appendDialog(html) {
         $(document.body).append($(`<div class='_extract_preview'>
-                                        <button class="_ex_send" >发送</button>
-                                        <button id="_ex_close" style='float:right'>关闭</button>
-                                        <div class='_extract_content' style="">${html}</div>
-                                        <div><textarea style='width:28rem;padding:0.5rem' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea>
-                                            <br>
-                                            <label>默认<input type="radio" value="1" name="_extract_status"></label>
-                                            <label>私有<input type="radio" value="10"  name="_extract_status"></label>
-                                            <br/><button class="_ex_send" style='width:28rem'>发送</button></div>
-                                    </div>`))
+            <div class='_extract_top_bar'>
+                <button class="_ex_send" >发送</button>
+                <button id="_ex_close" style='float:right'>关闭</button>
+            </div>
+            <div class='_extract_content' style="">${html}</div>
+            <div><textarea style='width:28rem;padding:0.5rem;' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea>
+                <div style='padding:0.5rem 0'>
+                    <label>默认<input type="radio" value="1" name="_extract_status"></label>
+                    <label>私有<input type="radio" value="10"  name="_extract_status"></label>
+                </div><button class="_ex_send" style='width:28rem'>发送</button></div>
+        </div>`))
     }
 
     GM_addStyle(`
@@ -135,21 +145,35 @@ document.addEventListener("mouseup", (e) => {
         z-index:9999999999;
         box-shadow: #888888 2px 2px 5px 0px;
         overflow:hidden;
-        transition: all 0.5s;
+        transition: all 0.3s;
+        border-radius: 1rem;
     }
     ._extract_preview.expend{
         left:25%;
         width:30rem;
-        height:23rem;
+        height:25rem;
         overflow:auto;
         padding:1rem
+    }
+    ._extract_top_bar{
+        height:0;
+        overflow:hidden;
+        transition: all 0.25s;
+    }
+    ._extract_preview:hover  ._extract_top_bar,
+    ._extract_preview.expend ._extract_top_bar{
+        height:1.5rem
+    }
+    ._extract_preview.expend ._extract_top_bar ._ex_send{
+        display:none
     }
     ._extract_content{
         clear:both;
         width:100%;
-        height:15rem;
+        max-height:15rem;
         cursor: pointer;
         overflow:hidden;
+        margin-bottom:0.5rem;
     }
     .expend  ._extract_content{
         overflow:auto;
@@ -157,8 +181,15 @@ document.addEventListener("mouseup", (e) => {
     ._extract_preview button{
         width:3rem;
         height:1.5rem;
-        border: 1px solid grey;
-        background: lightgrey;
+        border: 1px solid #409eff;
+        background: white;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #409eff;
+    }
+    ._extract_preview button:hover{
+        background: #409eff;
+        color:white
     }
     `)
 
