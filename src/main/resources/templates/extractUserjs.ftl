@@ -20,7 +20,7 @@
         auth: '${apiAuth}',
         domain: '${domain}',
     }
-< #noparse >
+<#noparse>
         // 全局右键
         GM_registerMenuCommand('记录本网页', (e) => {
             if ($("._extract_preview.expend").length !== 0) { return }
