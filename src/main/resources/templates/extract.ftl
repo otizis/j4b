@@ -54,6 +54,12 @@
 <#include "./comps/link.ftl"/>
 
 <div class="container">
+    <@hasLogin>
+        <div>
+            <a href="?status=10">不公开列表</a>
+            <a href="?status=0">已删除列表</a>
+        </div>
+    </@hasLogin>
     <#if page.records?size == 0>
         空
     </#if>
@@ -65,34 +71,19 @@
                 <button class="f-update-state" data-id="${page.id}" data-state="10">私有</button>
             </div>
             </@hasLogin>
-
+            <div class="u-extract-source">
+                <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
+                <span>${page.createAt?string('yyyy-MM-dd')}</span>
+            </div>
             <#if page.type == 1>
-                <div class="u-extract-source">
-                    <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
-                    <span >${page.createAt?string('yyyy-MM-dd')}</span>
-                </div>
                 <div class="u-extract-img"><img src="${page.content!''}"></div>
-                <div class="u-extract-memo">
-                    <span>${page.memo!}</span>
-                </div>
             <#elseif page.type == 2>
-                <div class="u-extract-source">
-                    <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
-                    <span>${page.createAt?string('yyyy-MM-dd')}</span>
-                </div>
-                <div class="u-extract-memo">
-                    <span>${page.memo!}</span>
-                </div>
             <#elseif page.type == 3>
-                <div class="u-extract-source">
-                    <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
-                    <span>${page.createAt?string('yyyy-MM-dd')}</span>
-                </div>
                 <div class="u-extract-cnt">${page.content!}</div>
-                <div class="u-extract-memo">
-                    <span>${page.memo!}</span>
-                </div>
-        </#if>
+            </#if>
+            <div class="u-extract-memo">
+                (${page.status})<span>${page.memo!}</span>
+            </div>
         </div>
 
     </#list>

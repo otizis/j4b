@@ -260,11 +260,10 @@ public class HtmlController implements ErrorController
         }
         boolean login = J4bUtils.isLogin();
         QueryWrapper<ExtractEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper
-                .ne(status==null,"status",0)
-                .ne(!login,"status",10)
-                .eq(status!=null,"status",status)
-                .orderByDesc("create_at");
+        queryWrapper.eq(status==null,ExtractEntity.STATUS,1)
+                    .eq(status!=null,ExtractEntity.STATUS,status)
+                    .notIn(!login,ExtractEntity.STATUS,0,10)
+                    .orderByDesc("create_at");
         IPage<ExtractEntity> page = extractService.page(new Page<>(pageN, 10), queryWrapper);
         modelMap.put("page", page);
         modelMap.put("total", page.getPages());

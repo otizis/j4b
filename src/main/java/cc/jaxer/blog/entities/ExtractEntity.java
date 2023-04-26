@@ -21,4 +21,6 @@ public class ExtractEntity
     private String memo ;//  VARCHAR(512),
     private Date createAt ;//  TIMESTAMP,
     private Date updateAt ;//  TIMESTAMP
+
+    public static final  String STATUS = "status";
 }
