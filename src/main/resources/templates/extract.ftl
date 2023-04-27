@@ -86,8 +86,12 @@
                 <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
                 <span>${page.createAt?string('yyyy-MM-dd')}</span>
             </div>
-            <#if page.type == 1>
-                <div class="u-extract-img"><img src="${page.content!''}"></div>
+            <#if page.type == 1 || page.type == 4>
+                <div class="u-extract-img">
+                    <a href="${page.content!''}" target="_blank" title="点击查看大图">
+                        <img src="${page.content!''}" />
+                    </a>
+                </div>
             <#elseif page.type == 2>
             <#elseif page.type == 3>
                 <div class="u-extract-cnt">${page.content!}</div>

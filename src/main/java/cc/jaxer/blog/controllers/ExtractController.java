@@ -6,11 +6,14 @@ import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import cc.jaxer.blog.entities.ExtractEntity;
 import cc.jaxer.blog.services.ExtractService;
+import cn.hutool.core.img.ImgUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +30,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/extract")
+@Slf4j
 public class ExtractController
 {
     @Value("${fileupload.path}")
@@ -63,6 +68,15 @@ public class ExtractController
             if(response.getStatus() == 200){
                 request.setContent(AppConstant.OSS_PATH +filePath.replace(File.separator,"/"));
             }
+        }else if(request.getType() == 4)
+        {
+            BufferedImage bufferedImage = ImgUtil.toImage(request.getContent().split(",")[1]);
+            LocalDate now = LocalDate.now();
+            String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
+            String filename = UUID.randomUUID().toString();
+            String filePath = File.separator + day + File.separator + filename + ".png";
+            ImgUtil.writePng(bufferedImage, FileUtil.getOutputStream(nginxServerPath + filePath) );
+            request.setContent(AppConstant.OSS_PATH +filePath.replace(File.separator,"/"));
         }
         Date now = new Date();
         request.setCreateAt(now);
