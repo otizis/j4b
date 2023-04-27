@@ -24,6 +24,10 @@
             text-align: left;
             margin-bottom: 2rem;
         }
+        .u-extract-action-bar{
+            padding:0.5rem 1rem;
+            border-bottom: #eceff1 1px solid;
+        }
         .u-extract-source{
             border-bottom: #eceff1 1px solid;
             padding: 0.5rem 1rem;
@@ -66,9 +70,16 @@
     <#list page.records! as page>
         <div class="u-extract" >
             <@hasLogin>
-            <div>
-                <button class="f-update-state" data-id="${page.id}" data-state="0">删除</button>
-                <button class="f-update-state" data-id="${page.id}" data-state="10">私有</button>
+            <div class="u-extract-action-bar">
+                <#if page.status == 1>
+                    [正常]
+                <#elseif page.type == 0>
+                    [已删]
+                <#elseif page.type == 10>
+                    [不公开]
+                </#if>
+                <button class="u-button f-update-state" data-id="${page.id}" data-state="0">删除</button>
+                <button class="u-button f-update-state" data-id="${page.id}" data-state="10">私有</button>
             </div>
             </@hasLogin>
             <div class="u-extract-source">
@@ -82,7 +93,7 @@
                 <div class="u-extract-cnt">${page.content!}</div>
             </#if>
             <div class="u-extract-memo">
-                (${page.status})<span>${page.memo!}</span>
+                <span>${page.memo!}</span>
             </div>
         </div>
 
