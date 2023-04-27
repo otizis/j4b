@@ -21,21 +21,56 @@
         domain: '${domain}',
     }
 <#noparse>
-        // 全局右键
-        GM_registerMenuCommand('记录本网页', (e) => {
-            if ($("._extract_preview.expend").length !== 0) { return }
-            //console.log(e)
-            _extract.params = {
-                "type": 2,
-                "title": htmlEncode(document.title),
-                "content": htmlEncode(document.title),
-                "sourceUrl": location.href,
-                "memo": ""
+    // 发送剪切板图片
+    GM_registerMenuCommand('发送剪切板图片', (e) => {
+        if ($("._extract_preview.expend").length !== 0) { return }
+        //console.log(e)
+        _extract.params = {
+            "type": 4,
+            "title": "剪切板",
+            "content": "",
+            "sourceUrl": `http://${_extract.domain}`,
+            "memo": ""
+        }
+        appendDialog(`<div id="pasteDiv" contenteditable="">图片粘贴到这里</div> `)
+        $("._extract_preview").toggleClass("expend")
+        $("#pasteDiv").on("paste", function (event) {
+            if (event.clipboardData || event.originalEvent) {
+                let clipboardData = (event.clipboardData || event.originalEvent.clipboardData);
+                if (clipboardData.items) {
+                    let blob;
+                    for (let i = 0; i < clipboardData.items.length; i++) {
+                        if (clipboardData.items[i].type.indexOf("image") !== -1) {
+                            blob = clipboardData.items[i].getAsFile();
+                        }
+                    }
+                    let render = new FileReader();
+                    render.onload = function (evt) {
+                        //输出base64编码
+                        _extract.params.content = evt.target.result;
+                    }
+                    if (blob) {
+                        render.readAsDataURL(blob);
+                    }
+                }
             }
-            $('._extract_preview').remove()
-            appendDialog(`<div class="_ex_hide_before">${htmlEncode(_extract.params.title)}</div><div>${htmlEncode(_extract.params.sourceUrl)}</div>`)
-            $("._extract_preview").toggleClass("expend")
-        });
+        })
+    });
+
+
+    GM_registerMenuCommand('记录本网页', (e) => {
+        if ($("._extract_preview.expend").length !== 0) { return }
+        //console.log(e)
+        _extract.params = {
+            "type": 2,
+            "title": htmlEncode(document.title),
+            "content": htmlEncode(document.title),
+            "sourceUrl": location.href,
+            "memo": ""
+        }
+        appendDialog(`<div class="_ex_hide_before">${htmlEncode(_extract.params.title)}</div><div>${htmlEncode(_extract.params.sourceUrl)}</div>`)
+        $("._extract_preview").toggleClass("expend")
+    });
 
     GM_registerMenuCommand('查看记录', (e) => {
         GM_openInTab(`http://${_extract.domain}/extract.html`);
@@ -77,6 +112,9 @@
     })
 
     function appendDialog(html) {
+        // 先清空
+        $('._extract_preview').remove()
+
         $(document.body).append($(`<div class='_extract_preview'>
             <div class='_extract_top_bar'>
                 <button class="_ex_send" >发送</button>
@@ -116,7 +154,7 @@
                         var resp = JSON.parse(response.responseText)
                         if (resp.code === 0) {
                             // 成功
-                            $('._extract_preview').html('发送成功');
+                            $('._extract_preview').html('<p> 发送成功！</p>');
                             setTimeout(function () { $('._extract_preview').remove() }, 1000)
                         } else {
                             $('._extract_preview ._ex_send').removeProp('disabled')
@@ -196,6 +234,16 @@
     background: #409eff;
     color:white
 }
+._extract_preview #pasteDiv{
+    width: 25rem;
+    min-height: 5rem;
+    border: 1px solid #1890ff;
+    overflow: auto;
+    max-height: 13rem;
+}
+._extract_preview #pasteDiv img{
+    width:100%
+}
 `)
 
     function htmlEncode(html) {
@@ -211,4 +259,5 @@
     }
 
 })();
+
 </#noparse>
