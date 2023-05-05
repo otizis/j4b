@@ -110,13 +110,5 @@ public class ExtractController
         extractService.updateById(request);
         return R.ok();
     }
-   public static void main(String[] args)
-    {
-        String  url="https://f.video.weibocdn.com/o0/pHBZGXo4lx0852Std1Pa010412001LN20E010?label=mp4_hd&template=540x960.24.0&ori=0&ps=1BThihd3VLAY5R&Expires=1683274495&ssig=N%2FI%2BrWWJQm&KID=unistore,video";
-        String path = URLUtil.getPath(url);
-        System.out.println(path);
 
-
-        System.out.println(FileNameUtil.getSuffix(path));
-    }
 }
