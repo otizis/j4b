@@ -13,6 +13,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +54,16 @@ public class ExtractController
         request.setTitle(StrUtil.maxLength(request.getTitle(),250));
         request.setSourceUrl(StrUtil.maxLength(request.getSourceUrl(),510));
 
-        if(request.getType() == 1){
+        if(request.getType() == 1)
+        {
+            // 已经添加过的图片地址，不添加了
+            ExtractEntity queryByContent = new ExtractEntity();
+            queryByContent.setContent(request.getContent());
+            int count = extractService.count(new QueryWrapper<>(queryByContent));
+            if(count != 0){
+                return R.error("已经存在相同内容");
+            }
+
             LocalDate now = LocalDate.now();
             String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
             String filename = UUID.randomUUID().toString();
@@ -68,7 +78,8 @@ public class ExtractController
             if(response.getStatus() == 200){
                 request.setContent(AppConstant.OSS_PATH +filePath.replace(File.separator,"/"));
             }
-        }else if(request.getType() == 4)
+        }
+        else if(request.getType() == 4)
         {
             BufferedImage bufferedImage = ImgUtil.toImage(request.getContent().split(",")[1]);
             LocalDate now = LocalDate.now();
