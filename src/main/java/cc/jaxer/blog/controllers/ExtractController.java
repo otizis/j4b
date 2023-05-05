@@ -10,6 +10,7 @@ import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -45,7 +47,8 @@ public class ExtractController
     public R add(@RequestBody ExtractEntity request){
         Assert.notNull(request.getTitle());
         Assert.notNull(request.getType());
-        Assert.notNull(request.getContent());
+        String content = request.getContent();
+        Assert.notNull(content);
         Assert.notNull(request.getSourceUrl());
         if(request.getMemo()!=null){
             Assert.isTrue(request.getMemo().length() < 512,"memo过长");
@@ -58,7 +61,7 @@ public class ExtractController
         {
             // 已经添加过的图片或视频地址，不添加了
             ExtractEntity queryByContent = new ExtractEntity();
-            queryByContent.setContent(request.getContent());
+            queryByContent.setContent(content);
             int count = extractService.count(new QueryWrapper<>(queryByContent));
             if(count != 0){
                 return R.error("已经存在相同内容");
@@ -67,10 +70,14 @@ public class ExtractController
             LocalDate now = LocalDate.now();
             String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
             String filename = UUID.randomUUID().toString();
-            String suffix = FileNameUtil.getSuffix(request.getContent());
+            String path = URLUtil.getPath(content);
+            String suffix = FileNameUtil.getSuffix(path);
+            if(suffix.contains("/")){
+                suffix = suffix.replace("/", "");
+            }
             String filePath = File.separator + day + File.separator + filename + "." + suffix;
 
-            final HttpResponse response = HttpRequest.get(request.getContent())
+            final HttpResponse response = HttpRequest.get(content)
                                                      .header(Header.REFERER,request.getSourceUrl())
                                                      .timeout(3000).executeAsync();
             response.writeBody(new File(nginxServerPath + filePath), null);
@@ -81,7 +88,7 @@ public class ExtractController
         }
         else if(request.getType() == 4)
         {
-            BufferedImage bufferedImage = ImgUtil.toImage(request.getContent().split(",")[1]);
+            BufferedImage bufferedImage = ImgUtil.toImage(content.split(",")[1]);
             LocalDate now = LocalDate.now();
             String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
             String filename = UUID.randomUUID().toString();
@@ -102,5 +109,14 @@ public class ExtractController
         Assert.notNull(request.getStatus());
         extractService.updateById(request);
         return R.ok();
+    }
+   public static void main(String[] args)
+    {
+        String  url="https://f.video.weibocdn.com/o0/pHBZGXo4lx0852Std1Pa010412001LN20E010?label=mp4_hd&template=540x960.24.0&ori=0&ps=1BThihd3VLAY5R&Expires=1683274495&ssig=N%2FI%2BrWWJQm&KID=unistore,video";
+        String path = URLUtil.getPath(url);
+        System.out.println(path);
+
+
+        System.out.println(FileNameUtil.getSuffix(path));
     }
 }
