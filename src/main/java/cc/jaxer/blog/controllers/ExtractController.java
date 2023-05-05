@@ -54,9 +54,9 @@ public class ExtractController
         request.setTitle(StrUtil.maxLength(request.getTitle(),250));
         request.setSourceUrl(StrUtil.maxLength(request.getSourceUrl(),510));
 
-        if(request.getType() == 1)
+        if(request.getType() == 1||request.getType() == 5)
         {
-            // 已经添加过的图片地址，不添加了
+            // 已经添加过的图片或视频地址，不添加了
             ExtractEntity queryByContent = new ExtractEntity();
             queryByContent.setContent(request.getContent());
             int count = extractService.count(new QueryWrapper<>(queryByContent));

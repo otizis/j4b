@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name extract
 // @namespace http://jaxer.cc/
-// @version 0.9
+// @version 0.9.1
 // @require http://jaxer.cc/libs/zepto/zepto.1.2.min.js
-// @description 网页图片，文本等发送到服务器记录
+// @description 网页图片，文本，视频 等发送到服务器记录
 // @author jaxer
 // @match *://*/*
 // @icon http://jaxer.cc/oss/201810284/5530a058-6cd2-4a36-bd43-a8adbdabb6da.png
@@ -88,6 +88,19 @@
                 "memo": ""
             }
             appendDialog(`<div><img style='max-height: 15rem;max-width: 100%;' src='${imageUrl}'/></div>`)
+            return
+        }
+        else if(e.target.tagName === 'VIDEO')
+        {
+            var videoUrl = e.target.currentSrc
+            _extract.params = {
+                "type": 5,
+                "title": htmlEncode(document.title),
+                "content": videoUrl,
+                "sourceUrl": location.href,
+                "memo": ""
+            }
+            appendDialog(`<div><video style='max-height: 15rem;max-width: 100%;' controls muted="true"  src='${videoUrl}'/></div>`)
             return
         }
         var selected = window.getSelection();

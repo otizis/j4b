@@ -38,7 +38,7 @@
         .u-extract-source span{
 
         }
-        .u-extract-img img{
+        .u-extract-img,.u-extract-video{
             max-width: 100%;
             max-height: 50vh;
         }
@@ -87,14 +87,18 @@
                 <span>${page.createAt?string('yyyy-MM-dd')}</span>
             </div>
             <#if page.type == 1 || page.type == 4>
-                <div class="u-extract-img">
+                <div >
                     <a href="${page.content!''}" target="_blank" title="点击查看大图">
-                        <img src="${page.content!''}" />
+                        <img class="u-extract-img" src="${page.content!''}" />
                     </a>
                 </div>
             <#elseif page.type == 2>
             <#elseif page.type == 3>
                 <div class="u-extract-cnt">${page.content!}</div>
+            <#elseif page.type == 5>
+                <div>
+                    <video  class="u-extract-video" src="${page.content!''}" controls></video>
+                </div>
             </#if>
             <div class="u-extract-memo">
                 <span>${page.memo!}</span>
