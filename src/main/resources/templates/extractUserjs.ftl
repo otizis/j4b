@@ -93,6 +93,9 @@
         else if(e.target.tagName === 'VIDEO')
         {
             var videoUrl = e.target.currentSrc
+            if(videoUrl.toLowerCase().startsWith("blob")){
+                return
+            }
             _extract.params = {
                 "type": 5,
                 "title": htmlEncode(document.title),
