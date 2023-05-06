@@ -174,7 +174,7 @@
                             setTimeout(function () { $('._extract_preview').remove() }, 1000)
                         } else {
                             $('._extract_preview ._ex_send').removeProp('disabled')
-                            alert('faild')
+                            alert(resp.msg||'faild')
                         }
                     }
                 });

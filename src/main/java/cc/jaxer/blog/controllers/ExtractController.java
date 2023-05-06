@@ -6,6 +6,9 @@ import cc.jaxer.blog.common.NeedLogin;
 import cc.jaxer.blog.common.R;
 import cc.jaxer.blog.entities.ExtractEntity;
 import cc.jaxer.blog.services.ExtractService;
+import cn.hutool.cache.Cache;
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
@@ -25,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -36,6 +38,12 @@ import java.util.UUID;
 @Slf4j
 public class ExtractController
 {
+    /**
+     *  近64次添加，content不相同，避免短期内重复添加，同一个资源
+     */
+    private final static Cache<String,Integer> fifoCache = CacheUtil.newFIFOCache(64);
+
+
     @Value("${fileupload.path}")
     private String nginxServerPath;
 
@@ -59,13 +67,10 @@ public class ExtractController
 
         if(request.getType() == 1||request.getType() == 5)
         {
-            // 已经添加过的图片或视频地址，不添加了
-            ExtractEntity queryByContent = new ExtractEntity();
-            queryByContent.setContent(content);
-            int count = extractService.count(new QueryWrapper<>(queryByContent));
-            if(count != 0){
+            if(fifoCache.containsKey(content)){
                 return R.error("已经存在相同内容");
             }
+            fifoCache.put(content, AppConstant.PAGE_STATE_NORMAL);
 
             LocalDate now = LocalDate.now();
             String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
