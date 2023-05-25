@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name extract
 // @namespace http://jaxer.cc/
-// @version 0.9.1
+// @version 0.9.2
 // @require http://jaxer.cc/libs/zepto/zepto.1.2.min.js
 // @description 网页图片，文本，视频 等发送到服务器记录
 // @author jaxer
@@ -87,7 +87,7 @@
                 "sourceUrl": location.href,
                 "memo": ""
             }
-            appendDialog(`<div><img style='max-height: 15rem;max-width: 100%;' src='${imageUrl}'/></div>`)
+            appendDialog(`<div><img style='max-height: 250px;max-width: 100%;' src='${imageUrl}'/></div>`)
             return
         }
         else if(e.target.tagName === 'VIDEO')
@@ -103,7 +103,7 @@
                 "sourceUrl": location.href,
                 "memo": ""
             }
-            appendDialog(`<div><video style='max-height: 15rem;max-width: 100%;' controls muted="true"  src='${videoUrl}'/></div>`)
+            appendDialog(`<div><video style='max-height: 250px;max-width: 100%;' controls muted="true"  src='${videoUrl}'/></div>`)
             return
         }
         var selected = window.getSelection();
@@ -116,8 +116,7 @@
                 "sourceUrl": location.href,
                 "memo": ""
             }
-            $('._extract_preview').remove()
-            appendDialog(`<h6 class="_ex_hide_before">${htmlEncode(_extract.params.title)}</h6><div class="_ex_hide_before" style='color:grey'>${_extract.params.sourceUrl}</div><div style='padding:1rem 0'>${htmlEncode(_extract.params.content)}</div>`)
+            appendDialog(`<h6 class="_ex_hide_before">${htmlEncode(_extract.params.title)}</h6><div class="_ex_hide_before" style='color:grey'>${_extract.params.sourceUrl}</div><div style='padding:15px 0'>${htmlEncode(_extract.params.content)}</div>`)
         }
     });
 
@@ -133,15 +132,15 @@
 
         $(document.body).append($(`<div class='_extract_preview'>
             <div class='_extract_top_bar'>
-                <button class="_ex_send" >发送</button>
-                <button id="_ex_close" style='float:right'>关闭</button>
+                <button class=" _ex_send" >发送</button>
+                <button class="" id="_ex_close" style='float:right'>关闭</button>
             </div>
             <div class='_extract_content' style="">${html}</div>
-            <div><textarea style='width:28rem;padding:0.5rem;' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea>
-                <div style='padding:0.5rem 0'>
+            <div><textarea style='width:320px;padding:10px;' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea>
+                <div style='padding:10px 0'>
                     <label>默认<input type="radio" value="1" name="_extract_status"></label>
                     <label>私有<input type="radio" value="10"  name="_extract_status"></label>
-                </div><button class="_ex_send" style='width:28rem'>发送</button></div>
+                </div><button class=" _ex_send" style='width:320px'>发送</button></div>
         </div>`))
         $('._extract_preview')
             .on("click", function (e) { e.stopPropagation() })
@@ -170,7 +169,7 @@
                         var resp = JSON.parse(response.responseText)
                         if (resp.code === 0) {
                             // 成功
-                            $('._extract_preview').html('<p> 发送成功！</p>');
+                            $('._extract_preview').html('<p style="background:green;height:90px"> 发送成功！</p>');
                             setTimeout(function () { $('._extract_preview').remove() }, 1000)
                         } else {
                             $('._extract_preview ._ex_send').removeProp('disabled')
@@ -189,24 +188,28 @@
     GM_addStyle(`
 ._extract_preview{
     position:fixed;
-    left:1rem;
-    bottom:1rem;
-    width:6rem;
-    height:6rem;
+    left:-55px;
+    bottom:15px;
+    width:90px;
+    height:90px;
     background:white;
     text-align:left;
     z-index:9999999999;
-    box-shadow: #888888 2px 2px 5px 0px;
+    box-shadow: #888888 0 2px 5px 0px;
     overflow:hidden;
     transition: all 0.3s;
-    border-radius: 1rem;
+    border-radius: 15px;
+    font-size:14px;
+}
+._extract_preview:hover{
+    left:0;
 }
 ._extract_preview.expend{
     left:25%;
-    width:30rem;
-    height:25rem;
+    width:450px;
+    height:410px;
     overflow:auto;
-    padding:1rem
+    padding:15px
 }
 ._extract_top_bar{
     height:0;
@@ -215,7 +218,7 @@
 }
 ._extract_preview:hover  ._extract_top_bar,
 ._extract_preview.expend ._extract_top_bar{
-    height:1.5rem
+    height:25px
 }
 ._extract_preview.expend ._extract_top_bar ._ex_send{
     display:none
@@ -229,33 +232,35 @@
 ._extract_content{
     clear:both;
     width:100%;
-    max-height:15rem;
+    max-height:250px;
     cursor: pointer;
     overflow:hidden;
-    margin-bottom:0.5rem;
+    margin-bottom:10px;
 }
 .expend  ._extract_content{
     overflow:auto;
 }
 ._extract_preview button{
-    width:3rem;
-    height:1.5rem;
+    width:45px;
+    height:25px;
     border: 1px solid #409eff;
     background: white;
     border-radius: 5px;
     cursor: pointer;
     color: #409eff;
+    margin: 0;
+    padding: 0;
 }
 ._extract_preview button:hover{
     background: #409eff;
     color:white
 }
 ._extract_preview #pasteDiv{
-    width: 25rem;
-    min-height: 5rem;
+    width: 350px;
+    min-height: 75px;
     border: 1px solid #1890ff;
     overflow: auto;
-    max-height: 13rem;
+    max-height: 190px;
 }
 ._extract_preview #pasteDiv img{
     width:100%
