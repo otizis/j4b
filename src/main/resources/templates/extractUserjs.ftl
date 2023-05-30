@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name extract
 // @namespace http://jaxer.cc/
-// @version 0.9.2
+// @version 0.9.3
 // @require http://jaxer.cc/libs/zepto/zepto.1.2.min.js
 // @description 网页图片，文本，视频 等发送到服务器记录
 // @author jaxer
@@ -169,7 +169,7 @@
                         var resp = JSON.parse(response.responseText)
                         if (resp.code === 0) {
                             // 成功
-                            $('._extract_preview').html('<p style="background:green;height:90px"> 发送成功！</p>');
+                            $('._extract_preview').html('<p class="_extract_msg"> 发送成功！</p>');
                             setTimeout(function () { $('._extract_preview').remove() }, 1000)
                         } else {
                             $('._extract_preview ._ex_send').removeProp('disabled')
@@ -264,6 +264,11 @@
 }
 ._extract_preview #pasteDiv img{
     width:100%
+}
+._extract_preview ._extract_msg{
+    background: #2ca339;
+    padding: 10px 10px 0 60px;
+    color: white;
 }
 `)
 
