@@ -1,9 +1,6 @@
 package cc.jaxer.blog.controllers;
 
-import cc.jaxer.blog.common.AppConstant;
-import cc.jaxer.blog.common.ConfigCodeEnum;
-import cc.jaxer.blog.common.J4bUtils;
-import cc.jaxer.blog.common.NeedLogin;
+import cc.jaxer.blog.common.*;
 import cc.jaxer.blog.configs.NeedAuthAop;
 import cc.jaxer.blog.entities.*;
 import cc.jaxer.blog.mapper.*;
@@ -268,6 +265,17 @@ public class HtmlController implements ErrorController
         modelMap.put("page", page);
         modelMap.put("total", page.getPages());
         return "extract";
+    }
+
+    /**
+     * 删除所有已删除的记录
+     * @return
+     */
+    @RequestMapping("/extract/deleteAllZero.html")
+    @NeedLogin(isPage = true)
+    public String deleteAllZero(){
+        extractService.remove(new QueryWrapper<ExtractEntity>().eq(ExtractEntity.STATUS,0));
+        return "redict:/extract.html";
     }
 
     /**
