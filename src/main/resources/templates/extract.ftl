@@ -72,13 +72,16 @@
 
 
     <#if isLogin == "1">
-        <div>
-            <a href="?status=10">不公开列表</a>
-            <a href="?status=0">已删除列表</a>
-        </div>
-        <div>
+        <ul>
+            <li><a href="?status=">正常列表</a></li>
+            <li><a href="?status=10">不公开列表</a></li>
+            <li><a href="?status=0">已删除列表</a>
+            <#if ((status!-1)  == 0)>
             <a style="color:red" href="/extract/deleteAllZero" target="_blank">物理删除所有已删除列表</a>
-        </div>
+            </#if>
+            </li>
+        </ul>
+
     </#if>
     <#if page.records?size == 0>
         空
@@ -90,9 +93,9 @@
              <div class="u-extract-action-bar">
                  <#if page.status == 1>
                      [正常]
-                 <#elseif page.type == 0>
+                 <#elseif page.status == 0>
                      [已删]
-                 <#elseif page.type == 10>
+                 <#elseif page.status == 10>
                      [不公开]
                  </#if>
                  <button class="u-button f-update-state" data-id="${page.id}" data-state="0">删除</button>

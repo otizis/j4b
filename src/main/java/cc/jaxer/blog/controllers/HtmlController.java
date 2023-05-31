@@ -268,6 +268,7 @@ public class HtmlController implements ErrorController
         IPage<ExtractEntity> page = extractService.page(new Page<>(pageN, 10), queryWrapper);
         modelMap.put("page", page);
         modelMap.put("search", search);
+        modelMap.put("status", status);
         modelMap.put("total", page.getPages());
         return "extract";
     }
