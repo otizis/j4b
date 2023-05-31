@@ -31,6 +31,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -116,4 +117,26 @@ public class ExtractController
         return R.ok();
     }
 
+
+    /**
+     * 删除所有已删除的记录，同时删除文件
+     * @return
+     */
+    @RequestMapping("/deleteAllZero")
+    @NeedLogin
+    public R deleteAllZero()
+    {
+        List<ExtractEntity> list = extractService.list(new QueryWrapper<ExtractEntity>().eq(ExtractEntity.STATUS, 0));
+        for (ExtractEntity extractEntity : list)
+        {
+            Integer type = extractEntity.getType();
+            if(type == 1||type == 4||type == 5)
+            {
+                String content = extractEntity.getContent();
+                FileUtil.del(nginxServerPath + content);
+            }
+        }
+        extractService.remove(new QueryWrapper<ExtractEntity>().eq(ExtractEntity.STATUS,0));
+        return R.ok();
+    }
 }

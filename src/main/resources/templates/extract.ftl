@@ -56,32 +56,49 @@
 </header>
 
 <#include "./comps/link.ftl"/>
-
+<#assign isLogin="0"/>
+<@hasLogin>
+    <#assign isLogin="1"/>
+</@hasLogin>
 <div class="container">
-    <@hasLogin>
+    <form >
+        <br>
+        <label for="搜索">
+            <input type="text" name="search" value="${search!}"/>
+        </label>
+        <input type="submit"  class="u-button" value="搜索"/>
+    </form>
+    <br>
+
+
+    <#if isLogin == "1">
         <div>
             <a href="?status=10">不公开列表</a>
             <a href="?status=0">已删除列表</a>
         </div>
-    </@hasLogin>
+        <div>
+            <a style="color:red" href="/extract/deleteAllZero" target="_blank">物理删除所有已删除列表</a>
+        </div>
+    </#if>
     <#if page.records?size == 0>
         空
     </#if>
+
     <#list page.records! as page>
         <div class="u-extract" >
-            <@hasLogin>
-            <div class="u-extract-action-bar">
-                <#if page.status == 1>
-                    [正常]
-                <#elseif page.type == 0>
-                    [已删]
-                <#elseif page.type == 10>
-                    [不公开]
-                </#if>
-                <button class="u-button f-update-state" data-id="${page.id}" data-state="0">删除</button>
-                <button class="u-button f-update-state" data-id="${page.id}" data-state="10">私有</button>
-            </div>
-            </@hasLogin>
+            <#if isLogin == "1">
+             <div class="u-extract-action-bar">
+                 <#if page.status == 1>
+                     [正常]
+                 <#elseif page.type == 0>
+                     [已删]
+                 <#elseif page.type == 10>
+                     [不公开]
+                 </#if>
+                 <button class="u-button f-update-state" data-id="${page.id}" data-state="0">删除</button>
+                 <button class="u-button f-update-state" data-id="${page.id}" data-state="10">私有</button>
+             </div>
+            </#if>
             <div class="u-extract-source">
                 <a href="${page.sourceUrl!'#'}" target="_blank">来源：${page.title!}</a>
                 <span>${page.createAt?string('yyyy-MM-dd')}</span>

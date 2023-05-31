@@ -7,6 +7,7 @@ import cc.jaxer.blog.mapper.*;
 import cc.jaxer.blog.services.ConfigService;
 import cc.jaxer.blog.services.ExtractService;
 import cc.jaxer.blog.services.PageService;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -150,7 +151,7 @@ public class HtmlController implements ErrorController
         TagEntity tag = tagMapper.selectById(tagId);
         if(tag == null)
         {
-            return "redict:/error";
+            return "redirect:/error";
         }
         modelMap.put("tag",tag);
 
@@ -247,7 +248,7 @@ public class HtmlController implements ErrorController
     }
 
     @RequestMapping(path = {"/extract.html"})
-    public String extract(ModelMap modelMap, String pageNum, Integer status)
+    public String extract(ModelMap modelMap, String pageNum, Integer status,String search)
     {
         // page列表
         int pageN = 1;
@@ -259,24 +260,18 @@ public class HtmlController implements ErrorController
         QueryWrapper<ExtractEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(status==null,ExtractEntity.STATUS,1)
                     .eq(status!=null,ExtractEntity.STATUS,status)
+                    .and(StrUtil.isNotBlank(search),x->x.like(ExtractEntity.TITLE,search)
+                                                        .or().like(ExtractEntity.CONTENT,search)
+                                                        .or().like(ExtractEntity.MEMO,search))
                     .notIn(!login,ExtractEntity.STATUS,0,10)
                     .orderByDesc("create_at");
         IPage<ExtractEntity> page = extractService.page(new Page<>(pageN, 10), queryWrapper);
         modelMap.put("page", page);
+        modelMap.put("search", search);
         modelMap.put("total", page.getPages());
         return "extract";
     }
 
-    /**
-     * 删除所有已删除的记录
-     * @return
-     */
-    @RequestMapping("/extract/deleteAllZero.html")
-    @NeedLogin(isPage = true)
-    public String deleteAllZero(){
-        extractService.remove(new QueryWrapper<ExtractEntity>().eq(ExtractEntity.STATUS,0));
-        return "redict:/extract.html";
-    }
 
     /**
      * 一键添加油猴脚本

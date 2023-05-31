@@ -23,4 +23,7 @@ public class ExtractEntity
     private Date updateAt ;//  TIMESTAMP
 
     public static final  String STATUS = "status";
+    public static final  String TITLE = "title";
+    public static final  String CONTENT = "content";
+    public static final  String MEMO = "memo";
 }
