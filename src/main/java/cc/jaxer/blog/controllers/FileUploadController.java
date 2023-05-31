@@ -48,7 +48,7 @@ public class FileUploadController
     public R upload(@RequestParam("file") MultipartFile file)
     {
         LocalDate now = LocalDate.now();
-        String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
+        String day = DateTimeFormatter.ofPattern("yyyyMM").format(now);
         String originalFilename = file.getOriginalFilename();
         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String filename = UUID.randomUUID().toString();
@@ -185,7 +185,7 @@ public class FileUploadController
     public String downloadByUrl(@RequestParam("url") String url)
     {
         LocalDate now = LocalDate.now();
-        String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
+        String day = DateTimeFormatter.ofPattern("yyyyMM").format(now);
         String path = nginxServerPath + day + File.separator;
         File dayDir = new File( path);
         if (!dayDir.exists())

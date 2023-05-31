@@ -74,7 +74,7 @@ public class ExtractController
             fifoCache.put(content, AppConstant.PAGE_STATE_NORMAL);
 
             LocalDate now = LocalDate.now();
-            String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
+            String day = DateTimeFormatter.ofPattern("yyyyMM").format(now);
             String filename = UUID.randomUUID().toString();
             String path = URLUtil.getPath(content);
             String suffix = FileNameUtil.getSuffix(path);
@@ -99,7 +99,7 @@ public class ExtractController
         {
             BufferedImage bufferedImage = ImgUtil.toImage(content.split(",")[1]);
             LocalDate now = LocalDate.now();
-            String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(now);
+            String day = DateTimeFormatter.ofPattern("yyyyMM").format(now);
             String filename = UUID.randomUUID().toString();
             String filePath = File.separator + day + File.separator + filename + ".png";
             ImgUtil.writePng(bufferedImage, FileUtil.getOutputStream(nginxServerPath + filePath) );
