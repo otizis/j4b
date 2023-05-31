@@ -81,6 +81,9 @@ public class ExtractController
             if(suffix.contains("/")){
                 suffix = suffix.replace("/", "");
             }
+            if(suffix.length() > 5){
+                suffix = "";
+            }
             String filePath = File.separator + day + File.separator + filename + "." + suffix;
 
             final HttpResponse response = HttpRequest.get(content)
@@ -133,6 +136,7 @@ public class ExtractController
             if(type == 1||type == 4||type == 5)
             {
                 String content = extractEntity.getContent();
+                content = content.replaceFirst(AppConstant.OSS_PATH,"");
                 FileUtil.del(nginxServerPath + content);
             }
         }

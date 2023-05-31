@@ -13,7 +13,10 @@ public class ExtractEntity
 {
     @TableId(type = IdType.UUID)
     private String id ;//  VARCHAR(32),
-    private Integer type ;//  TINYINT comment '类别1图片2文章3文本段落4剪切板图片5视频',
+    /**
+     * 类别: 1图片,2文章,3文本段落,4剪切板图片,5视频
+     */
+    private Integer type ;
     private String title ;//  VARCHAR(256),
     private String content ;//  TEXT comment '',
     private String sourceUrl ;//  VARCHAR(512),
