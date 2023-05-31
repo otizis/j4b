@@ -21,6 +21,11 @@ public class J4bUtils
         tokenMap.put(token, timeInMillis);
     }
 
+    /**
+     * 是否存在token
+     * @param token
+     * @return
+     */
     public static boolean checkToken(String token)
     {
         if(token == null){

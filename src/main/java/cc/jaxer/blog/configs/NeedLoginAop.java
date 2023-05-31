@@ -5,9 +5,9 @@ import cc.jaxer.blog.common.BException;
 import cc.jaxer.blog.common.J4bUtils;
 import cc.jaxer.blog.common.NeedLogin;
 import org.apache.commons.lang3.StringUtils;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
@@ -29,8 +29,8 @@ public class NeedLoginAop
 
     }
 
-    @Before("dataFilterCut()")
-    public void dataFilter(JoinPoint point) throws Throwable
+    @Around("dataFilterCut()")
+    public Object dataFilter(ProceedingJoinPoint point) throws Throwable
     {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes();
@@ -55,14 +55,14 @@ public class NeedLoginAop
         }
         if (J4bUtils.checkToken(token))
         {
-            return;
+            return point.proceed();
         }
         MethodSignature signature = (MethodSignature) point.getSignature();
         NeedLogin needLogin = signature.getMethod().getAnnotation(NeedLogin.class);
         if (needLogin.isPage())
         {
             response.sendRedirect("/login.html?"+URLEncoder.encode(request.getRequestURL() +"?"+ request.getQueryString()));
-            return;
+            return null;
         }
         throw new BException("未登录");
     }
