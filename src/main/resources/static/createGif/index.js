@@ -15,9 +15,8 @@ var width = canvas.width;
 var height = canvas.height;
 var mid = { x: width / 2, y: height / 2 };
 var arr = [];//三角形坐标参数
-var strStep = 0;// 一个字串 从最小到最大的 步骤
 // 文字列表
-var strArr,gif,strArrIdx,interval,strStep;
+var strArr,gif,strArrIdx,interval;
 var oneStrTime = 1000;
 var intervalDur = 30;
 
@@ -49,7 +48,11 @@ function clean(){
     img.src = ""
 }
 
-function createGif() {
+function createGif(event) {
+    event.target.textContent="生成中..."
+    var img = document.getElementById('result')
+    img.src = ""
+    canvas.style.display="unset"
     strArrIdx = 0;
     strArr=[]
     let tmpStrArr = document.getElementById("textarea").value.split("\n");
@@ -71,9 +74,11 @@ function createGif() {
         transparent:  'rgba(0,0,0,0)'
     });
     gif.on('finished', function (blob) {
+        canvas.style.display="none"
         console.log("end..")
         var img = document.getElementById('result')
         img.src = URL.createObjectURL(blob)
+        event.target.textContent="开始生成"
     });
     interval = setInterval(function () {
         createArr();
@@ -159,7 +164,6 @@ function drawText() {
         font_size = initFontSize;
         initFontSize = 5;
         strArrIdx++;
-        strStep = 0
     }
     console.log("strArrIdx",strArrIdx)
     if (strArrIdx === strArr.length) {
