@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>创建gif</title>
+    <script src='./gif.js'></script>
+    <style>
+      html{
+        background-color: #f0f0f0;
+      }
+      @font-face {
+        font-family: '钉钉进步体';
+        src: url(./DingTalkJinBuTi.ttf);
+    }
+    </style>
+</head>
+<body>
+    <canvas id="tutorial" ></canvas>
+    <img id="result" src="" alt="">
+    <p style="font-family: 'DingTalk JinBuTi',钉钉进步体;">字体演示</p>
+    <textarea id="textarea" rows="8" cols="50">本群的初衷是什么？
+主题是什么？
+活跃时间是几点？
+群规在哪里？
+我能做什么贡献？
+还有啥该注意的?</textarea>
+<p>
+  <button type="button" onclick="clean()">重置</button>
+  <button type="button" onclick="restart()">开始生成</button>
+</p>
+<p>
+  <button type="button" onclick="switchFontColorMode(event)">切换字的颜色</button>
+</p>
+</body>
+<script src='./index.js'></script>
+
+</html>
