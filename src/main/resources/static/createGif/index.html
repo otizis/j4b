@@ -10,28 +10,29 @@
       html{
         background-color: #f0f0f0;
       }
-      @font-face {
-        font-family: '钉钉进步体';
-        src: url(./DingTalkJinBuTi.ttf);
-    }
     </style>
 </head>
 <body>
     <canvas id="tutorial" ></canvas>
     <img id="result" src="" alt="">
-    <p style="font-family: 'DingTalk JinBuTi',钉钉进步体;">字体演示</p>
+    <p style="font-family: 自定义字体">自定义字体演示</p>
     <textarea id="textarea" rows="8" cols="50">本群的初衷是什么？
 主题是什么？
 活跃时间是几点？
 群规在哪里？
 我能做什么贡献？
 还有啥该注意的?</textarea>
+
 <p>
   <button type="button" onclick="clean()">重置</button>
-  <button type="button" onclick="restart()">开始生成</button>
+  <button type="button" onclick="createGif()">开始生成</button>
 </p>
 <p>
   <button type="button" onclick="switchFontColorMode(event)">切换字的颜色</button>
+  </p>
+  <p>
+    <input id="fontUrl" value="./DingTalkJinBuTi.ttf"></input>
+  <button type="button" onclick="setFontFamily()">设置字体</button>
 </p>
 </body>
 <script src='./index.js'></script>

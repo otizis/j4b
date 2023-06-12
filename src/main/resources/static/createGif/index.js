@@ -20,6 +20,19 @@ var strStep = 0;// 一个字串 从最小到最大的 步骤
 var strArr,gif,strArrIdx,interval,strStep;
 var oneStrTime = 1000;
 var intervalDur = 30;
+
+function setFontFamily(){
+
+    var fontUrl = document.getElementById("fontUrl").value;
+    console.log("fonturl",fontUrl)
+    const font = new FontFace("自定义字体", `url(${fontUrl})`)
+    font.load().then(()=>{
+        document.fonts.add(font)
+    }).catch(e=>{
+        alert("字体加载失败" + e)
+    })
+
+}
 var fontColorMode = false;
 function switchFontColorMode(event){
     fontColorMode = !fontColorMode;
@@ -36,7 +49,7 @@ function clean(){
     img.src = ""
 }
 
-function restart() {
+function createGif() {
     strArrIdx = 0;
     strArr=[]
     let tmpStrArr = document.getElementById("textarea").value.split("\n");
@@ -132,7 +145,7 @@ function createArr() {
 
 function drawText() {
 
-    ctx.font = font_size + "px  '钉钉进步体'"
+    ctx.font = font_size + "px  '自定义字体'"
     ctx.fillStyle = nextColor();
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
@@ -155,7 +168,7 @@ function drawText() {
         gif.render();
     }
     // if (font_size > (width * 1.5) * 0.5) {
-    //     ctx.font = initFontSize + "px  \"钉钉进步体\" sans-serif"
+    //     ctx.font = initFontSize + "px  \"自定义字体\" sans-serif"
     //     initFontSize *= 1.15
     //     ctx.fillText(strArr[(strArrIdx + 1) % strArr.length], mid.x, mid.y)
     // }
