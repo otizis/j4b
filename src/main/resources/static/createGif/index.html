@@ -14,21 +14,24 @@
 </head>
 <body>
 <div>
+    <div  id="result">
+
+    </div>
     <canvas id="tutorial"></canvas>
-    <img id="result" src="" alt="">
+    
 </div>
 
 
-<textarea id="textarea" rows="8" cols="50">本群的初衷是什么？
+<textarea id="textarea" rows="8" cols="40">本群的初衷是什么？
 主题是什么？
 活跃时间是几点？
 群规在哪里？
-我能做什么贡献？
-还有啥该注意的?</textarea>
+我能做什么贡献？</textarea>
 
 <p>
     <button type="button" onclick="clean()">重置</button>
     <button type="button" onclick="createGif(event)">开始生成</button>
+
 </p>
 <hr>
 <p>
@@ -36,7 +39,7 @@
 </p>
 <hr>
 <p>
-<p style="font-family: 自定义字体">自定义字体演示</p>
+<p style="font-family: 自定义字体">自定义字体演示，用户规避字体版权问题</p>
 <input id="fontUrl" value="/oss/DingTalkJinBuTi.ttf"></input>
 <button type="button" onclick="setFontFamily()">设置字体地址</button>
 </p>

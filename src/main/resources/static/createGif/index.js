@@ -42,6 +42,7 @@ function switchFontColorMode(event){
         event.target.textContent = "切换字色闪彩"
     }
 }
+
 function clean(){
     clearCtx()
     var img = document.getElementById('result')
@@ -50,8 +51,6 @@ function clean(){
 
 function createGif(event) {
     event.target.textContent="生成中..."
-    var img = document.getElementById('result')
-    img.src = ""
     canvas.style.display="unset"
     strArrIdx = 0;
     strArr=[]
@@ -68,7 +67,7 @@ function createGif(event) {
     gif = new GIF({
         width: s_width,
         height: s_height,
-        workers: 2,
+        workers: 1,
         quality: 50,
         workerScript: './worker.js',
         transparent:  'rgba(0,0,0,0)'
@@ -76,9 +75,28 @@ function createGif(event) {
     gif.on('finished', function (blob) {
         canvas.style.display="none"
         console.log("end..")
-        var img = document.getElementById('result')
-        img.src = URL.createObjectURL(blob)
+        var reader = new FileReader();
+        reader.onload = function(event){
+            // console.log(event.target.result)
+            var result = document.createElement('div')
+            var img  = document.createElement("img")
+            img.src = event.target.result
+            var span  = document.createElement("span")
+            span.innerText = "长按图片下载"
+            result.append(img)
+            result.append(span)
+
+            var resultDom = document.getElementById("result")
+            resultDom.append(result)
+
+
+            
+        }; // data url!
+        reader.readAsDataURL(blob);
+
         event.target.textContent="开始生成"
+ 
+
     });
     interval = setInterval(function () {
         createArr();
