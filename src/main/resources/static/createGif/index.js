@@ -238,9 +238,9 @@ function drawTextRoll() {
         // ctx.fillStyle = `rgba(0,0,0,${(3 + Math.cos(angle))/4})`;
         ctx.fillText(str, mid.x, mid.y - (Math.sin(angle)*height/2))
     })
-    rollAngle+= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
+    rollAngle-= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
     console.log("rollAngle",rollAngle)
-    if(rollAngle > Math.PI * 2){
+    if(rollAngle <  - Math.PI * 2){
         result.end=true
     }
     return result;
