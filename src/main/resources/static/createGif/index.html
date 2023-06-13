@@ -35,7 +35,15 @@
 </p>
 <hr>
 <p>
-    <button type="button" onclick="switchFontColorMode(event)">切换字的颜色</button>
+    字的颜色：
+    
+    <label><input type="radio" name="fontColor" value="0" checked onclick="switchFontColorMode(0)"/>纯黑</label>
+    <label><input type="radio" name="fontColor" value="1" onclick="switchFontColorMode(1)"/>闪彩</label>
+
+    <br>
+    效果：
+    <label><input type="radio" name="mode" value="0" checked onclick="switchTextMode(0)"/>扑面而来</label>
+    <label><input type="radio" name="mode" value="1" onclick="switchTextMode(1)"/>滚动旋转</label>
 </p>
 <hr>
 <p>

@@ -16,9 +16,11 @@ var height = canvas.height;
 var mid = { x: width / 2, y: height / 2 };
 var arr = [];//三角形坐标参数
 // 文字列表
-var strArr,gif,strArrIdx,interval;
+var strArr,gif,strArrIdx,interval,firstStrImage;
 var oneStrTime = 1000;
 var intervalDur = 30;
+// 是否需要简图
+var needFirstImage = false;
 
 function setFontFamily(){
 
@@ -32,28 +34,28 @@ function setFontFamily(){
     })
 
 }
-var fontColorMode = false;
-function switchFontColorMode(event){
-    fontColorMode = !fontColorMode;
-    console.log(event)
-    if(fontColorMode){
-        event.target.textContent = "切换字色纯黑"
-    }else{
-        event.target.textContent = "切换字色闪彩"
-    }
+
+var fontColorMode = 0;
+function switchFontColorMode(mode){
+    fontColorMode = mode;
+}
+
+var textMode = 0;
+function switchTextMode(mode){
+    textMode = mode;
 }
 
 function clean(){
     clearCtx()
-    var img = document.getElementById('result')
-    img.src = ""
 }
 
 function createGif(event) {
     event.target.textContent="生成中..."
     canvas.style.display="unset"
     strArrIdx = 0;
+    rollAngle = 0;
     strArr=[]
+    firstStrImage=null;
     let tmpStrArr = document.getElementById("textarea").value.split("\n");
     tmpStrArr.forEach(element => {
         if(element){
@@ -77,33 +79,55 @@ function createGif(event) {
         console.log("end..")
         var reader = new FileReader();
         reader.onload = function(event){
-            // console.log(event.target.result)
+            console.log(event.target.result)
             var result = document.createElement('div')
             var img  = document.createElement("img")
             img.src = event.target.result
-            var span  = document.createElement("span")
-            span.innerText = "长按图片下载"
             result.append(img)
+
+            var span  = document.createElement("span")
+            span.innerText = "👈长按图片保存"
             result.append(span)
 
+            if(needFirstImage){
+                var img2  = document.createElement("img")
+                img2.src = firstStrImage
+                result.append(img2)
+            }
             var resultDom = document.getElementById("result")
             resultDom.append(result)
 
-
-            
         }; // data url!
         reader.readAsDataURL(blob);
 
         event.target.textContent="开始生成"
- 
+
 
     });
     interval = setInterval(function () {
-        createArr();
         clearCtx()
-         // drawAllTriangleArr();
-        drawText();
+
+        // drawAllTriangleArr();
+        let result = {}
+        if(textMode == 0 ){
+            result = drawText();
+        }else if (textMode == 1){
+            result = drawTextRoll();
+        }
+
+        if(needFirstImage
+            &&!firstStrImage
+            && strArrIdx === 0
+            && result.strWidth > width*0.9){
+            // 第一帧最后
+            firstStrImage = canvas.toDataURL();
+        }
         gif.addFrame(ctx, { copy: true, delay: intervalDur });
+        if (result.end) {
+            clearInterval(interval);
+            console.log("clearInterval interval")
+            gif.render();
+        }
     }, intervalDur);
 }
 
@@ -128,11 +152,15 @@ function drawTriangle(x1, y1, x2, y2, r) {
 }
 function clearCtx(){
     ctx.clearRect(0, 0, width, height)
+    // ctx.fillStyle = "#00a2e8"
+    // ctx.rect(0, 0, width, height);
+    // ctx.fill();
 }
 /**
  * 画一次图
  */
 function drawAllTriangleArr() {
+    createArr();
     var size = arr.length;
     for (var i = 0; i < size; i++) {
         drawTriangle(arr[i].x1, arr[i].y1, arr[i].x2, arr[i].y2, arr[i].r)
@@ -167,41 +195,63 @@ function createArr() {
 
 
 function drawText() {
+    let result = {str:"",strWidth:0,end:false}
 
     ctx.font = font_size + "px  '自定义字体'"
     ctx.fillStyle = nextColor();
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
     let str = strArr[(strArrIdx) % strArr.length];
+    result.str = str
     ctx.fillText(str, mid.x, mid.y)
-    
-    let maxFontSize = width * 1.2 / str.length
+
+    var metrics = ctx.measureText(str);
+    result.strWidth = metrics.width
+    var maxFontSize = font_size * width * 1.2 / metrics.width
     let stepFontSize = (maxFontSize - initFontSize) / (oneStrTime/intervalDur);
     font_size += stepFontSize;
-    if (font_size  > maxFontSize) {
+
+    if (metrics.width > width * 1.2) {
         font_size = initFontSize;
-        initFontSize = 5;
         strArrIdx++;
     }
     console.log("strArrIdx",strArrIdx)
-    if (strArrIdx === strArr.length) {
-        clearInterval(interval);
-        console.log("clearInterval interval")
-        gif.render();
+    if(strArrIdx === strArr.length){
+        result.end=true
     }
-    // if (font_size > (width * 1.5) * 0.5) {
-    //     ctx.font = initFontSize + "px  \"自定义字体\" sans-serif"
-    //     initFontSize *= 1.15
-    //     ctx.fillText(strArr[(strArrIdx + 1) % strArr.length], mid.x, mid.y)
-    // }
-
+    return result;
 }
+
+var rollAngle = 0;
+function drawTextRoll() {
+    let result = {str:"",strWidth:0,end:false}
+    ctx.fillStyle = nextColor();
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+    strArr.forEach((str,index)=>{
+        ctx.font = "16px  '自定义字体'"
+        var metrics = ctx.measureText(str);
+        var maxFontSize = 16 * width * 0.9 / metrics.width
+        let angle = index * Math.PI * 2 / strArr.length
+        angle += rollAngle
+        ctx.font = maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
+        // ctx.fillStyle = `rgba(0,0,0,${(3 + Math.cos(angle))/4})`;
+        ctx.fillText(str, mid.x, mid.y - (Math.sin(angle)*height/2))
+    })
+    rollAngle+= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
+    console.log("rollAngle",rollAngle)
+    if(rollAngle > Math.PI * 2){
+        result.end=true
+    }
+    return result;
+}
+
 /**
- * 
- * @returns 
+ *
+ * @returns
  */
 function nextColor() {
-    if(fontColorMode){
+    if(fontColorMode == 1){
         return "#" + (Math.random()*16777215).toString(16).replace(".","").substr(0,6);
     }
     return "#333"
