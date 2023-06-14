@@ -120,7 +120,7 @@ function createGif(event) {
 
                 var gifQuality = 70 // 介于0~256之间数值越小压缩后文件越小
                 // eslint-disable-next-line no-undef
-                var minResult = gifmin(event.target.result, colors) // 二进制文件流
+                var minResult = gifmin(event.target.result, gifQuality) // 二进制文件流
 
                 console.log(minResult)
                 var obj = new Blob([minResult], { // 转换成Blob对象
