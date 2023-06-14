@@ -5,7 +5,8 @@ var height = 100;
 var initFontSize = 5;
 var font_size = initFontSize;
 var bgImage = null;
-var gifQuality = 10
+var gifQuality = 70
+var compressGif = true
 
 var canvas = document.getElementById('tutorial');
 canvas.width = width;
@@ -41,6 +42,10 @@ function switchFontColorMode(mode){
 var textMode = 0;
 function switchTextMode(mode){
     textMode = mode;
+}
+
+function switchCompressGif(mode){
+    compressGif = mode===1;
 }
 
 function heightChangeListener(event){
@@ -102,35 +107,79 @@ function createGif(event) {
         width: width,
         height: height,
         workers: 1,
-        quality: gifQuality,
+        quality: 20,
         workerScript: './worker.js',
         transparent:  'rgba(0,0,0,0)'
     });
     gif.on('finished', function (blob) {
         canvas.style.display="none"
         console.log("end..")
-        var reader = new FileReader();
-        reader.onload = function(event){
-            console.log(event.target.result)
-            var result = document.createElement('div')
-            var img  = document.createElement("img")
-            img.src = event.target.result
-            result.append(img)
+        if(compressGif){
+            var reader = new FileReader();
+            reader.onload = function(event){
 
-            var span  = document.createElement("span")
-            span.innerText = "👈长按图片保存"+(img.src.length/1024).toFixed(1) +"k"
-            result.append(span)
+                var gifQuality = 70 // 介于0~256之间数值越小压缩后文件越小
+                // eslint-disable-next-line no-undef
+                var minResult = gifmin(event.target.result, colors) // 二进制文件流
 
-            if(needFirstImage){
-                var img2  = document.createElement("img")
-                img2.src = firstStrImage
-                result.append(img2)
-            }
-            var resultDom = document.getElementById("result")
-            resultDom.append(result)
+                console.log(minResult)
+                var obj = new Blob([minResult], { // 转换成Blob对象
+                    type: 'application/octet-stream'
+                })
+                var gifFile = new window.File([obj], "file.name", { // 转换成file文件
+                    type: "image/gif"
+                })
 
-        }; // data url!
-        reader.readAsDataURL(blob);
+                var minReader = new FileReader();
+                minReader.onload = function(){
+                    
+                    
+                    var result = document.createElement('div')
+                    var img  = document.createElement("img")
+                    img.src = minReader.result
+                    result.append(img)
+        
+                    var span  = document.createElement("span")
+                    span.innerText = "👈长按图片保存"+(img.src.length/1024).toFixed(1) +"k"
+                    result.append(span)
+        
+                    if(needFirstImage){
+                        var img2  = document.createElement("img")
+                        img2.src = firstStrImage
+                        result.append(img2)
+                    }
+                    var resultDom = document.getElementById("result")
+                    resultDom.append(result)
+                }
+                minReader.readAsDataURL(gifFile)
+    
+            }; // data url!
+            reader.readAsArrayBuffer(blob);
+        }else{
+            var reader = new FileReader();
+            reader.onload = function(event){
+                console.log(event.target.result)
+                var result = document.createElement('div')
+                var img  = document.createElement("img")
+                img.src = event.target.result
+                result.append(img)
+    
+                var span  = document.createElement("span")
+                span.innerText = "👈长按图片保存"+(img.src.length/1024).toFixed(1) +"k"
+                result.append(span)
+    
+                if(needFirstImage){
+                    var img2  = document.createElement("img")
+                    img2.src = firstStrImage
+                    result.append(img2)
+                }
+                var resultDom = document.getElementById("result")
+                resultDom.append(result)
+    
+            }; // data url!
+            reader.readAsDataURL(blob);
+        }
+
 
         event.target.textContent="开始生成"
 

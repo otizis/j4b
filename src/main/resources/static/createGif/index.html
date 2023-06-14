@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>创建gif</title>
     <script src='./gif.js'></script>
+    <script src='./gifmin.min.js'></script>
     <style>
         html {
             background-color: #f0f0f0;
@@ -70,18 +71,22 @@
 </p>
 <hr>
 
-<p style="font-family: 自定义字体">自定义字体演示，用户规避字体版权问题</p>
+<p style="font-family: 自定义字体">自定义字体演示，用于规避字体版权问题</p>
 <p>
     <input id="fontUrl" value="/oss/DingTalkJinBuTi.ttf"/>
     <button type="button" onclick="setFontFamily()">设置字体地址</button>
 </p>
 <hr>
 <p>
-    gif质量(数字越小质量越高)：
-    <input type="range" value="10" min="1" max="20" onchange="qualityChangeListener(event)">
-    <span id="qualityInput">10</span>
+    gif质量：
+    <input type="range" value="70" min="0" max="256" onchange="qualityChangeListener(event)">
+    <span id="qualityInput">70</span>
 </p>
-
+<p>
+    是否压缩：
+    <label><input type="radio" name="compressGif" value="0"  onclick="switchCompressGif(0)"/>否</label>
+    <label><input type="radio" name="compressGif" value="1" checked onclick="switchCompressGif(1)"/>是</label>
+</p>
 </body>
 <script src='./index.js'></script>
 
