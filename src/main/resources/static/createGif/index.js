@@ -49,6 +49,10 @@ function heightChangeListener(event){
     canvas.height = height;
     document.getElementById("heightInput").innerText = height
 }
+
+function bgFileListener(){
+    
+}
 function clean(){
     clearCtx()
 }
@@ -120,6 +124,8 @@ function createGif(event) {
             result = drawTextRoll();
         }else if (textMode == 2){
             result = drawTextRadiate();
+        }else if (textMode == 3){
+            result = drawTextAroundHead();
         }
 
         if(needFirstImage
@@ -261,7 +267,7 @@ function drawTextRoll() {
 var xRunLenght = 0;
 function drawTextRadiate() {
     let result = {str:"",strWidth:0,end:false}
-    var mid = { x: width / 2, y: height / 2 };
+
     ctx.fillStyle = nextColor();
 
     ctx.textAlign = "center"
@@ -273,7 +279,7 @@ function drawTextRadiate() {
         let angle =  (Math.PI / 3) * index
         angle += rollAngle
         ctx.font = (maxFontSize/3) + maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
-        ctx.fillText(str,  width*0.6 - offest + xRunLenght, mid.y - (Math.sin(angle)*height/3))
+        ctx.fillText(str,  width*0.6 - offest + xRunLenght, height / 2 - (Math.sin(angle)*height/3))
 
         offest += maxFontSize*0.8
     })
@@ -283,6 +289,33 @@ function drawTextRadiate() {
     rollAngle-= (Math.PI ) / (oneStrTime/intervalDur)
 
     if(xRunLenght > offest){
+        result.end=true
+    }
+    return result;
+}
+
+
+function drawTextAroundHead() {
+    let result = {str:"",strWidth:0,end:false}
+    var mid = { x: width / 2, y: height / 2 };
+    ctx.fillStyle = nextColor();
+
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+    strArr.forEach((str,index)=>{
+        ctx.font = "16px  '自定义字体'"
+        var metrics = ctx.measureText(str);
+        var maxFontSize = 16 * width * 0.8 / metrics.width
+        let angle = index * Math.PI * 2 / strArr.length
+        angle += rollAngle
+        ctx.font = maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
+
+        
+        ctx.fillText(str, mid.x - (Math.sin(angle)*width/2) , mid.y - Math.abs(Math.sin(angle)*height/3))
+    })
+    rollAngle-= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
+    console.log("rollAngle",rollAngle)
+    if(rollAngle <  - Math.PI * 2){
         result.end=true
     }
     return result;
