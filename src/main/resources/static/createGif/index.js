@@ -51,7 +51,7 @@ function heightChangeListener(event){
 }
 
 function bgFileListener(){
-    
+
 }
 function clean(){
     clearCtx()
@@ -303,9 +303,8 @@ function drawTextAroundHead() {
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
     strArr.forEach((str,index)=>{
-        ctx.font = "16px  '自定义字体'"
-        var metrics = ctx.measureText(str);
-        var maxFontSize = 16 * width * 0.8 / metrics.width
+
+        var maxFontSize = height / 4
         let angle = index * Math.PI * 2 / strArr.length
         angle += rollAngle
         ctx.font = maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
