@@ -63,7 +63,10 @@
     <label><input type="radio" name="mode" value="3" onclick="switchTextMode(3)"/>头晕目眩</label>
 </p>
 <p>
-    <!-- <input type="file" value="插入底图" onchange="bgFileListener"> -->
+    <label >
+        背景图片：
+        <input type="file" value="插入底图" accept="image/*" onchange="bgFileListener(event)">
+    </label>
 </p>
 <hr>
 
@@ -72,6 +75,13 @@
     <input id="fontUrl" value="/oss/DingTalkJinBuTi.ttf"/>
     <button type="button" onclick="setFontFamily()">设置字体地址</button>
 </p>
+<hr>
+<p>
+    gif质量(数字越小质量越高)：
+    <input type="range" value="10" min="1" max="20" onchange="qualityChangeListener(event)">
+    <span id="qualityInput">10</span>
+</p>
+
 </body>
 <script src='./index.js'></script>
 

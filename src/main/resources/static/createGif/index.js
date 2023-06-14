@@ -4,7 +4,8 @@ var width = 240;
 var height = 100;
 var initFontSize = 5;
 var font_size = initFontSize;
-
+var bgImage = null;
+var gifQuality = 10
 
 var canvas = document.getElementById('tutorial');
 canvas.width = width;
@@ -30,7 +31,6 @@ function setFontFamily(){
     }).catch(e=>{
         alert("字体加载失败" + e)
     })
-
 }
 
 var fontColorMode = 0;
@@ -49,9 +49,32 @@ function heightChangeListener(event){
     canvas.height = height;
     document.getElementById("heightInput").innerText = height
 }
+function qualityChangeListener(event){
+    console.log(event.target,event.target.value)
+    gifQuality=event.target.value*1
+    document.getElementById("qualityInput").innerText = gifQuality
+}
 
-function bgFileListener(){
+function bgFileListener(event){
+    console.log(event)
+    var file = event.target.files[0]
+    if(!/image\/\w+/.test(file.type)){
+        alert("不是图片")
+        return false
+    }
+    var reader = new FileReader();
+    reader.readAsDataURL(file)
+    reader.onload = function(event){
+        console.log(event.target.result)
+        bgImage = document.createElement("img")
+        bgImage.src = event.target.result
+        bgImage.onload = function(){
+            height = 240 * bgImage.height / bgImage.width
+            canvas.height = height;
+            clearCtx()
+        }
 
+    }
 }
 function clean(){
     clearCtx()
@@ -79,7 +102,7 @@ function createGif(event) {
         width: width,
         height: height,
         workers: 1,
-        quality: 50,
+        quality: gifQuality,
         workerScript: './worker.js',
         transparent:  'rgba(0,0,0,0)'
     });
@@ -95,7 +118,7 @@ function createGif(event) {
             result.append(img)
 
             var span  = document.createElement("span")
-            span.innerText = "👈长按图片保存"
+            span.innerText = "👈长按图片保存"+(img.src.length/1024).toFixed(1) +"k"
             result.append(span)
 
             if(needFirstImage){
@@ -166,6 +189,9 @@ function drawTriangle(x1, y1, x2, y2, r) {
 }
 function clearCtx(){
     ctx.clearRect(0, 0, width, height)
+    if(bgImage){
+        ctx.drawImage(bgImage, 0, 0, width, height)
+    }
     // ctx.fillStyle = "#00a2e8"
     // ctx.rect(0, 0, width, height);
     // ctx.fill();
@@ -212,12 +238,14 @@ function drawText() {
     let result = {str:"",strWidth:0,end:false}
     var mid = { x: width / 2, y: height / 2 };
     ctx.font = font_size + "px  '自定义字体'"
+    ctx.strokeStyle = "white";
     ctx.fillStyle = nextColor();
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
     let str = strArr[(strArrIdx) % strArr.length];
     result.str = str
     ctx.fillText(str, mid.x, mid.y)
+    // ctx.strokeText(str, mid.x, mid.y)
 
     var metrics = ctx.measureText(str);
     result.strWidth = metrics.width
@@ -253,7 +281,7 @@ function drawTextRoll() {
         angle += rollAngle
         ctx.font = maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
 
-        
+
         ctx.fillText(str, mid.x, mid.y - (Math.sin(angle)*height/2))
     })
     rollAngle-= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
@@ -303,13 +331,15 @@ function drawTextAroundHead() {
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
     strArr.forEach((str,index)=>{
+        ctx.font = "16px  '自定义字体'"
+        var metrics = ctx.measureText(str);
+        var maxFontSize = 16 * width * 0.9 / metrics.width
 
-        var maxFontSize = height / 4
         let angle = index * Math.PI * 2 / strArr.length
         angle += rollAngle
         ctx.font = maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
 
-        
+
         ctx.fillText(str, mid.x - (Math.sin(angle)*width/2) , mid.y - Math.abs(Math.sin(angle)*height/3))
     })
     rollAngle-= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
