@@ -1,19 +1,17 @@
 var area_len = 0.5;// 设置线条长度  0~1范围
 
-var s_width = 240;
-var s_height = 100;
+var width = 240;
+var height = 100;
 var initFontSize = 5;
 var font_size = initFontSize;
 
 
-var color = 0;
 var canvas = document.getElementById('tutorial');
-canvas.width = s_width;
-canvas.height = s_height;
+canvas.width = width;
+canvas.height = height;
 var ctx = canvas.getContext('2d');
-var width = canvas.width;
-var height = canvas.height;
-var mid = { x: width / 2, y: height / 2 };
+
+
 var arr = [];//三角形坐标参数
 // 文字列表
 var strArr,gif,strArrIdx,interval,firstStrImage;
@@ -45,6 +43,12 @@ function switchTextMode(mode){
     textMode = mode;
 }
 
+function heightChangeListener(event){
+    console.log(event.target,event.target.value)
+    height=event.target.value*1
+    canvas.height = height;
+    document.getElementById("heightInput").innerText = height
+}
 function clean(){
     clearCtx()
 }
@@ -54,6 +58,7 @@ function createGif(event) {
     canvas.style.display="unset"
     strArrIdx = 0;
     rollAngle = 0;
+    xRunLenght = 0
     strArr=[]
     firstStrImage=null;
     let tmpStrArr = document.getElementById("textarea").value.split("\n");
@@ -67,8 +72,8 @@ function createGif(event) {
     }
     console.log(strArr)
     gif = new GIF({
-        width: s_width,
-        height: s_height,
+        width: width,
+        height: height,
         workers: 1,
         quality: 50,
         workerScript: './worker.js',
@@ -113,6 +118,8 @@ function createGif(event) {
             result = drawText();
         }else if (textMode == 1){
             result = drawTextRoll();
+        }else if (textMode == 2){
+            result = drawTextRadiate();
         }
 
         if(needFirstImage
@@ -138,6 +145,7 @@ function createGif(event) {
  * @param y1 asdfasdfadsf
  */
 function drawTriangle(x1, y1, x2, y2, r) {
+    var mid = { x: width / 2, y: height / 2 };
     ctx.fillStyle = nextColor();
     // console.log(ctx.fillStyle)
     var center = { x: (x1 + x2) / 2, y: (y1 + y2) / 2 };
@@ -196,7 +204,7 @@ function createArr() {
 
 function drawText() {
     let result = {str:"",strWidth:0,end:false}
-
+    var mid = { x: width / 2, y: height / 2 };
     ctx.font = font_size + "px  '自定义字体'"
     ctx.fillStyle = nextColor();
     ctx.textAlign = "center"
@@ -222,10 +230,13 @@ function drawText() {
     return result;
 }
 
+
 var rollAngle = 0;
 function drawTextRoll() {
     let result = {str:"",strWidth:0,end:false}
+    var mid = { x: width / 2, y: height / 2 };
     ctx.fillStyle = nextColor();
+
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
     strArr.forEach((str,index)=>{
@@ -235,12 +246,43 @@ function drawTextRoll() {
         let angle = index * Math.PI * 2 / strArr.length
         angle += rollAngle
         ctx.font = maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
-        // ctx.fillStyle = `rgba(0,0,0,${(3 + Math.cos(angle))/4})`;
+
+        
         ctx.fillText(str, mid.x, mid.y - (Math.sin(angle)*height/2))
     })
     rollAngle-= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
     console.log("rollAngle",rollAngle)
     if(rollAngle <  - Math.PI * 2){
+        result.end=true
+    }
+    return result;
+}
+
+var xRunLenght = 0;
+function drawTextRadiate() {
+    let result = {str:"",strWidth:0,end:false}
+    var mid = { x: width / 2, y: height / 2 };
+    ctx.fillStyle = nextColor();
+
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+    let offest = 0
+
+    strArr.join("").split("").forEach((str,index)=>{
+        var maxFontSize = height/3
+        let angle =  (Math.PI / 3) * index
+        angle += rollAngle
+        ctx.font = (maxFontSize/3) + maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
+        ctx.fillText(str,  width*0.6 - offest + xRunLenght, mid.y - (Math.sin(angle)*height/3))
+
+        offest += maxFontSize*0.8
+    })
+
+    xRunLenght+=2
+
+    rollAngle-= (Math.PI ) / (oneStrTime/intervalDur)
+
+    if(xRunLenght > offest){
         result.end=true
     }
     return result;
