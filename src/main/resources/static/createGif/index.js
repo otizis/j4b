@@ -17,8 +17,8 @@ var ctx = canvas.getContext('2d');
 var arr = [];//三角形坐标参数
 // 文字列表
 var strArr,gif,strArrIdx,interval,firstStrImage;
-var oneStrTime = 1000;
-var intervalDur = 30;
+var oneStrTime = 2000;
+var frate = 30; // 每句话的帧数
 // 是否需要简图
 var needFirstImage = false;
 
@@ -58,6 +58,16 @@ function qualityChangeListener(event){
     console.log(event.target,event.target.value)
     gifQuality=event.target.value*1
     document.getElementById("qualityInput").innerText = gifQuality
+}
+function speedInputListener(event){
+    console.log(event.target,event.target.value)
+    oneStrTime=event.target.value*1
+    document.getElementById("speedInput").innerText = oneStrTime
+}
+function frateInputListener(event){
+    console.log(event.target,event.target.value)
+    frate=event.target.value*1
+    document.getElementById("frateInput").innerText = frate
 }
 
 function bgFileListener(event){
@@ -131,17 +141,17 @@ function createGif(event) {
 
                 var minReader = new FileReader();
                 minReader.onload = function(){
-                    
-                    
+
+
                     var result = document.createElement('div')
                     var img  = document.createElement("img")
                     img.src = minReader.result
                     result.append(img)
-        
+
                     var span  = document.createElement("span")
                     span.innerText = "👈长按图片保存"+(img.src.length/1024).toFixed(1) +"k"
                     result.append(span)
-        
+
                     if(needFirstImage){
                         var img2  = document.createElement("img")
                         img2.src = firstStrImage
@@ -151,7 +161,7 @@ function createGif(event) {
                     resultDom.append(result)
                 }
                 minReader.readAsDataURL(gifFile)
-    
+
             }; // data url!
             reader.readAsArrayBuffer(blob);
         }else{
@@ -162,11 +172,11 @@ function createGif(event) {
                 var img  = document.createElement("img")
                 img.src = event.target.result
                 result.append(img)
-    
+
                 var span  = document.createElement("span")
                 span.innerText = "👈长按图片保存"+(img.src.length/1024).toFixed(1) +"k"
                 result.append(span)
-    
+
                 if(needFirstImage){
                     var img2  = document.createElement("img")
                     img2.src = firstStrImage
@@ -174,7 +184,7 @@ function createGif(event) {
                 }
                 var resultDom = document.getElementById("result")
                 resultDom.append(result)
-    
+
             }; // data url!
             reader.readAsDataURL(blob);
         }
@@ -206,13 +216,13 @@ function createGif(event) {
             // 第一帧最后
             firstStrImage = canvas.toDataURL();
         }
-        gif.addFrame(ctx, { copy: true, delay: intervalDur });
+        gif.addFrame(ctx, { copy: true, delay: oneStrTime / frate });
         if (result.end) {
             clearInterval(interval);
             console.log("clearInterval interval")
             gif.render();
         }
-    }, intervalDur);
+    }, oneStrTime / frate);
 }
 
 
@@ -298,7 +308,7 @@ function drawText() {
     var metrics = ctx.measureText(str);
     result.strWidth = metrics.width
     var maxFontSize = font_size * width * 1.2 / metrics.width
-    let stepFontSize = (maxFontSize - initFontSize) / (oneStrTime/intervalDur);
+    let stepFontSize = (maxFontSize - initFontSize) / frate;
     font_size += stepFontSize;
 
     if (metrics.width > width * 1.2) {
@@ -332,7 +342,7 @@ function drawTextRoll() {
 
         ctx.fillText(str, mid.x, mid.y - (Math.sin(angle)*height/2))
     })
-    rollAngle-= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
+    rollAngle-= (Math.PI * 3 / strArr.length) / frate
     console.log("rollAngle",rollAngle)
     if(rollAngle <  - Math.PI * 2){
         result.end=true
@@ -362,7 +372,7 @@ function drawTextRadiate() {
 
     xRunLenght+=2
 
-    rollAngle-= (Math.PI ) / (oneStrTime/intervalDur)
+    rollAngle-= (Math.PI ) / frate
 
     if(xRunLenght > offest){
         result.end=true
@@ -375,7 +385,7 @@ function drawTextAroundHead() {
     let result = {str:"",strWidth:0,end:false}
     var mid = { x: width / 2, y: height / 2 };
     ctx.fillStyle = nextColor();
-
+    // ctx.strokeStyle = "#eee";
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
     strArr.forEach((str,index)=>{
@@ -389,8 +399,10 @@ function drawTextAroundHead() {
 
 
         ctx.fillText(str, mid.x - (Math.sin(angle)*width/2) , mid.y - Math.abs(Math.sin(angle)*height/3))
+        // ctx.font = maxFontSize*((1 + Math.cos(angle))/2)+1 + "px  '自定义字体'"
+        // ctx.strokeText(str, mid.x - (Math.sin(angle)*width/2) , mid.y - Math.abs(Math.sin(angle)*height/3))
     })
-    rollAngle-= (Math.PI * 3 / strArr.length) / (oneStrTime/intervalDur)
+    rollAngle-= (Math.PI * 3 / strArr.length) / frate
     console.log("rollAngle",rollAngle)
     if(rollAngle <  - Math.PI * 2){
         result.end=true

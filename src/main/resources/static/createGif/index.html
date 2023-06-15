@@ -48,8 +48,13 @@
 <hr>
 <p>
     动图高度：
-    <input type="range" value="100" min="100" max="240" step="10" onchange="heightChangeListener(event)">
+    <input type="range" value="100" min="80" max="240" step="10" onchange="heightChangeListener(event)">
     <span id="heightInput">100</span>
+</p>
+<p>
+    单句时长：
+    <input type="range" value="2000" min="1000" max="3000" step="200" onchange="speedInputListener(event)">
+    <span id="speedInput">2000</span>
 </p>
 <p>
     字的颜色：
@@ -78,14 +83,19 @@
 </p>
 <hr>
 <p>
-    gif质量：
-    <input type="range" value="70" min="0" max="256" onchange="qualityChangeListener(event)">
-    <span id="qualityInput">70</span>
-</p>
-<p>
     是否压缩：
     <label><input type="radio" name="compressGif" value="0"  onclick="switchCompressGif(0)"/>否</label>
     <label><input type="radio" name="compressGif" value="1" checked onclick="switchCompressGif(1)"/>是</label>
+</p>
+<p>
+    gif质量：
+    <input type="range" value="70" min="2" max="256" onchange="qualityChangeListener(event)">
+    <span id="qualityInput">70</span>
+</p>
+<p>
+    单句帧数：
+    <input type="range" value="30" min="10" max="30" onchange="frateInputListener(event)">
+    <span id="frateInput">30</span>
 </p>
 </body>
 <script src='./index.js'></script>
