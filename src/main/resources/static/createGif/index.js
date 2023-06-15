@@ -42,6 +42,7 @@ function switchFontColorMode(mode){
 var textMode = 0;
 function switchTextMode(mode){
     textMode = mode;
+    previewGif()
 }
 
 function switchCompressGif(mode){
@@ -53,6 +54,7 @@ function heightChangeListener(event){
     height=event.target.value*1
     canvas.height = height;
     document.getElementById("heightInput").innerText = height
+    previewGif()
 }
 function qualityChangeListener(event){
     console.log(event.target,event.target.value)
@@ -91,18 +93,13 @@ function bgFileListener(event){
 
     }
 }
+
 function clean(){
     clearCtx()
 }
 
-function createGif(event) {
-    event.target.textContent="生成中..."
-    canvas.style.display="unset"
-    strArrIdx = 0;
-    rollAngle = 0;
-    xRunLenght = 0
+function textareaChange(){
     strArr=[]
-    firstStrImage=null;
     let tmpStrArr = document.getElementById("textarea").value.split("\n");
     tmpStrArr.forEach(element => {
         if(element){
@@ -113,6 +110,51 @@ function createGif(event) {
         strArr.push()
     }
     console.log(strArr)
+}
+
+function previewGif(){
+    if(interval){
+        clearInterval(interval);
+    }
+    strArrIdx = 0;
+    rollAngle = 0;
+    xRunLenght = 0
+    firstStrImage=null;
+    
+    textareaChange()
+
+    interval = setInterval(function () {
+        clearCtx()
+
+        // drawAllTriangleArr();
+        let result = drawTextByMode()
+
+        if(needFirstImage
+            &&!firstStrImage
+            && strArrIdx === 0
+            && result.strWidth > width*0.9){
+            // 第一帧最后
+            firstStrImage = canvas.toDataURL();
+        }
+        if (result.end) {
+            clearInterval(interval);
+            console.log("clearInterval interval")
+        }
+    }, oneStrTime / frate);
+}
+
+function createGif(event) {
+    if(interval){
+        clearInterval(interval);
+    }
+    event.target.textContent="生成中..."
+    // canvas.style.display="unset"
+    strArrIdx = 0;
+    rollAngle = 0;
+    xRunLenght = 0
+    firstStrImage=null;
+    
+    textareaChange()
     gif = new GIF({
         width: width,
         height: height,
@@ -122,7 +164,7 @@ function createGif(event) {
         transparent:  'rgba(0,0,0,0)'
     });
     gif.on('finished', function (blob) {
-        canvas.style.display="none"
+        // canvas.style.display="none"
         console.log("end..")
         if(compressGif){
             var reader = new FileReader();
@@ -198,16 +240,7 @@ function createGif(event) {
         clearCtx()
 
         // drawAllTriangleArr();
-        let result = {}
-        if(textMode == 0 ){
-            result = drawText();
-        }else if (textMode == 1){
-            result = drawTextRoll();
-        }else if (textMode == 2){
-            result = drawTextRadiate();
-        }else if (textMode == 3){
-            result = drawTextAroundHead();
-        }
+        let result = drawTextByMode()
 
         if(needFirstImage
             &&!firstStrImage
@@ -225,6 +258,17 @@ function createGif(event) {
     }, oneStrTime / frate);
 }
 
+function drawTextByMode(){
+    if(textMode == 0 ){
+        return drawText();
+    }else if (textMode == 1){
+        return drawTextRoll();
+    }else if (textMode == 2){
+        return drawTextRadiate();
+    }else if (textMode == 3){
+        return drawTextAroundHead();
+    }
+}
 
 /**
  * 画一个三角尖尖
@@ -398,7 +442,7 @@ function drawTextAroundHead() {
         ctx.font = maxFontSize*((1 + Math.cos(angle))/2) + "px  '自定义字体'"
 
 
-        ctx.fillText(str, mid.x - (Math.sin(angle)*width/2) , mid.y - Math.abs(Math.sin(angle)*height/3))
+        ctx.fillText(str, mid.x - (Math.sin(angle)*width/2) , mid.y - Math.abs(Math.sin(angle/2)*height/3))
         // ctx.font = maxFontSize*((1 + Math.cos(angle))/2)+1 + "px  '自定义字体'"
         // ctx.strokeText(str, mid.x - (Math.sin(angle)*width/2) , mid.y - Math.abs(Math.sin(angle)*height/3))
     })
