@@ -438,24 +438,36 @@ function drawTextL2R() {
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
 
-    let offest = 0
-    strArr.join("").split("").forEach((str,index)=>{
-        var maxFontSize = height * 0.8
-        // xRunLength
-        let fontSize = ((maxFontSize - initFontSize) / width) * (xRunLenght - offest) + initFontSize
-        if(fontSize < initFontSize){
-            fontSize = initFontSize
+    xRunLenght += ((width+(height/2))/frate)
+
+    let lastHeight = xRunLenght*height/width
+    let drawLength = 0;
+
+
+    let strings = strArr.join("").split("");
+    strings.forEach((str, index)=>{
+
+        if(xRunLenght-drawLength > (width+height)){
+            drawLength+=height
+            lastHeight= (xRunLenght-drawLength)*height/width
+            console.log("skip",lastHeight,xRunLenght)
+
+            return;
         }
 
-        ctx.font = fontSize + "px  '自定义字体'"
-        ctx.fillText(str,   xRunLenght - offest , height/2)
+        lastHeight = (xRunLenght-drawLength)*lastHeight/((xRunLenght-drawLength)+lastHeight)
+        // xRunLength
+        console.log(lastHeight,xRunLenght)
 
-        offest += maxFontSize
+        let fontSize = lastHeight
+        if(fontSize > initFontSize){
+            ctx.font = fontSize + "px  '自定义字体'"
+            ctx.fillText(str,   xRunLenght -drawLength- (lastHeight/2) , height/2)
+        }
+        drawLength+=lastHeight
     })
 
-    xRunLenght+=(width/frate)
-    console.log(xRunLenght,offest)
-    if(xRunLenght > offest){
+    if(xRunLenght > ((strings.length * height)+width)){
         result.end=true
     }
     if(strArrIdx === 0 ){
