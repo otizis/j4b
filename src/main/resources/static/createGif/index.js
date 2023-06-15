@@ -261,6 +261,8 @@ function drawTextByMode(){
         return drawTextRadiate();
     }else if (textMode == 3){
         return drawTextAroundHead();
+    }else if (textMode == 4){
+        return drawTextL2R();
     }
 }
 
@@ -418,6 +420,41 @@ function drawTextRadiate() {
 
     rollAngle-= (Math.PI ) / frate
 
+    if(xRunLenght > offest){
+        result.end=true
+    }
+    if(strArrIdx === 0 ){
+        result.firstImage=true
+    }
+    return result;
+}
+
+
+function drawTextL2R() {
+    let result = {str:"",firstImage:false,end:false}
+
+    ctx.fillStyle = nextColor();
+
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+
+    let offest = 0
+    strArr.join("").split("").forEach((str,index)=>{
+        var maxFontSize = height * 0.8
+        // xRunLength
+        let fontSize = ((maxFontSize - initFontSize) / width) * (xRunLenght - offest) + initFontSize
+        if(fontSize < initFontSize){
+            fontSize = initFontSize
+        }
+
+        ctx.font = fontSize + "px  '自定义字体'"
+        ctx.fillText(str,   xRunLenght - offest , height/2)
+
+        offest += maxFontSize
+    })
+
+    xRunLenght+=(width/frate)
+    console.log(xRunLenght,offest)
     if(xRunLenght > offest){
         result.end=true
     }
