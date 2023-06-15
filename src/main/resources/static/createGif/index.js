@@ -118,8 +118,7 @@ function createGif(event) {
             var reader = new FileReader();
             reader.onload = function(event){
 
-                var gifQuality = 70 // 介于0~256之间数值越小压缩后文件越小
-                // eslint-disable-next-line no-undef
+                //gifQuality 介于0~256之间数值越小压缩后文件越小
                 var minResult = gifmin(event.target.result, gifQuality) // 二进制文件流
 
                 console.log(minResult)
