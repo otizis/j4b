@@ -34,11 +34,6 @@ function setFontFamily(){
     })
 }
 
-var fontColorMode = 0;
-function switchFontColorMode(mode){
-    fontColorMode = mode;
-}
-
 var textMode = 0;
 function switchTextMode(mode){
     textMode = mode;
@@ -120,7 +115,7 @@ function previewGif(){
     rollAngle = 0;
     xRunLenght = 0
     firstStrImage=null;
-    
+
     textareaChange()
 
     interval = setInterval(function () {
@@ -128,14 +123,6 @@ function previewGif(){
 
         // drawAllTriangleArr();
         let result = drawTextByMode()
-
-        if(needFirstImage
-            &&!firstStrImage
-            && strArrIdx === 0
-            && result.strWidth > width*0.9){
-            // 第一帧最后
-            firstStrImage = canvas.toDataURL();
-        }
         if (result.end) {
             clearInterval(interval);
             console.log("clearInterval interval")
@@ -148,12 +135,14 @@ function createGif(event) {
         clearInterval(interval);
     }
     event.target.textContent="生成中..."
+    event.target.disabled="disabled"
+
     // canvas.style.display="unset"
     strArrIdx = 0;
     rollAngle = 0;
     xRunLenght = 0
     firstStrImage=null;
-    
+
     textareaChange()
     gif = new GIF({
         width: width,
@@ -233,7 +222,7 @@ function createGif(event) {
 
 
         event.target.textContent="开始生成"
-
+        event.target.disabled=""
 
     });
     interval = setInterval(function () {
@@ -244,10 +233,15 @@ function createGif(event) {
 
         if(needFirstImage
             &&!firstStrImage
-            && strArrIdx === 0
-            && result.strWidth > width*0.9){
+            && result.firstImage){
             // 第一帧最后
-            firstStrImage = canvas.toDataURL();
+
+            var tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = width/2;
+            tmpCanvas.height = height/2;
+            var tmpctx = tmpCanvas.getContext("2d")
+            tmpctx.drawImage(canvas,0,0,width/2,height/2)
+            firstStrImage = tmpCanvas.toDataURL();
         }
         gif.addFrame(ctx, { copy: true, delay: oneStrTime / frate });
         if (result.end) {
@@ -337,7 +331,7 @@ function createArr() {
 
 
 function drawText() {
-    let result = {str:"",strWidth:0,end:false}
+    let result = {str:"",end:false,firstImage:false}
     var mid = { x: width / 2, y: height / 2 };
     ctx.font = font_size + "px  '自定义字体'"
     ctx.strokeStyle = "white";
@@ -350,7 +344,7 @@ function drawText() {
     // ctx.strokeText(str, mid.x, mid.y)
 
     var metrics = ctx.measureText(str);
-    result.strWidth = metrics.width
+
     var maxFontSize = font_size * width * 1.2 / metrics.width
     let stepFontSize = (maxFontSize - initFontSize) / frate;
     font_size += stepFontSize;
@@ -363,13 +357,16 @@ function drawText() {
     if(strArrIdx === strArr.length){
         result.end=true
     }
+    if(strArrIdx === 0 && metrics.width > width*0.9){
+        result.firstImage=true
+    }
     return result;
 }
 
 
 var rollAngle = 0;
 function drawTextRoll() {
-    let result = {str:"",strWidth:0,end:false}
+    let result = {str:"",firstImage:false,end:false}
     var mid = { x: width / 2, y: height / 2 };
     ctx.fillStyle = nextColor();
 
@@ -391,12 +388,15 @@ function drawTextRoll() {
     if(rollAngle <  - Math.PI * 2){
         result.end=true
     }
+    if(strArrIdx === 0 ){
+        result.firstImage=true
+    }
     return result;
 }
 
 var xRunLenght = 0;
 function drawTextRadiate() {
-    let result = {str:"",strWidth:0,end:false}
+    let result = {str:"",firstImage:false,end:false}
 
     ctx.fillStyle = nextColor();
 
@@ -421,12 +421,15 @@ function drawTextRadiate() {
     if(xRunLenght > offest){
         result.end=true
     }
+    if(strArrIdx === 0 ){
+        result.firstImage=true
+    }
     return result;
 }
 
 
 function drawTextAroundHead() {
-    let result = {str:"",strWidth:0,end:false}
+    let result = {str:"",firstImage:false,end:false}
     var mid = { x: width / 2, y: height / 2 };
     ctx.fillStyle = nextColor();
     // ctx.strokeStyle = "#eee";
@@ -451,18 +454,22 @@ function drawTextAroundHead() {
     if(rollAngle <  - Math.PI * 2){
         result.end=true
     }
+    if(strArrIdx === 0 ){
+        result.firstImage=true
+    }
     return result;
 }
 
-/**
- *
- * @returns
- */
+var fontColorMode = "#333";
+function switchFontColorMode(event){
+    fontColorMode = event.target.value;
+    previewGif()
+}
 function nextColor() {
-    if(fontColorMode == 1){
+    if(fontColorMode === '1'){
         return "#" + (Math.random()*16777215).toString(16).replace(".","").substr(0,6);
     }
-    return "#333"
+    return fontColorMode
 }
 
 

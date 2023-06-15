@@ -60,6 +60,9 @@
     字的颜色：
     <label><input type="radio" name="fontColor" value="#333" checked onclick="switchFontColorMode(event)"/>纯黑</label>
     <label><input type="radio" name="fontColor" value="1" onclick="switchFontColorMode(event)"/>闪彩</label>
+    <label style="color: red"><input type="radio" name="fontColor" value="red"  onclick="switchFontColorMode(event)"/>中国红</label>
+    <label style="color: #19a636"><input type="radio" name="fontColor" value="#19a636" onclick="switchFontColorMode(event)"/>原谅绿</label>
+    <label style="color: #ffd700"><input type="radio" name="fontColor" value="#ffd700" onclick="switchFontColorMode(event)"/>土豪金</label>
 </p>
 <p>
     效果：
@@ -97,7 +100,15 @@
     <input type="range" value="30" min="10" max="30" onchange="frateInputListener(event)">
     <span id="frateInput">30</span>
 </p>
+<hr>
+<button onclick="downloadAll()">下载所有</button>
+<p>
+    是否生成缩率图：
+    <label><input type="radio" name="createFirstImg" value="0" checked onclick="switchCreateFirstImg(0)"/>否</label>
+    <label><input type="radio" name="createFirstImg" value="1"  onclick="switchCreateFirstImg(1)"/>是</label>
+</p>
 </body>
 <script src='./index.js'></script>
+<script src='./plus.js'></script>
 
 </html>
