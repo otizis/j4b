@@ -141,7 +141,7 @@ function createGif(event) {
         workers: 1,
         quality: 20,
         workerScript: './worker.js',
-        transparent:  'rgba(0,0,0,0)'
+        transparent:  bgImage? null: 'rgba(0,0,0,0)'
     });
     gif.on('finished', function (blob) {
         // canvas.style.display="none"
@@ -255,7 +255,9 @@ function drawTextByMode(){
     }else if (textMode == 4){
         return drawTextL2R();
     }else if (textMode == 5){
-        return drawTextFlyOut();
+        return drawTextFly(1);
+    }else if (textMode == 6){
+        return drawTextFly(-1);
     }
 }
 
@@ -360,7 +362,7 @@ function drawText() {
 
 
 var flyTmp = null
-function drawTextFlyOut() {
+function drawTextFly(z) {
     let result = {str:"",end:false,firstImage:false}
     var mid = { x: width / 2, y: height / 2 };
 
@@ -380,18 +382,41 @@ function drawTextFlyOut() {
                 step:(Math.random()*frate).toFixed(1)
             }
         })
+        while(flyTmp.strAll.length < 16){
+            flyTmp.strAll =  flyTmp.strAll.concat(strArr.map(x=>{
+                return {
+                    str:x,
+                    endX:(Math.random()*width).toFixed(1),
+                    endY:(Math.random()*height).toFixed(1),
+                    step:(Math.random()*frate).toFixed(1)
+                }
+            }))
+        }
+        flyTmp.strAll = flyTmp.strAll.slice(0,15)
     }
     
     flyTmp.strAll.forEach(flyItem=>{
         ctx.strokeStyle = "white";
-        // ctx.strokeText(str, mid.x, mid.y)
-    
-        var maxFontSize = 16
-        ctx.font = (maxFontSize-initFontSize)*flyItem.step/frate + "px  '自定义字体'"
-        ctx.fillText(flyItem.str,((flyItem.endX- mid.x)*flyItem.step/frate) + mid.x,((flyItem.endY- mid.y)*flyItem.step/frate)+mid.y)
+
+        var maxFontSize = height/5
+        var step = flyItem.step
+        var x = null
+        var y = null
+        if(z===-1){
+            ctx.font = maxFontSize - maxFontSize*(step%frate/frate) + "px  '自定义字体'"
+            x = flyItem.endX - ((flyItem.endX - mid.x)*(step%frate/frate))
+            y = flyItem.endY - ((flyItem.endY - mid.y)*(step%frate/frate))
+        }else{
+            ctx.font = maxFontSize*(step%frate/frate) + "px  '自定义字体'"
+            x = ((flyItem.endX- mid.x)*(step%frate/frate)) + mid.x
+            y = ((flyItem.endY- mid.y)*(step%frate/frate)) + mid.y
+        }
+        ctx.strokeText(flyItem.str,x,y)
+        ctx.fillText(flyItem.str,x,y)
         flyItem.step++
     })
     flyTmp.step++
+
 
 
     if( flyTmp.step === frate){
