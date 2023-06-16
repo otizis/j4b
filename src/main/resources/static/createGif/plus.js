@@ -28,3 +28,14 @@ function base64ToBlob(code) {
 function switchCreateFirstImg(mode){
     needFirstImage = mode===1
 }
+function setFontFamily(){
+
+    var fontUrl = document.getElementById("fontUrl").value;
+    console.log("fonturl",fontUrl)
+    const font = new FontFace("自定义字体", `url(${fontUrl})`)
+    font.load().then(()=>{
+        document.fonts.add(font)
+    }).catch(e=>{
+        alert("字体加载失败" + e)
+    })
+}

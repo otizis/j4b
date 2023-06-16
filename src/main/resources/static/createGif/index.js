@@ -22,17 +22,6 @@ var frate = 30; // 每句话的帧数
 // 是否需要简图
 var needFirstImage = false;
 
-function setFontFamily(){
-
-    var fontUrl = document.getElementById("fontUrl").value;
-    console.log("fonturl",fontUrl)
-    const font = new FontFace("自定义字体", `url(${fontUrl})`)
-    font.load().then(()=>{
-        document.fonts.add(font)
-    }).catch(e=>{
-        alert("字体加载失败" + e)
-    })
-}
 
 var textMode = 0;
 function switchTextMode(mode){
@@ -115,6 +104,7 @@ function previewGif(){
     rollAngle = 0;
     xRunLenght = 0
     firstStrImage=null;
+    flyTmp=null
 
     textareaChange()
 
@@ -142,6 +132,7 @@ function createGif(event) {
     rollAngle = 0;
     xRunLenght = 0
     firstStrImage=null;
+    flyTmp=null
 
     textareaChange()
     gif = new GIF({
@@ -263,6 +254,8 @@ function drawTextByMode(){
         return drawTextAroundHead();
     }else if (textMode == 4){
         return drawTextL2R();
+    }else if (textMode == 5){
+        return drawTextFlyOut();
     }
 }
 
@@ -360,6 +353,51 @@ function drawText() {
         result.end=true
     }
     if(strArrIdx === 0 && metrics.width > width*0.9){
+        result.firstImage=true
+    }
+    return result;
+}
+
+
+var flyTmp = null
+function drawTextFlyOut() {
+    let result = {str:"",end:false,firstImage:false}
+    var mid = { x: width / 2, y: height / 2 };
+
+    ctx.fillStyle = nextColor();
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+    if(flyTmp == null){
+        flyTmp={
+            strAll:[],
+            step:0,
+        }
+        flyTmp.strAll = strArr.map(x=>{
+            return {
+                str:x,
+                endX:(Math.random()*width).toFixed(1),
+                endY:(Math.random()*height).toFixed(1),
+                step:(Math.random()*frate).toFixed(1)
+            }
+        })
+    }
+    
+    flyTmp.strAll.forEach(flyItem=>{
+        ctx.strokeStyle = "white";
+        // ctx.strokeText(str, mid.x, mid.y)
+    
+        var maxFontSize = 16
+        ctx.font = (maxFontSize-initFontSize)*flyItem.step/frate + "px  '自定义字体'"
+        ctx.fillText(flyItem.str,((flyItem.endX- mid.x)*flyItem.step/frate) + mid.x,((flyItem.endY- mid.y)*flyItem.step/frate)+mid.y)
+        flyItem.step++
+    })
+    flyTmp.step++
+
+
+    if( flyTmp.step === frate){
+        result.end=true
+    }
+    if(flyTmp.step===1){
         result.firstImage=true
     }
     return result;
