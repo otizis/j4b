@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name extract
 // @namespace http://jaxer.cc/
-// @version 0.9.3
+// @version 0.9.4
 // @require http://jaxer.cc/libs/zepto/zepto.1.2.min.js
 // @description 网页图片，文本，视频 等发送到服务器记录
 // @author jaxer
@@ -139,6 +139,7 @@
             <div><textarea style='width:320px;padding:10px;' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea>
                 <div style='padding:10px 0'>
                     <label>默认<input type="radio" value="1" name="_extract_status"></label>
+                    <label>待办事项<input type="radio" value="2"  name="_extract_status"></label>
                     <label>私有<input type="radio" value="10"  name="_extract_status"></label>
                 </div><button class=" _ex_send" style='width:320px'>发送</button></div>
         </div>`))
