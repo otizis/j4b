@@ -41,4 +41,13 @@ public class TextDetectService
     public boolean isBad(String temp) {
         return tree.isMatch(temp);
     }
+
+    public static void check(String temp) {
+        String match = tree.match(temp);
+        System.out.println(match);
+    }
+
+    public static void main(String[] args) {
+        TextDetectService.check("今天是↵9月5日↵星期二");
+    }
 }
