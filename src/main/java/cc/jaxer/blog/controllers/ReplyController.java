@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cc.jaxer.blog.services.TextDetectService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,9 +25,11 @@ import cc.jaxer.blog.mapper.ReplyMapper;
 @RestController
 public class ReplyController
 {
-
     @Autowired
     private ReplyMapper replyMapper;
+
+    @Autowired
+    private TextDetectService textDetectService;
 
     @RequestMapping("/reply/list")
     public R list(
@@ -54,6 +57,9 @@ public class ReplyController
         if(reply.getContent().length() > 1000){
             return R.error(500,"留言过长，超过1000");
         }
+        if(textDetectService.isBad(reply.getContent())){
+            return R.error(500,"包含敏感词");
+        }
         String realIp = request.getHeader("X-Real-IP");
         if(StringUtils.isBlank(realIp)){
             realIp = request.getRemoteAddr();
@@ -63,6 +69,19 @@ public class ReplyController
         reply.setId(UUID.randomUUID().toString().replace("-", ""));
         replyMapper.insert(reply);
 
+        return R.ok();
+    }
+
+    @RequestMapping("/reply/check")
+    public R check(@RequestBody ReplyEntity reply)
+    {
+        if(StringUtils.isBlank(reply.getContent()))
+        {
+            return R.error();
+        }
+        if(textDetectService.isBad(reply.getContent())){
+            return R.error(500,"包含敏感词");
+        }
         return R.ok();
     }
 
