@@ -75,6 +75,7 @@
         <ul>
             <li><a href="?status=">正常列表</a></li>
             <li><a href="?status=10">不公开列表</a></li>
+            <li><a href="?status=2">待办事项</a>
             <li><a href="?status=0">已删除列表</a>
             <#if ((status!-1)  == 0)>
             <a style="color:red" href="/extract/deleteAllZero" target="_blank">物理删除所有已删除列表</a>
@@ -93,6 +94,8 @@
              <div class="u-extract-action-bar">
                  <#if page.status == 1>
                      [正常]
+                 <#elseif page.status == 2>
+                     [待办事项]
                  <#elseif page.status == 0>
                      [已删]
                  <#elseif page.status == 10>

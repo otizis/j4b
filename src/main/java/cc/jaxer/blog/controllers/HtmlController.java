@@ -263,7 +263,7 @@ public class HtmlController implements ErrorController
                     .and(StrUtil.isNotBlank(search),x->x.like(ExtractEntity.TITLE,search)
                                                         .or().like(ExtractEntity.CONTENT,search)
                                                         .or().like(ExtractEntity.MEMO,search))
-                    .notIn(!login,ExtractEntity.STATUS,0,10)
+                    .notIn(!login,ExtractEntity.STATUS,0,2,10)
                     .orderByDesc("create_at");
         IPage<ExtractEntity> page = extractService.page(new Page<>(pageN, 10), queryWrapper);
         modelMap.put("page", page);

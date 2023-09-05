@@ -20,6 +20,9 @@ public class ExtractEntity
     private String title ;//  VARCHAR(256),
     private String content ;//  TEXT comment '',
     private String sourceUrl ;//  VARCHAR(512),
+    /**
+     * 状态分类：0删除 1正常 2待办事项 10不公开
+     */
     private Integer status ;//  TINYINT DEFAULT 1,
     private String memo ;//  VARCHAR(512),
     private Date createAt ;//  TIMESTAMP,
