@@ -131,11 +131,11 @@
     </#list>
     <div class="u-pagition">
         <#if page.current gt  1>
-            <a href="?pageNum=${page.current - 1}&status=${status}" target="_blank">上一页</a>
+            <a href="?pageNum=${page.current - 1}&status=${status!''}" target="_blank">上一页</a>
         </#if>
         <span>第${page.current}页 共${total}页</span>
         <#if page.current lt total>
-            <a href="?pageNum=${page.current + 1}&status=${status}" target="_blank">下一页</a>
+            <a href="?pageNum=${page.current + 1}&status=${status!''}" target="_blank">下一页</a>
         </#if>
     </div>
 </div>
