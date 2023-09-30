@@ -1,14 +1,15 @@
 package cc.jaxer.blog.services;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.dfa.WordTree;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * 文本检测服务
@@ -25,7 +26,7 @@ public class TextDetectService
         tree.clear();
 
         try {
-            InputStream inputStream = new ClassPathResource("sensitive_words_lines.txt").getInputStream();
+            InputStream inputStream = new ClassPathResource("uniq_sensitive_words.txt").getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
             for (String line = br.readLine(); line != null; line = br.readLine()) {
@@ -47,7 +48,4 @@ public class TextDetectService
         System.out.println(match);
     }
 
-    public static void main(String[] args) {
-        TextDetectService.check("今天是↵9月5日↵星期二");
-    }
 }
