@@ -224,7 +224,7 @@ public class FileUploadController
                     }
 
                     @Override
-                    public void progress(long progressSize)
+                    public void progress(long total,long progressSize)
                     {
                         entity.setStatus(2);
                         entity.setProgressSize(progressSize);
