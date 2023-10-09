@@ -28,3 +28,12 @@ auth: 38301d4eda7792e0
 }
 
 ###
+POST http://localhost:8080/reply/check
+Content-Type: application/json
+auth: 38301d4eda7792e0
+
+{
+  "content": "千人计划"
+}
+
+###
