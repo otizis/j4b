@@ -45,7 +45,7 @@ public class TextDetectService
 
     public static void check(String temp) {
         String match = tree.match(temp);
-        System.out.println(match);
+        log.error("{},-bad for->,{}",temp,match);
     }
 
 }

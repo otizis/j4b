@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ import cc.jaxer.blog.entities.ReplyEntity;
 import cc.jaxer.blog.mapper.ReplyMapper;
 
 @RestController
+@Slf4j
 public class ReplyController
 {
     @Autowired
@@ -80,6 +82,8 @@ public class ReplyController
             return R.error();
         }
         if(textDetectService.isBad(reply.getContent())){
+            // 输出日志，看看有哪些
+            TextDetectService.check(reply.getContent());
             return R.error(500,"包含敏感词");
         }
         return R.ok();

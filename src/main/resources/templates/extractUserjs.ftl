@@ -138,9 +138,9 @@
             <div class='_extract_content' style="">${html}</div>
             <div><textarea style='width:320px;padding:10px;' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea>
                 <div style='padding:10px 0'>
-                    <label>默认<input type="radio" value="1" name="_extract_status"></label>
-                    <label>待办事项<input type="radio" value="2"  name="_extract_status"></label>
-                    <label>私有<input type="radio" value="10"  name="_extract_status"></label>
+                    <label style='margin-right:5px'><input type="radio" value="1" name="_extract_status">默认</label>
+                    <label style='margin-right:5px'><input type="radio" value="2"  name="_extract_status">待办事项</label>
+                    <label style='margin-right:5px'><input type="radio" value="10"  name="_extract_status">私有</label>
                 </div><button class=" _ex_send" style='width:320px'>发送</button></div>
         </div>`))
         $('._extract_preview')
