@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 public class ConfigService
 {
-
     @Autowired
     private ConfigMapper configMapper;
 
@@ -40,7 +39,7 @@ public class ConfigService
         List<ConfigEntity> configEntities = configMapper.selectList(queryWrapper);
 
 
-        BlogInfoEntity blogInfoEntity = new BlogInfoEntity();
+        blogInfoEntity = new BlogInfoEntity();
         // 链接列表
         List<LinkEntity> linkList = blogInfoEntity.getLinkList();
         // 底部列表

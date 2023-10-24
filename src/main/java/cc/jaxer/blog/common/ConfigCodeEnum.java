@@ -14,6 +14,7 @@ public enum ConfigCodeEnum
     footer_num("底部链接。html格式，可添加多个，从1开始 footer_1, footer_2 .. 类推"),
     bgm_url("首页bgm的url地址，请以http开头"),
     blog_domain("博客地址，请以http://开头，结尾不要/"),
+    referer_filter_conf("接口referer校验"),
     ;
 
     String desc;
