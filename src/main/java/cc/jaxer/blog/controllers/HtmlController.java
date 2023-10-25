@@ -7,6 +7,7 @@ import cc.jaxer.blog.mapper.*;
 import cc.jaxer.blog.services.ConfigService;
 import cc.jaxer.blog.services.ExtractService;
 import cc.jaxer.blog.services.PageService;
+import cc.jaxer.blog.services.TextDetectService;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -57,6 +58,8 @@ public class HtmlController implements ErrorController
     @Autowired
     private NeedAuthAop needAuthAop;
 
+    @Autowired
+    private TextDetectService textDetectService;
 
     @RequestMapping(path = {"/", "/index.html"})
     public String index(ModelMap modelMap, String pageNum)
@@ -398,5 +401,24 @@ public class HtmlController implements ErrorController
         return "admin/export";
     }
 
+
+    @RequestMapping(path = {"/editTextDetectList.html"})
+    @NeedLogin(isPage = true)
+    public String editTextDetectList(ModelMap modelMap, String pageNum, String search)
+    {
+        int pageN = 1;
+        if (NumberUtils.isDigits(pageNum))
+        {
+            pageN = Integer.parseInt(pageNum);
+        }
+        QueryWrapper<TextDetectEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotEmpty(search), "word",search);
+        IPage<TextDetectEntity> replyPage = textDetectService.page(new Page<>(pageN, 15), queryWrapper);
+
+        modelMap.put("list", replyPage);
+        modelMap.put("total", replyPage.getPages());
+        modelMap.put("search", search);
+        return "admin/editTextDetectList";
+    }
 
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import cc.jaxer.blog.common.ConfigCodeEnum;
+import cc.jaxer.blog.entities.TextDetectEntity;
 import cc.jaxer.blog.services.ConfigService;
 import cc.jaxer.blog.services.TextDetectService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -86,7 +87,8 @@ public class ReplyController
         if(StringUtils.isEmpty(referer)){
             return R.error();
         }
-        if(System.currentTimeMillis() > loadConfTime || reply.getStatus()!=null){
+        if(System.currentTimeMillis() > loadConfTime || reply.getStatus()!=null)
+        {
             String conf = configService.getConfDefault(ConfigCodeEnum.referer_filter_conf, null);
             if(conf == null){
                 refererFilterConf = null;
@@ -108,7 +110,7 @@ public class ReplyController
         }
         if(textDetectService.isBad(reply.getContent())){
             // 输出日志，看看有哪些
-            TextDetectService.check(reply.getContent());
+            textDetectService.check(reply.getContent());
             return R.error(500,"包含敏感词");
         }
         return R.ok();
@@ -124,5 +126,36 @@ public class ReplyController
     }
 
 
+    @RequestMapping("/reply/addTextDetect")
+    public R addTextDetect(@RequestBody TextDetectEntity textDetect)
+    {
+        if(StringUtils.isBlank(textDetect.getWord()))
+        {
+            return R.error();
+        }
+        if(textDetect.getWord().length() > 16){
+            return R.error(500,"过长，超过16");
+        }
+        try{
+            textDetect.setType(1);
+            textDetectService.save(textDetect);
+            textDetectService.reload();
+            return R.ok();
+        }catch (Exception e){
+            return R.error(e.getMessage());
+        }
+
+    }
+
+    @RequestMapping("/reply/delTextDetect")
+    @NeedLogin
+    public R delTextDetect(@RequestBody TextDetectEntity textDetect)
+    {
+        QueryWrapper<TextDetectEntity> wrapper = new QueryWrapper<>();
+        wrapper.eq("word", textDetect.getWord());
+        textDetectService.remove(wrapper);
+        textDetectService.reload();
+        return R.ok();
+    }
 
 }
