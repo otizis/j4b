@@ -108,6 +108,7 @@ public class ReplyController
         {
             return R.error();
         }
+        log.info("text detect: {}",reply.getContent());
         if(textDetectService.isBad(reply.getContent())){
             // 输出日志，看看有哪些
             textDetectService.check(reply.getContent());

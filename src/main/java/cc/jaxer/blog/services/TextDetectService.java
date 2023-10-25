@@ -30,14 +30,13 @@ public class TextDetectService  extends ServiceImpl<TextDetectMapper, TextDetect
 
 
     public void reload() {
+        log.info("reload start");
         tree.clear();
-
-
 
         int page = 1;
         int pageSize = 3000;
         IPage<TextDetectEntity> pageResult = this.page(new Page<>(page,pageSize));
-
+        // 库里没有数据，导入初始数据
         if(pageResult.getTotal() == 0)
         {
             List<TextDetectEntity> list = new ArrayList<>();
@@ -66,13 +65,14 @@ public class TextDetectService  extends ServiceImpl<TextDetectMapper, TextDetect
         }
 
         long pages = pageResult.getPages();
-        while (page < pages){
+        while (page <= pages){
             pageResult = this.page(new Page<>(page,pageSize));
             pageResult.getRecords().forEach(x->{
                 tree.addWord(x.getWord());
             });
             page ++;
         }
+        log.info("reload end");
     }
 
     public boolean isBad(String temp) {
