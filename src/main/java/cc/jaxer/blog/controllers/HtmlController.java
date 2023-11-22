@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -60,6 +61,9 @@ public class HtmlController implements ErrorController
 
     @Autowired
     private TextDetectService textDetectService;
+
+    @Value("${j4b.reply.open:false}")
+    private boolean replyOpen;
 
     @RequestMapping(path = {"/", "/index.html"})
     public String index(ModelMap modelMap, String pageNum)
@@ -228,7 +232,7 @@ public class HtmlController implements ErrorController
     {
         String conf = configService.getConfDefault(ConfigCodeEnum.unsplash_proxy, AppConstant.UNSPLASH_DOMAIN);
         modelMap.put("unsplashDomain", conf);
-
+        modelMap.put("replyOpen", replyOpen);
         // page
         PageEntity pageEntity = pageService.getById(id);
         if (pageEntity == null)
