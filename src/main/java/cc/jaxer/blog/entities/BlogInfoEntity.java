@@ -13,6 +13,7 @@ public class BlogInfoEntity
     private String desc;
     private String keywords;
     private String description;
+    private boolean replyOpen;
     // 链接列表
     private List<LinkEntity> linkList = new ArrayList<>();
     // 底部列表

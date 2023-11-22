@@ -7,6 +7,7 @@ import cc.jaxer.blog.entities.LinkEntity;
 import cc.jaxer.blog.mapper.ConfigMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class ConfigService
 {
     @Autowired
     private ConfigMapper configMapper;
+
+    @Value("${j4b.reply.open:false}")
+    private boolean replyOpen;
 
     private static BlogInfoEntity blogInfoEntity = null;
 
@@ -40,6 +44,7 @@ public class ConfigService
 
 
         blogInfoEntity = new BlogInfoEntity();
+        blogInfoEntity.setReplyOpen(replyOpen);
         // 链接列表
         List<LinkEntity> linkList = blogInfoEntity.getLinkList();
         // 底部列表
