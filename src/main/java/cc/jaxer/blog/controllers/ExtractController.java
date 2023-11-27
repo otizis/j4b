@@ -85,11 +85,12 @@ public class ExtractController
                 suffix = "";
             }
             String filePath = File.separator + day + File.separator + filename + "." + suffix;
-
+            String pathname = nginxServerPath + filePath;
+            FileUtil.mkParentDirs(pathname);
             final HttpResponse response = HttpRequest.get(content)
                                                      .header(Header.REFERER,request.getSourceUrl())
                                                      .timeout(3000).executeAsync();
-            response.writeBody(new File(nginxServerPath + filePath), null);
+            response.writeBody(new File(pathname), null);
 
             if(response.getStatus() == 200){
                 request.setContent(AppConstant.OSS_PATH +filePath.replace(File.separator,"/"));
