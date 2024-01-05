@@ -64,6 +64,9 @@ public class FontController {
             case "拼音":
                 pathname = fontPath +  "pinyin.ttf";
                 break;
+            case "寒蝉圆黑体":
+                pathname = fontPath +  "ChillRoundGothic_Bold.ttf";
+                break;
             default:
                 pathname =  fontPath +  "DingTalkJinBuTi.ttf";
         }
