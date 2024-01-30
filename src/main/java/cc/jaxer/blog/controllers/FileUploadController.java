@@ -26,10 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @Slf4j
@@ -124,6 +121,7 @@ public class FileUploadController
                     return (int) (b.lastModified() - a.lastModified());
                 });
             }
+            Arrays.sort(list, Comparator.comparing(File::getName));
             modelMap.addAttribute("fileList", list);
             modelMap.addAttribute("currPath", gotoPath);
 
@@ -268,6 +266,20 @@ public class FileUploadController
         File file = new File(nginxServerPath + path);
         if(file.exists() ){
             file.delete();
+        }
+        return "redirect:/fileList.html";
+    }
+
+    @RequestMapping(path = {"/tranText"})
+    @NeedLogin
+    public String tranText(@RequestParam("path") String path)
+    {
+        if(StringUtils.contains(path,"..")){
+            return "redirect:/fileList.html";
+        }
+        File file = new File(nginxServerPath + path);
+        if(file.exists() ){
+            return "redirect:/audio/tran.html?path="+path;
         }
         return "redirect:/fileList.html";
     }
