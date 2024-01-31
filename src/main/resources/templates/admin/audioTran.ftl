@@ -22,7 +22,17 @@
 
 <div id="app">
     <div class="u-content">
-        <h3>taskId:${taskId!'空'}</h3>
+        <div>
+            taskId:${taskId!'空'}
+        </div>
+        <div>
+            段落停顿间隔：<input style="width: 300px"
+                          type="range"
+                          v-model.number="duration"
+                          max="10000"
+                          min="1000"> {{duration}}ms
+        </div>
+
         <hr>
 
         <span v-for="(se,idx) of sentences"

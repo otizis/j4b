@@ -11,7 +11,7 @@ Zepto(function($){
             return {
                 sentences: [],
                 currentTime:0,
-                duration:2000
+                duration: 2000
             }
         },
         created(){
