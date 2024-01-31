@@ -67,8 +67,6 @@
 
 <#include "./comps/foot.ftl"/>
 <script src="/libs/zepto/zepto.1.2.min.js"></script>
-<#if replyOpen>
 <script src="/admin/page.js"></script>
-</#if>
 </body>
 </html>
