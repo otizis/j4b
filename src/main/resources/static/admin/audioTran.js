@@ -10,7 +10,8 @@ Zepto(function($){
         data: function (){
             return {
                 sentences: [],
-                currentTime:0
+                currentTime:0,
+                duration:2000
             }
         },
         created(){
