@@ -97,12 +97,21 @@ public class AudioController
         }else{
             //不存在查询一次
             File stateFile = new File(nginxServerPath + path + ".taskId");
-            if(stateFile.exists()){
+            if(stateFile.exists())
+            {
                 String taskId = FileUtil.readString(stateFile, StandardCharsets.UTF_8);
-                if(StringUtils.isNotEmpty(taskId)){
-                    String query = this.query(taskId);
-                    if(query!=null){
-                        FileUtil.writeString(query, resultFile, StandardCharsets.UTF_8);
+                modelMap.put("taskId", taskId);
+                if(StringUtils.isNotEmpty(taskId))
+                {
+                    JSONObject result = this.query(taskId);
+                    String statusText = result.getStr("StatusText");
+                    if ("SUCCESS".equals(statusText))
+                    {
+                        FileUtil.writeString(result.getStr("Result"), resultFile, StandardCharsets.UTF_8);
+                        modelMap.put("message", "成功请刷新");
+                    }else if("RUNNING".equals(statusText))
+                    {
+                        modelMap.put("message", "进行中请等待");
                     }
                 }
             }else{
@@ -114,7 +123,9 @@ public class AudioController
         }
         return "admin/audioTran";
     }
-    public String query(String taskId){
+
+
+    public JSONObject query(String taskId){
         CommonRequest getRequest = new CommonRequest();
         getRequest.setDomain(DOMAIN);   // 设置域名，固定值。
         getRequest.setVersion(API_VERSION);         // 设置中国站的版本号。
@@ -139,12 +150,8 @@ public class AudioController
             return null;
         }
         log.info("识别查询结果：{}" , getResponse.getData());
-        JSONObject result = JSONUtil.parseObj(getResponse.getData());
-        String statusText = result.getStr("StatusText");
-        if ("SUCCESS".equals(statusText)) {
-            return result.getStr("Result");
-        }
-        return null;
+
+        return JSONUtil.parseObj(getResponse.getData());
     }
 
     public String start(String fileLink){
@@ -187,11 +194,12 @@ public class AudioController
 
         taskObject.put("first_channel_only", true);
 
-        // 回调
-//        taskObject.put("enable_callback", true);
-//        taskObject.put("callback_url", AUDIO_TRANS_URL);
-
-        taskObject.put(KEY_AUTO_SPLIT, false);
+        /**
+         * 是否开启智能分轨（开启智能分轨，即可在两方对话的语音情景下，依据每句话识别结果中的ChannelId，
+         * 判断该句话的发言人为哪一方。通常先发言一方ChannelId为0，8k双声道开启分轨后默认为2个人，
+         * 声道channel0和channel1就是音轨编号）。
+         */
+        taskObject.put(KEY_AUTO_SPLIT, true);
         taskObject.put(KEY_SR_ADAPTIVE, true);
         taskObject.put(KEY_NUMBER_TEXT, true);
 

@@ -23,7 +23,7 @@
 <div id="app">
     <div class="u-content">
         <div>
-            taskId:${taskId!'空'}
+            taskId:${taskId!'空'} ， message:${message!""}
         </div>
         <div>
             段落停顿间隔：<input style="width: 300px"
