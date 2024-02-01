@@ -93,6 +93,7 @@ public class AudioController
 
         File resultFile = new File(nginxServerPath + path + "result.json");
         if(resultFile.exists()){
+            modelMap.put("message", "请查看");
             modelMap.put("resultJson", path + "result.json");
         }else{
             //不存在查询一次
