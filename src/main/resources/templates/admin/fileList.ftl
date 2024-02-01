@@ -71,7 +71,7 @@
                 <input type="hidden" name="path" value="${currPath}/${file.name}">
                 <input type="submit" class="u-button" value="删除">
             </form>
-            <#if file.name?contains("mp3")>
+            <#if file.name?ends_with(".mp3") || file.name?ends_with(".wav") || file.name?ends_with(".m4a")>
                 <form action="/tranText"  method="POST" enctype="multipart/form-data" onsubmit="return confirm('是否识别音频？')">
                     <input type="hidden" name="path" value="${currPath}/${file.name}">
                     <input type="submit" class="u-button" value="识别">

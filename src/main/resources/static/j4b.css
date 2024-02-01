@@ -223,6 +223,7 @@ blockquote {
     box-shadow: grey 1px 1px 1px;
     cursor: pointer;
     vertical-align: middle;
+    margin:2px;
 }
 input[type="text"] {
     height: 24px;
