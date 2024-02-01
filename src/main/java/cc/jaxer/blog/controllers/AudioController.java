@@ -1,5 +1,6 @@
 package cc.jaxer.blog.controllers;
 
+import cc.jaxer.blog.common.AppConstant;
 import cc.jaxer.blog.common.NeedLogin;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONObject;
@@ -19,11 +20,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 
 
 @Controller
@@ -78,8 +78,13 @@ public class AudioController
     @RequestMapping(path = {"/tran.html"})
     @NeedLogin(isPage = true)
     public String audioTran(@RequestParam(value = "path",required = false) String path,
+                            HttpServletRequest servletRequest,
                            ModelMap modelMap )
     {
+        String serverName = servletRequest.getServerName();
+        int serverPort = servletRequest.getServerPort();
+        System.out.println(serverName+":"+serverPort);
+
         modelMap.put("audioUrl", path);
         File file = new File(nginxServerPath + path);
         if(!file.exists()){
@@ -102,7 +107,7 @@ public class AudioController
                 }
             }else{
                 // 发起
-                String taskId = this.start("http://jaxer.cc/oss/" + path);
+                String taskId = this.start("http://"+serverName+":"+serverPort+ AppConstant.OSS_PATH + "/" + path);
                 FileUtil.writeString(taskId, stateFile, StandardCharsets.UTF_8);
                 modelMap.put("taskId", taskId);
             }
