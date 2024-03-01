@@ -15,6 +15,7 @@ public enum ConfigCodeEnum
     bgm_url("首页bgm的url地址，请以http开头"),
     blog_domain("博客地址，请以http://开头，结尾不要/"),
     referer_filter_conf("接口referer校验"),
+    bilibili_cookie("bilibili登录cookie"),
     ;
 
     String desc;
