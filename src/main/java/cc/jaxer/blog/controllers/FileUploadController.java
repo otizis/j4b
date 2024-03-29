@@ -253,13 +253,14 @@ public class FileUploadController
 
         File file = new File(nginxServerPath +File.separator+ currPath + File.separator + dirName);
         file.mkdir();
-        return "redirect:/fileList.html?currPath"+currPath;
+        return "redirect:/fileList.html?currPath="+currPath;
     }
 
     @RequestMapping(path = {"/delFile"})
     @NeedLogin
     public String uploadOrig(@RequestParam("path") String path)
     {
+
         if(StringUtils.contains(path,"..")){
             return "redirect:/fileList.html";
         }
@@ -267,8 +268,11 @@ public class FileUploadController
         if(file.exists() ){
             file.delete();
         }
-        return "redirect:/fileList.html";
+        int i = path.lastIndexOf("/");
+        String parentPath = path.substring(0, i);
+        return "redirect:/fileList.html?currPath="+parentPath ;
     }
+
 
     @RequestMapping(path = {"/tranText"})
     @NeedLogin
