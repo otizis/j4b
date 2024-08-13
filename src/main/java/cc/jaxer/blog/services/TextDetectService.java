@@ -26,12 +26,12 @@ import java.util.List;
 @Slf4j
 public class TextDetectService  extends ServiceImpl<TextDetectMapper, TextDetectEntity> implements IService<TextDetectEntity>
 {
-    private static final WordTree tree = new WordTree();
+    private static WordTree tree = new WordTree();
 
 
     public void reload() {
         log.info("reload start");
-        tree.clear();
+        tree = new WordTree();
 
         int page = 1;
         int pageSize = 3000;
