@@ -30,11 +30,19 @@ auth: 38301d4eda7792e0
 ###
 POST http://{{url}}/reply/check
 Content-Type: application/json
-auth: 38301d4eda7792e0
-Referer: https://a1ce21bd84/
+Referer: https://a1ce21bd84/wx5753f2c1ce21bd84
 
 {
-  "content": "千人计划"
+  "content": "本案按时归还那位公告"
 }
 
 ###
+GET http://{{url}}/font/hwbook7.ttf/mini2.ttf?queryString=年阿三根据本案按时归还那位公告暗杀沃尔ui啊红包
+Referer: https://a1ce21bd84/wx5753f2c1ce21bd84
+
+###
+GET http://{{url}}/font/shehuiti3.1.ttf/mini2.ttf?queryString=年阿三根据本案按时归还那位公告暗杀沃尔ui啊红包
+Referer: https://a1ce21bd84/
+
+###
+
