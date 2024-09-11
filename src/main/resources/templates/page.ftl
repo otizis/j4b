@@ -11,7 +11,7 @@
         height: 50vh"></div>
 </#if>
 <header>
-    <h3 >${page.title!}</h3>
+    <h1 >${page.title!}</h1>
     <div>
         <span class="header-info">${page.createAt?string("yyyy-MM-dd HH:mm")}</span>
         <#if page.status == 2>

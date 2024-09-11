@@ -14,8 +14,10 @@
         <div class="inline-left">
             <span>标题:</span>
             <label >
-               <input type="text" style="width: 40rem" name="title" value="${(pageEntity.title)!''}"/>
+               <input type="text" style="width: 35rem" name="title" value="${(pageEntity.title)!''}"/>
             </label>
+
+            <button id="savePageBtn" class="u-button primary" type="button">发送文章</button>
         </div>
 
         <div class="inline-left">
@@ -64,8 +66,7 @@
         <div id="editor" style="text-align:left">
             ${(pageEntity.content)!''}
         </div>
-        <br>
-        <input id="savePageBtn" class="u-button" type="button" value="确认发表">
+
     </form>
 </div>
 <script src="/libs/tinymce/tinymce.min.js"></script>

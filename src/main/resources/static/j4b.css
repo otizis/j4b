@@ -22,6 +22,11 @@ header .header-info{
     width: 100%;
     margin: auto
 }
+.u-b-desc{
+    font-family: serif;
+    padding:0.5rem;
+    font-size: 0.9rem;
+}
 .u-link{
     max-width: 60rem;
     margin: auto;
@@ -63,12 +68,17 @@ header .header-info{
 }
 .container .u-card h3{
     text-align: left;
-    padding-left: 1rem;
     max-height: 3rem;
     overflow: hidden;
+    margin: 0.7rem 0;
 }
 .container .u-card .content{
-    min-height: 5rem;
+    min-height: 4rem;
+    text-align: left;
+    text-indent: 2em;
+    padding-top: 1rem;
+    word-break: break-all;
+    font-family: serif;
 }
 .container .u-card:hover{
     border:1px solid cornflowerblue;
@@ -81,9 +91,12 @@ header .header-info{
     height: 5rem;
 }
 .container .u-card .u-card-plane{
-    text-align: right;
+    text-align: left;
     color: #333333;
     font-size: 0.9rem;
+}
+.container .u-card .u-card-plane .u-tag-list{
+    text-align: right;
 }
 
 .container .u-card.u-self-page{
@@ -121,6 +134,7 @@ footer > div{
     min-height: 40rem;
     word-break: break-all;
     background: white;
+    font-family: serif;
 }
 .u-page.u-self-page{
     border: 1px solid darkred;
@@ -224,6 +238,10 @@ blockquote {
     cursor: pointer;
     vertical-align: middle;
     margin:2px;
+}
+.u-button.primary{
+    background: #4d5cf5;
+    color: white;
 }
 input[type="text"] {
     height: 24px;
