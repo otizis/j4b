@@ -10,11 +10,11 @@
 <table style="margin: auto" class="hover-line">
     <#list configList! as config>
         <tr>
-            <td>${config.code!""}</td>
-            <td>${config.v!""}</td>
+            <td class="id-code">${config.code!""}</td>
+            <td class="id-value">${config.v!""}</td>
             <td>
                 <input class="u-button updateConfig"
-                    type="button" data-c="${config.code!''}" value="修改">
+                    type="button" value="修改">
                     |
                 <input class="u-button deleteConfig"
                     type="button" data-c="${config.code!''}" value="删除">
@@ -26,12 +26,17 @@
 <div>
     <h5>新增或修改配置</h5>
     <form id="addConfig">
-        <label >
-            code：<input type="text" name="code"/>
-        </label>
-        <label >
-            value：<input type="text" name="v"/>
-        </label>
+        <div>
+            <label >
+                code：<input type="text" name="code" style="width:20rem;padding:0 8px"/>
+            </label>
+        </div>
+        <div>
+            <label >
+                value：<textarea name="v" style="width:20rem;padding:3px 8px" rows="5"></textarea>
+            </label>
+        </div>
+
         <input class="u-button" id="addConfigBtn" type="button" value="提交">
     </form>
     <hr>

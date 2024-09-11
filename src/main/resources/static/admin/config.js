@@ -7,8 +7,9 @@ Zepto(function($){
     }
 
     $(".updateConfig").on("click",function(){
-        console.log("click .updateConfig")
-        $("#addConfig")[0].code.value = $(this).data("c");
+        console.log("click .updateConfig",$(this).closest('tr').find(".id-code"))
+        $("#addConfig")[0].code.value = $(this).closest('tr').find(".id-code")[0].innerText
+        $("#addConfig")[0].v.value =$(this).closest('tr').find(".id-value")[0].innerHTML
     })
 
     $(".deleteConfig").on("click",function(){
