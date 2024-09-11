@@ -1,6 +1,5 @@
 package cc.jaxer.blog.controllers;
 
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.typography.font.sfntly.Font;
 import com.google.typography.font.sfntly.FontFactory;
@@ -15,82 +14,77 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 @Controller
 @Slf4j
-public class FontController {
+public class FontController
+{
 
     @Value("${j4b.font.path}")
     private String fontPath;
 
+    private static HashSet<Integer> removeTables = new HashSet<>();
+    static {
+        removeTables.add(Tag.GDEF);
+        removeTables.add(Tag.GPOS);
+        removeTables.add(Tag.GSUB);
+        removeTables.add(Tag.kern);
+        removeTables.add(Tag.hdmx);
+        removeTables.add(Tag.vmtx);
+        removeTables.add(Tag.VDMX);
+        removeTables.add(Tag.LTSH);
+        removeTables.add(Tag.DSIG);
+        removeTables.add(Tag.vhea);
+        removeTables.add(Tag.intValue(new byte[]{109, 111, 114, 116}));
+        removeTables.add(Tag.intValue(new byte[]{109, 111, 114, 120}));
+    }
+
+
     @RequestMapping(path = {"/font/{fontName}/mini2.ttf"})
     public void miniFont(HttpServletResponse response,
-                     @PathVariable("fontName") String fontName,
-                     @RequestParam("queryString") String queryString)
-            throws IOException
+                         @PathVariable("fontName") String fontName,
+                         @RequestParam("queryString") String queryString) throws IOException
     {
         if (StrUtil.isBlank(queryString))
         {
-            queryString = "动字";
+            queryString = "动字1234567890abcdefghijklnmopqrstuvwxyz";
         }
         queryString = queryString.replaceAll("\\n", "");
-        log.info("fontname:{},str::{}",fontName,queryString);
-        String pathname = fontPath +  fontName;
-        File sourceFont = new File(pathname);
-        if(!sourceFont.exists()){
-            sourceFont =  new File(fontPath +  "DingTalkJinBuTi.ttf");
+        log.info("fontname:{},str::{}", fontName, queryString);
+        String pathname = fontPath + fontName;
+        Path path = Paths.get(pathname);
+        File sourceFont = path.toFile();
+        if (!sourceFont.exists())
+        {
+            path = Paths.get(fontPath + "DingTalkJinBuTi.ttf");
         }
 
         FontFactory fontFactory = FontFactory.getInstance();
 
-        try {
-            byte[] fontBytes = IoUtil.readBytes(new FileInputStream(sourceFont));
-            Font[] fonts = fontFactory.loadFonts(fontBytes);
-            Font font = fonts[0];
-            ArrayList var9 = new ArrayList();
-            var9.add(CMapTable.CMapId.WINDOWS_BMP);
+        byte[] fontBytes = Files.readAllBytes(path);
+        Font[] fonts = fontFactory.loadFonts(fontBytes);
+        Font font = fonts[0];
 
-            RenumberingSubsetter renumberingSubsetter = new RenumberingSubsetter(font, fontFactory);
-            renumberingSubsetter.setCMaps(var9, 1);
-            List glyphCoverage = GlyphCoverage.getGlyphCoverage(font, queryString);
-            renumberingSubsetter.setGlyphs(glyphCoverage);
-            HashSet var15 = new HashSet();
-            var15.add(Tag.GDEF);
-            var15.add(Tag.GPOS);
-            var15.add(Tag.GSUB);
-            var15.add(Tag.kern);
-            var15.add(Tag.hdmx);
-            var15.add(Tag.vmtx);
-            var15.add(Tag.VDMX);
-            var15.add(Tag.LTSH);
-            var15.add(Tag.DSIG);
-            var15.add(Tag.vhea);
-            var15.add(Tag.intValue(new byte[]{109, 111, 114, 116}));
-            var15.add(Tag.intValue(new byte[]{109, 111, 114, 120}));
-            renumberingSubsetter.setRemoveTables(var15);
-            Font resultFont = renumberingSubsetter.subset().build();
+        ArrayList<CMapTable.CMapId> idList = new ArrayList<>();
+        idList.add(CMapTable.CMapId.WINDOWS_BMP);
 
-            fontFactory.serializeFont(resultFont, response.getOutputStream());
-        } finally {
+        RenumberingSubsetter renumberingSubsetter = new RenumberingSubsetter(font, fontFactory);
+        renumberingSubsetter.setCMaps(idList, 1);
 
-        }
+        List<Integer> glyphCoverage = GlyphCoverage.getGlyphCoverage(font, queryString);
+        renumberingSubsetter.setGlyphs(glyphCoverage);
+        renumberingSubsetter.setRemoveTables(removeTables);
 
-
+        Font resultFont = renumberingSubsetter.subset().build();
+        fontFactory.serializeFont(resultFont, response.getOutputStream());
+        response.flushBuffer();
     }
 
-    /**
-     * 字体列表
-     * {
-     *  loaded:false,
-     *  miniId:"QianTuXiaoTuTi-2.ttf",
-     *  name:"千图小兔体",
-     *  url:"https://dadan.jaxer.cc/oss/fonts/QianTuXiaoTuTi-2.ttf",
-     *  nameImg:"https://dadan.jaxer.cc/oss/createGif/fonts/qiantuxiaotu.png"
-     * }
-     */
 }
