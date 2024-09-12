@@ -122,10 +122,17 @@ footer a{
 }
 footer > div{
     display: inline-block;
+    vertical-align: top;
     padding: 1rem 1.2rem;
     font: 0.8rem serif;
+    text-align: left;
 }
-
+footer ul{
+    padding: 0;
+}
+footer li{
+    list-style: square;
+}
 .u-page{
     text-align: left;
     border: 1px solid #a8a8a8;
