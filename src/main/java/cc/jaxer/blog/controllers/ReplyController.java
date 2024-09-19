@@ -36,8 +36,6 @@ public class ReplyController
     @Autowired
     private ConfigService configService;
 
-    private String[] refererFilterConf = null;
-    private long loadConfTime = 0;
 
     @RequestMapping("/reply/list")
     public R list(
@@ -84,30 +82,17 @@ public class ReplyController
     public R check(@RequestBody ReplyEntity reply,
                    @RequestHeader(value="Referer",required = false) String referer)
     {
-        if(StringUtils.isEmpty(referer)){
-            return R.error();
+        if(StringUtils.isEmpty(referer) || StringUtils.isBlank(reply.getContent())){
+            return R.error("501");
         }
-        if(System.currentTimeMillis() > loadConfTime || reply.getStatus()!=null)
-        {
-            String conf = configService.getConfDefault(ConfigCodeEnum.referer_filter_conf, null);
-            if(conf == null){
-                refererFilterConf = null;
-            }else{
-                refererFilterConf = conf.split(";");
-            }
-            loadConfTime = System.currentTimeMillis() + 24*60*60*1000;
-        }
+
+        String conf = configService.getConfDefaultCache(ConfigCodeEnum.referer_filter_conf, "");
+        String[] refererFilterConf = conf.split(";");
         // 校验来源
-        if(refererFilterConf !=null)
-        {
-            if(!StringUtils.containsAny(referer, refererFilterConf)){
-                return R.error();
-            }
-        }
-        if(StringUtils.isBlank(reply.getContent()))
-        {
+        if(!StringUtils.containsAny(referer, refererFilterConf)){
             return R.error();
         }
+
         log.info("text detect: {}",reply.getContent());
         if(textDetectService.isBad(reply.getContent())){
             // 输出日志，看看有哪些

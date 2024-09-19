@@ -5,6 +5,8 @@ import cc.jaxer.blog.entities.BlogInfoEntity;
 import cc.jaxer.blog.entities.ConfigEntity;
 import cc.jaxer.blog.entities.LinkEntity;
 import cc.jaxer.blog.mapper.ConfigMapper;
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.TimedCache;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +24,9 @@ public class ConfigService
     private boolean replyOpen;
 
     private static BlogInfoEntity blogInfoEntity = null;
+
+    TimedCache<String, ConfigEntity> cachedConfig = CacheUtil.newTimedCache(60 * 60 * 1000);
+
 
     public BlogInfoEntity getBlogInfo()
     {
@@ -94,6 +99,18 @@ public class ConfigService
         blogInfoEntity = null;
     }
 
+    public String getConfDefaultCache(ConfigCodeEnum key,String defaultStr) {
+        ConfigEntity cached = cachedConfig.get(key.toString());
+        if(cached == null){
+            ConfigEntity configEntity = configMapper.selectById(key.toString());
+            if(configEntity == null){
+                return defaultStr;
+            }
+            cachedConfig.put(key.toString(), configEntity);
+            return configEntity.getV();
+        }
+        return cached.getV();
+    }
     public String getConfDefault(ConfigCodeEnum key,String defaultStr) {
         ConfigEntity configEntity = configMapper.selectById(key.toString());
         return configEntity == null ? defaultStr :configEntity.getV();
