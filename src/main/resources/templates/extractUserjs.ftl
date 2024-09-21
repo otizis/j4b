@@ -132,8 +132,8 @@
 
         $(document.body).append($(`<div class='_extract_preview'>
             <div class='_extract_top_bar'>
-                <button class=" _ex_send" >发送</button>
-                <button class="" id="_ex_close" style='float:right'>关闭</button>
+                <div class="my-btn  _ex_send" >发送</div>
+                <div class="my-btn " id="_ex_close" style='float:right'>关闭</div>
             </div>
             <div class='_extract_content' style="">${html}</div>
             <div><textarea style='width:320px;padding:10px;' rows=2 id="_ex_memo" placeholder="输入备注" ></textarea>
@@ -141,7 +141,7 @@
                     <label style='margin-right:5px'><input type="radio" value="1" name="_extract_status">默认</label>
                     <label style='margin-right:5px'><input type="radio" value="2"  name="_extract_status">待办事项</label>
                     <label style='margin-right:5px'><input type="radio" value="10"  name="_extract_status">私有</label>
-                </div><button class=" _ex_send" style='width:320px'>发送</button></div>
+                </div><div class="my-btn  _ex_send" style='width:320px'>发送</div></div>
         </div>`))
         $('._extract_preview')
             .on("click", function (e) { e.stopPropagation() })
@@ -219,7 +219,8 @@
 }
 ._extract_preview:hover  ._extract_top_bar,
 ._extract_preview.expend ._extract_top_bar{
-    height:25px
+    height:25px;
+    padding:2px 0;
 }
 ._extract_preview.expend ._extract_top_bar ._ex_send{
     display:none
@@ -241,8 +242,8 @@
 .expend  ._extract_content{
     overflow:auto;
 }
-._extract_preview button{
-    width:45px;
+    ._extract_preview .my-btn{
+    width:43px;
     height:25px;
     border: 1px solid #409eff;
     background: white;
@@ -251,8 +252,11 @@
     color: #409eff;
     margin: 0;
     padding: 0;
+    display:inline-block;
+    line-height:25px;
+    text-align:center;
 }
-._extract_preview button:hover{
+._extract_preview .my-btn:hover{
     background: #409eff;
     color:white
 }
@@ -268,8 +272,9 @@
 }
 ._extract_preview ._extract_msg{
     background: #2ca339;
-    padding: 10px 10px 0 60px;
+    padding: 10px 10px 10px 60px;
     color: white;
+    margin:0;
 }
 `)
 
